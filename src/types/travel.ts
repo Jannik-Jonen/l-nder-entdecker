@@ -6,6 +6,51 @@ export interface TodoItem {
   completed: boolean;
 }
 
+export interface Attraction {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  rating?: number;
+  priceLevel?: 'free' | 'low' | 'medium' | 'high';
+}
+
+export interface Hotel {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  pricePerNight: number;
+  rating: number;
+  amenities: string[];
+}
+
+export interface Restaurant {
+  id: string;
+  name: string;
+  cuisine: string;
+  priceLevel: 'low' | 'medium' | 'high';
+  rating: number;
+  imageUrl: string;
+}
+
+export interface FlightConnection {
+  id: string;
+  airline: string;
+  departureCity: string;
+  arrivalCity: string;
+  duration: string;
+  priceRange: string;
+  stops: number;
+}
+
+export interface WeatherInfo {
+  averageTemp: number;
+  condition: 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'mixed';
+  bestTimeToVisit: string;
+  packingTips: string[];
+}
+
 export interface Country {
   id: string;
   name: string;
@@ -14,6 +59,13 @@ export interface Country {
   startDate: string;
   endDate: string;
   todos: TodoItem[];
+  dailyCost?: number;
+  currency?: string;
+  attractions?: Attraction[];
+  hotels?: Hotel[];
+  restaurants?: Restaurant[];
+  flights?: FlightConnection[];
+  weather?: WeatherInfo;
 }
 
 export interface Trip {
@@ -21,6 +73,27 @@ export interface Trip {
   name: string;
   countries: Country[];
   createdAt: string;
+}
+
+export interface Destination {
+  id: string;
+  name: string;
+  country: string;
+  type: 'country' | 'island' | 'city' | 'region';
+  imageUrl: string;
+  description: string;
+  highlights: string[];
+  bestSeason: string;
+  averageDailyCost: number;
+  currency: string;
+}
+
+export interface TravelTip {
+  id: string;
+  category: 'packing' | 'budget' | 'health' | 'safety' | 'culture' | 'transport';
+  title: string;
+  content: string;
+  icon: string;
 }
 
 export const categoryLabels: Record<TodoItem['category'], string> = {
@@ -37,4 +110,22 @@ export const categoryIcons: Record<TodoItem['category'], string> = {
   budget: '💰',
   preparation: '📋',
   transport: '✈️',
+};
+
+export const tipCategoryLabels: Record<TravelTip['category'], string> = {
+  packing: 'Packen',
+  budget: 'Budget',
+  health: 'Gesundheit',
+  safety: 'Sicherheit',
+  culture: 'Kultur',
+  transport: 'Transport',
+};
+
+export const tipCategoryIcons: Record<TravelTip['category'], string> = {
+  packing: '🧳',
+  budget: '💸',
+  health: '🏥',
+  safety: '🔒',
+  culture: '🎭',
+  transport: '🚆',
 };
