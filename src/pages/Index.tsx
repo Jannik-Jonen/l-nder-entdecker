@@ -100,7 +100,7 @@ const Index = () => {
       <footer className="border-t border-border mt-16 py-8">
         <div className="container text-center text-sm text-muted-foreground">
           <p>
-            Exploarn – Deine zentrale Reiseübersicht für stressfreie Planung
+            GlobeDetour – Dein Begleiter für unvergessliche Reisen
           </p>
         </div>
       </footer>
