@@ -1,11 +1,14 @@
-import { Country } from '@/types/travel';
+import { useState } from 'react';
+import { Country, PackingItem } from '@/types/travel';
 import { TodoItemComponent } from './TodoItem';
+import { PackingList } from './PackingList';
 import { Progress } from '@/components/ui/progress';
 import { format, differenceInDays } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { ArrowLeft, Calendar, MapPin, Clock, Sun, Cloud, CloudRain, Snowflake, Plane, Hotel, Utensils, Camera, DollarSign } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Clock, Sun, Cloud, CloudRain, Snowflake, Plane, Hotel, Utensils, Camera, DollarSign, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface CountryDetailProps {
   country: Country;
@@ -29,6 +32,8 @@ const priceLevelLabels = {
 };
 
 export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailProps) => {
+  const [packingItems, setPackingItems] = useState<PackingItem[]>([]);
+
   const completedTodos = country.todos.filter((t) => t.completed).length;
   const totalTodos = country.todos.length;
   const progress = totalTodos > 0 ? (completedTodos / totalTodos) * 100 : 0;
@@ -41,6 +46,26 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   };
 
   const WeatherIcon = country.weather ? weatherIcons[country.weather.condition] : Sun;
+
+  const handleTogglePacking = (id: string) => {
+    setPackingItems(packingItems.map((item) =>
+      item.id === id ? { ...item, packed: !item.packed } : item
+    ));
+  };
+
+  const handleAddPacking = (name: string, category: PackingItem['category']) => {
+    const newItem: PackingItem = {
+      id: `pack-${Date.now()}`,
+      name,
+      packed: false,
+      category,
+    };
+    setPackingItems([...packingItems, newItem]);
+  };
+
+  const handleDeletePacking = (id: string) => {
+    setPackingItems(packingItems.filter((item) => item.id !== id));
+  };
 
   return (
     <div className="animate-fade-up">
@@ -138,17 +163,30 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {country.attractions.map((attr) => (
-              <div key={attr.id} className="rounded-lg overflow-hidden border border-border">
-                <img src={attr.imageUrl} alt={attr.name} className="h-32 w-full object-cover" />
+              <a
+                key={attr.id}
+                href={attr.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-lg overflow-hidden border border-border hover:border-primary hover:shadow-lg transition-all duration-300"
+              >
+                <div className="relative h-32 overflow-hidden">
+                  <img src={attr.imageUrl} alt={attr.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  {attr.externalUrl && (
+                    <div className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ExternalLink className="h-3 w-3" />
+                    </div>
+                  )}
+                </div>
                 <div className="p-3">
-                  <h4 className="font-medium">{attr.name}</h4>
+                  <h4 className="font-medium group-hover:text-primary transition-colors">{attr.name}</h4>
                   <p className="text-xs text-muted-foreground line-clamp-2">{attr.description}</p>
                   <div className="flex items-center justify-between mt-2">
                     {attr.rating && <span className="text-xs">⭐ {attr.rating}</span>}
                     {attr.priceLevel && <Badge variant="outline" className="text-xs">{priceLevelLabels[attr.priceLevel]}</Badge>}
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -164,13 +202,22 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
             </h2>
             <div className="space-y-3">
               {country.hotels.map((hotel) => (
-                <div key={hotel.id} className="flex gap-3 p-3 rounded-lg bg-muted/50">
+                <a
+                  key={hotel.id}
+                  href={hotel.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex gap-3 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-colors"
+                >
                   <img src={hotel.imageUrl} alt={hotel.name} className="h-16 w-16 rounded-lg object-cover" />
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm">{hotel.name}</h4>
+                    <h4 className="font-medium text-sm group-hover:text-primary transition-colors flex items-center gap-1">
+                      {hotel.name}
+                      <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </h4>
                     <p className="text-xs text-muted-foreground">ab {hotel.pricePerNight}€/Nacht • ⭐ {hotel.rating}</p>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -184,13 +231,22 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
             </h2>
             <div className="space-y-3">
               {country.restaurants.map((rest) => (
-                <div key={rest.id} className="flex gap-3 p-3 rounded-lg bg-muted/50">
+                <a
+                  key={rest.id}
+                  href={rest.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex gap-3 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-colors"
+                >
                   <img src={rest.imageUrl} alt={rest.name} className="h-16 w-16 rounded-lg object-cover" />
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm">{rest.name}</h4>
+                    <h4 className="font-medium text-sm group-hover:text-primary transition-colors flex items-center gap-1">
+                      {rest.name}
+                      <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </h4>
                     <p className="text-xs text-muted-foreground">{rest.cuisine} • {priceLevelLabels[rest.priceLevel]} • ⭐ {rest.rating}</p>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -206,29 +262,53 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
           </h2>
           <div className="space-y-3">
             {country.flights.map((flight) => (
-              <div key={flight.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+              <a
+                key={flight.id}
+                href={flight.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between p-4 rounded-lg bg-muted/50 hover:bg-primary/10 transition-colors"
+              >
                 <div>
-                  <p className="font-medium">{flight.airline}</p>
+                  <p className="font-medium group-hover:text-primary transition-colors flex items-center gap-1">
+                    {flight.airline}
+                    <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </p>
                   <p className="text-sm text-muted-foreground">{flight.departureCity} → {flight.arrivalCity}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium text-primary">{flight.priceRange}</p>
                   <p className="text-xs text-muted-foreground">{flight.duration} • {flight.stops === 0 ? 'Direkt' : `${flight.stops} Stopp`}</p>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
       )}
 
-      {/* Todo list */}
+      {/* Todo & Packing Tabs */}
       <div className="rounded-xl bg-card p-6 shadow-card">
-        <h2 className="font-display text-2xl font-semibold mb-6">To-do Liste</h2>
-        <div className="space-y-3">
-          {country.todos.map((todo) => (
-            <TodoItemComponent key={todo.id} todo={todo} onToggle={onToggleTodo} />
-          ))}
-        </div>
+        <Tabs defaultValue="todos">
+          <TabsList className="mb-4">
+            <TabsTrigger value="todos">To-do Liste</TabsTrigger>
+            <TabsTrigger value="packing">Packliste</TabsTrigger>
+          </TabsList>
+          <TabsContent value="todos">
+            <div className="space-y-3">
+              {country.todos.map((todo) => (
+                <TodoItemComponent key={todo.id} todo={todo} onToggle={onToggleTodo} />
+              ))}
+            </div>
+          </TabsContent>
+          <TabsContent value="packing">
+            <PackingList
+              items={packingItems}
+              onToggle={handleTogglePacking}
+              onAdd={handleAddPacking}
+              onDelete={handleDeletePacking}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
