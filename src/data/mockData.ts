@@ -414,7 +414,7 @@ export const inspirationDestinations: Destination[] = [
     name: 'Island',
     country: 'Island',
     type: 'country',
-    imageUrl: 'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1520769669658-f07657e5b307?w=800&q=80',
     description: 'Land aus Feuer und Eis mit Geysiren, Gletschern und Nordlichtern',
     highlights: ['Golden Circle', 'Blue Lagoon', 'Jökulsárlón', 'Nordlichter'],
     bestSeason: 'Juni bis August oder Dezember bis Februar',

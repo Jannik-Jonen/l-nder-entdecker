@@ -8,10 +8,16 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { AddCountryDialog } from '@/components/AddCountryDialog';
 
 const Profile = () => {
   const [countries, setCountries] = useState<Country[]>(mockCountries);
   const [editMode, setEditMode] = useState(false);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+
+  const handleAddCountry = (newCountry: Country) => {
+    setCountries([...countries, newCountry]);
+  };
 
   const totalTrips = countries.length;
   const totalTodos = countries.reduce((sum, c) => sum + c.todos.length, 0);
@@ -79,7 +85,7 @@ const Profile = () => {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-display text-2xl font-semibold">Meine Destinationen</h2>
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => setAddDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Reise hinzufügen
             </Button>
@@ -143,7 +149,10 @@ const Profile = () => {
             })}
 
             {/* Add new card */}
-            <button className="flex items-center justify-center rounded-xl border-2 border-dashed border-border h-64 hover:border-primary hover:bg-primary/5 transition-colors group">
+            <button 
+              onClick={() => setAddDialogOpen(true)}
+              className="flex items-center justify-center rounded-xl border-2 border-dashed border-border h-64 hover:border-primary hover:bg-primary/5 transition-colors group"
+            >
               <div className="text-center">
                 <Plus className="h-10 w-10 mx-auto text-muted-foreground group-hover:text-primary transition-colors" />
                 <p className="mt-2 text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
@@ -152,6 +161,12 @@ const Profile = () => {
               </div>
             </button>
           </div>
+
+          <AddCountryDialog
+            open={addDialogOpen}
+            onOpenChange={setAddDialogOpen}
+            onAdd={handleAddCountry}
+          />
         </section>
 
         {/* Settings section */}
