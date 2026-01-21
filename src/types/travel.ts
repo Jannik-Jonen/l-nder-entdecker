@@ -13,6 +13,7 @@ export interface Attraction {
   imageUrl: string;
   rating?: number;
   priceLevel?: 'free' | 'low' | 'medium' | 'high';
+  externalUrl?: string;
 }
 
 export interface Hotel {
@@ -23,16 +24,17 @@ export interface Hotel {
   pricePerNight: number;
   rating: number;
   amenities: string[];
+  bookingUrl?: string;
 }
 
-export interface Restaurant {
+export interface PackingItem {
   id: string;
   name: string;
-  cuisine: string;
-  priceLevel: 'low' | 'medium' | 'high';
-  rating: number;
-  imageUrl: string;
+  packed: boolean;
+  category: 'clothing' | 'toiletries' | 'electronics' | 'documents' | 'other';
 }
+
+
 
 export interface FlightConnection {
   id: string;
@@ -42,7 +44,34 @@ export interface FlightConnection {
   duration: string;
   priceRange: string;
   stops: number;
+  bookingUrl?: string;
 }
+
+export interface Restaurant {
+  id: string;
+  name: string;
+  cuisine: string;
+  priceLevel: 'low' | 'medium' | 'high';
+  rating: number;
+  imageUrl: string;
+  externalUrl?: string;
+}
+
+export const packingCategoryLabels: Record<PackingItem['category'], string> = {
+  clothing: 'Kleidung',
+  toiletries: 'Hygiene',
+  electronics: 'Elektronik',
+  documents: 'Dokumente',
+  other: 'Sonstiges',
+};
+
+export const packingCategoryIcons: Record<PackingItem['category'], string> = {
+  clothing: '👕',
+  toiletries: '🧴',
+  electronics: '📱',
+  documents: '📄',
+  other: '📦',
+};
 
 export interface WeatherInfo {
   averageTemp: number;

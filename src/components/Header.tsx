@@ -1,4 +1,4 @@
-import { Compass } from 'lucide-react';
+import { Compass, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -9,6 +9,7 @@ export const Header = () => {
     { path: '/', label: 'Dashboard' },
     { path: '/inspiration', label: 'Inspiration' },
     { path: '/tipps', label: 'Reisetipps' },
+    { path: '/profile', label: 'Profil', icon: User },
   ];
 
   return (
@@ -27,12 +28,13 @@ export const Header = () => {
               key={item.path}
               to={item.path}
               className={cn(
-                "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+                "px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5",
                 location.pathname === item.path
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
             >
+              {item.icon && <item.icon className="h-4 w-4" />}
               {item.label}
             </Link>
           ))}
