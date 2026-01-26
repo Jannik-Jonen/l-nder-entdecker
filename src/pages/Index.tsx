@@ -3,10 +3,14 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { CountryCard } from '@/components/CountryCard';
 import { CountryDetail } from '@/components/CountryDetail';
+import { LandingHero } from '@/components/LandingHero';
+import { InspirationPreview } from '@/components/InspirationPreview';
 import { mockTrip } from '@/data/mockData';
 import { Country } from '@/types/travel';
+import { useAuth } from '@/hooks/useAuth';
 
 const Index = () => {
+  const { user, loading } = useAuth();
   const [trip, setTrip] = useState(mockTrip);
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
 
@@ -57,6 +61,37 @@ const Index = () => {
     ? trip.countries.find((c) => c.id === selectedCountry.id) || selectedCountry
     : null;
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container py-20 text-center">
+          <div className="animate-pulse text-muted-foreground">Laden...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show landing page for non-authenticated users
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main>
+          <LandingHero />
+          <InspirationPreview />
+        </main>
+        <footer className="border-t border-border mt-16 py-8">
+          <div className="container text-center text-sm text-muted-foreground">
+            <p>GlobeDetour – Dein Begleiter für unvergessliche Reisen</p>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+
+  // Authenticated user dashboard
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -96,12 +131,9 @@ const Index = () => {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-border mt-16 py-8">
         <div className="container text-center text-sm text-muted-foreground">
-          <p>
-            GlobeDetour – Dein Begleiter für unvergessliche Reisen
-          </p>
+          <p>GlobeDetour – Dein Begleiter für unvergessliche Reisen</p>
         </div>
       </footer>
     </div>
