@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { inspirationDestinations } from '@/data/mockData';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+ 
 
 const typeIcons: Record<Destination['type'], React.ElementType> = {
   country: Globe,
@@ -23,6 +24,11 @@ const typeLabels: Record<Destination['type'], string> = {
 const Inspiration = () => {
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+ 
+
+ 
+
+ 
 
   const filteredDestinations = selectedType === 'all'
     ? inspirationDestinations
@@ -35,6 +41,7 @@ const Inspiration = () => {
       <Header />
 
       <main className="container py-8">
+        
         {/* Hero Section */}
         <section className="relative overflow-hidden rounded-2xl gradient-hero p-8 md:p-12 text-primary-foreground mb-8">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary-foreground/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -79,28 +86,42 @@ const Inspiration = () => {
           {filteredDestinations.map((destination, index) => {
             const TypeIcon = typeIcons[destination.type];
             return (
-              <button
+              <div
                 key={destination.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setSelectedDestination(destination)}
-                className="group relative overflow-hidden rounded-xl bg-card shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 text-left animate-fade-up"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedDestination(destination);
+                  }
+                }}
+                className="group relative overflow-hidden rounded-xl bg-card shadow-card transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 text-left animate-fade-up cursor-pointer"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
                     src={destination.imageUrl}
                     alt={destination.name}
+                    loading="lazy"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
+                  {/* stärkerer, dunkler Overlay für bessere Lesbarkeit */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-transparent" />
 
-                  <div className="absolute top-3 left-3">
-                    <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
-                      <TypeIcon className="h-3 w-3 mr-1" />
-                      {typeLabels[destination.type]}
-                    </Badge>
-                  </div>
+                <div className="absolute top-3 left-3">
+                  <Badge
+                    variant="secondary"
+                    className="bg-black/75 text-white backdrop-blur-sm ring-1 ring-white/30 shadow-xl px-3 py-1 flex items-center"
+                  >
+                    <TypeIcon className="h-3 w-3 mr-1 text-white" />
+                    {typeLabels[destination.type]}
+                  </Badge>
+                </div>
 
-                  <div className="absolute bottom-4 left-4 right-4 text-primary-foreground">
+                  <div className="absolute bottom-4 left-4 right-4 text-primary-foreground drop-shadow-lg">
                     <h3 className="font-display text-xl font-semibold">{destination.name}</h3>
                     <p className="text-sm opacity-80">{destination.country}</p>
                   </div>
@@ -121,8 +142,10 @@ const Inspiration = () => {
                       <span>~{destination.averageDailyCost}€/Tag</span>
                     </div>
                   </div>
+                  
+                  
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -137,60 +160,74 @@ const Inspiration = () => {
               className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative h-64 overflow-hidden">
+              {/* Bild + Header */}
+              <div className="relative h-64 overflow-hidden rounded-t-2xl">
                 <img
                   src={selectedDestination.imageUrl}
                   alt={selectedDestination.name}
+                  loading="lazy"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Bild+nicht+verfügbar'; }}
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
                 <button
                   onClick={() => setSelectedDestination(null)}
                   className="absolute top-4 right-4 p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
                 >
                   ✕
                 </button>
-                <div className="absolute bottom-6 left-6 right-6 text-primary-foreground">
-                  <Badge variant="secondary" className="mb-2 bg-background/80 backdrop-blur-sm">
-                    {typeLabels[selectedDestination.type]}
-                  </Badge>
-                  <h2 className="font-display text-3xl font-bold">{selectedDestination.name}</h2>
-                  <p className="text-lg opacity-80">{selectedDestination.country}</p>
-                </div>
               </div>
 
-              <div className="p-6 space-y-6">
-                <p className="text-muted-foreground">{selectedDestination.description}</p>
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Badge variant="secondary" className="bg-black/60 text-white backdrop-blur-sm ring-1 ring-white/20 shadow-md px-3 py-1">
+                    {typeLabels[selectedDestination.type]}
+                  </Badge>
+                </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="rounded-xl bg-muted/50 p-4">
-                    <div className="flex items-center gap-2 mb-2 text-primary">
-                      <Calendar className="h-5 w-5" />
-                      <h4 className="font-medium">Beste Reisezeit</h4>
-                    </div>
-                    <p className="text-sm">{selectedDestination.bestSeason}</p>
+                <h2 className="font-display text-2xl font-bold mb-1">{selectedDestination.name}</h2>
+                <p className="text-sm opacity-80 mb-4">{selectedDestination.country}</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                  <div className="rounded-lg bg-muted/40 p-3 flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    <div className="text-sm"><span className="font-medium">Beste Reisezeit</span><div className="text-muted-foreground">{selectedDestination.bestSeason}</div></div>
                   </div>
-                  <div className="rounded-xl bg-muted/50 p-4">
-                    <div className="flex items-center gap-2 mb-2 text-primary">
-                      <DollarSign className="h-5 w-5" />
-                      <h4 className="font-medium">Tagesbudget</h4>
-                    </div>
-                    <p className="text-sm">~{selectedDestination.averageDailyCost} {selectedDestination.currency}/Tag</p>
+                  <div className="rounded-lg bg-muted/40 p-3 flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-primary" />
+                    <div className="text-sm"><span className="font-medium">Budget</span><div className="text-muted-foreground">~{selectedDestination.averageDailyCost}{selectedDestination.currency ? ` ${selectedDestination.currency}` : '€'}/Tag</div></div>
+                  </div>
+                  <div className="rounded-lg bg-muted/40 p-3 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    <div className="text-sm"><span className="font-medium">Kategorie</span><div className="text-muted-foreground">{typeLabels[selectedDestination.type]}</div></div>
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="font-medium mb-3 flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                    Highlights
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedDestination.highlights.map((highlight, i) => (
-                      <Badge key={i} variant="outline" className="bg-primary/5">
-                        {highlight}
-                      </Badge>
-                    ))}
+                <p className="text-sm text-muted-foreground mb-6">{selectedDestination.description}</p>
+
+                {selectedDestination.highlights && selectedDestination.highlights.length > 0 && (
+                  <div className="mb-6">
+                    <div className="text-sm font-medium mb-2">Highlights</div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedDestination.highlights.map((h, i) => (
+                        <Badge key={`${selectedDestination.id}-hl-${i}`} variant="secondary" className="px-3 py-1">
+                          {h}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
+                )}
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      const q = encodeURIComponent(`${selectedDestination.name} Reise Informationen`);
+                      window.open(`https://www.google.com/search?q=${q}`, '_blank');
+                    }}
+                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition"
+                  >
+                    Mehr Infos
+                  </button>
                 </div>
               </div>
             </div>
