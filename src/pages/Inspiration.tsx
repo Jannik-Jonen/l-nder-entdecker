@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { inspirationDestinations } from '@/data/mockData';
 import { Destination } from '@/types/travel';
-import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain } from 'lucide-react';
+import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
  
 
 const typeIcons: Record<Destination['type'], React.ElementType> = {
@@ -22,8 +26,37 @@ const typeLabels: Record<Destination['type'], string> = {
 };
 
 const Inspiration = () => {
+  const { user } = useAuth();
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+
+  const addToMyTrips = async (destination: Destination) => {
+    if (!user) return;
+    setIsAdding(true);
+
+    try {
+      const { error } = await supabase
+        .from('saved_trips')
+        .insert({
+          user_id: user.id,
+          destination_name: destination.name,
+          destination_code: 'XX',
+          image_url: destination.imageUrl,
+          daily_budget: destination.averageDailyCost,
+          currency: destination.currency || 'EUR',
+          start_date: new Date().toISOString(),
+          end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        });
+
+      if (error) throw error;
+      toast.success('Reise erfolgreich gespeichert!');
+    } catch (error: any) {
+      toast.error('Fehler beim Speichern: ' + error.message);
+    } finally {
+      setIsAdding(false);
+    }
+  };
  
 
  
@@ -224,10 +257,22 @@ const Inspiration = () => {
                       const q = encodeURIComponent(`${selectedDestination.name} Reise Informationen`);
                       window.open(`https://www.google.com/search?q=${q}`, '_blank');
                     }}
-                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition"
+                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
                   >
                     Mehr Infos
                   </button>
+
+                  {user && (
+                    <Button 
+                      onClick={() => addToMyTrips(selectedDestination)}
+                      disabled={isAdding}
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      {isAdding ? '...' : 'Zur Reise hinzufügen'}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
