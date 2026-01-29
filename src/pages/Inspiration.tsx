@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { inspirationDestinations } from '@/data/mockData';
 import { Destination } from '@/types/travel';
-import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus } from 'lucide-react';
+import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -250,6 +250,39 @@ const Inspiration = () => {
                     </div>
                   </div>
                 )}
+
+                {/* Travel Info Section */}
+                <div className="grid grid-cols-1 gap-3 mb-6">
+                  {selectedDestination.visaInfo && (
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50">
+                      <FileCheck className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <span className="font-medium text-blue-700 dark:text-blue-400 block mb-1">Visa & Einreise</span>
+                        <p className="text-muted-foreground leading-relaxed">{selectedDestination.visaInfo}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedDestination.vaccinationInfo && (
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50">
+                      <Syringe className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <span className="font-medium text-emerald-700 dark:text-emerald-400 block mb-1">Impfungen & Gesundheit</span>
+                        <p className="text-muted-foreground leading-relaxed">{selectedDestination.vaccinationInfo}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedDestination.healthSafetyInfo && (
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50">
+                      <ShieldCheck className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <span className="font-medium text-amber-700 dark:text-amber-400 block mb-1">Sicherheit & Hinweise</span>
+                        <p className="text-muted-foreground leading-relaxed">{selectedDestination.healthSafetyInfo}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-3">
                   <button

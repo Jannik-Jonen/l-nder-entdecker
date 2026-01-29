@@ -115,6 +115,9 @@ export interface Destination {
   bestSeason: string;
   averageDailyCost: number;
   currency: string;
+  visaInfo?: string;
+  vaccinationInfo?: string;
+  healthSafetyInfo?: string;
 }
 
 export interface TravelTip {

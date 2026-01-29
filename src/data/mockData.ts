@@ -408,6 +408,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'April bis Oktober',
     averageDailyCost: 50,
     currency: 'IDR',
+    visaInfo: 'Visa on Arrival (VoA) für 30 Tage erhältlich (ca. 30€). Reisepass muss noch 6 Monate gültig sein.',
+    vaccinationInfo: 'Standardimpfungen. Hepatitis A empfohlen. Bei längeren Aufenthalten auch Typhus, Tollwut, Jap. Enzephalitis.',
+    healthSafetyInfo: 'Dengue-Fieber Risiko (Mückenschutz!). Kein Leitungswasser trinken. Gute medizinische Versorgung in Touristengebieten.'
   },
   {
     id: 'dest-2',
@@ -420,6 +423,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'Juni bis August oder Dezember bis Februar',
     averageDailyCost: 180,
     currency: 'ISK',
+    visaInfo: 'Kein Visum für EU-Bürger erforderlich (Schengen-Raum). Personalausweis ausreichend.',
+    vaccinationInfo: 'Keine speziellen Impfungen erforderlich. Standardimpfungen sollten aktuell sein.',
+    healthSafetyInfo: 'Sehr sicheres Reiseland. Wetter kann schnell umschlagen – warme Kleidung wichtig! Ausgezeichnete medizinische Versorgung.'
   },
   {
     id: 'dest-3',
@@ -432,6 +438,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'März bis Mai, Oktober bis November',
     averageDailyCost: 120,
     currency: 'JPY',
+    visaInfo: 'Visumfrei für touristische Aufenthalte bis 90 Tage für EU-Bürger.',
+    vaccinationInfo: 'Standardimpfungen. Japanische Enzephalitis bei Langzeitaufenthalten in ländlichen Gebieten.',
+    healthSafetyInfo: 'Extrem sicher. Erdbebenrisiko beachten. Exzellente Hygiene und Gesundheitsversorgung.'
   },
   {
     id: 'dest-4',
@@ -444,6 +453,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'November bis März',
     averageDailyCost: 80,
     currency: 'ZAR',
+    visaInfo: 'Visumfrei für touristische Aufenthalte bis 90 Tage. Reisepass muss bei Ausreise noch 30 Tage gültig sein.',
+    vaccinationInfo: 'Hepatitis A empfohlen. Kapstadt ist malariafrei (aber Krüger Park nicht!).',
+    healthSafetyInfo: 'Sicherheitshinweise beachten (Wertsachen nicht offen zeigen, nachts bestimmte Gegenden meiden). Gute private Kliniken.'
   },
   {
     id: 'dest-5',
@@ -456,6 +468,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'November bis April',
     averageDailyCost: 300,
     currency: 'MVR',
+    visaInfo: 'Kostenloses Touristenvisum (30 Tage) bei Ankunft. Rückflugticket und Hotelbuchung notwendig.',
+    vaccinationInfo: 'Hepatitis A, Typhus empfohlen. Keine Malaria, aber Dengue-Fieber Risiko.',
+    healthSafetyInfo: 'Strenge Einfuhrbestimmungen (kein Alkohol/Schweinefleisch im Gepäck). Mückenschutz wichtig. Resorts haben oft Inselärzte.'
   },
   {
     id: 'dest-6',
@@ -468,6 +483,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'Oktober bis März',
     averageDailyCost: 100,
     currency: 'ARS/CLP',
+    visaInfo: 'Visumfrei bis 90 Tage für EU-Bürger in beiden Ländern.',
+    vaccinationInfo: 'Standardimpfungen. Hepatitis A empfohlen. Keine Malaria in Patagonien.',
+    healthSafetyInfo: 'Wetter extrem wechselhaft (Vier Jahreszeiten an einem Tag). Gute Ausrüstung wichtig. Ozonloch-Nähe: Hoher UV-Schutz nötig!'
   },
   {
     id: 'dest-7',
@@ -480,6 +498,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'April bis Oktober',
     averageDailyCost: 150,
     currency: 'EUR',
+    visaInfo: 'Kein Visum erforderlich (EU/Schengen).',
+    vaccinationInfo: 'Keine speziellen Impfungen. Standardimpfungen auffrischen.',
+    healthSafetyInfo: 'Sicher. Im Sommer sehr heiß (Sonnenschutz!). Leitungswasser meist nicht trinkbar (Flaschenwasser nutzen).'
   },
   {
     id: 'dest-8',
@@ -492,6 +513,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'März bis Mai, September bis November',
     averageDailyCost: 60,
     currency: 'MAD',
+    visaInfo: 'Visumfrei bis 90 Tage für EU-Bürger. Reisepass erforderlich (mind. 6 Monate gültig).',
+    vaccinationInfo: 'Hepatitis A empfohlen. Ggf. Typhus bei einfachen Reisebedingungen.',
+    healthSafetyInfo: 'Kein Leitungswasser trinken! Vorsicht bei rohem Essen ("Cook it, peel it or leave it"). Magen-Darm-Medikamente mitnehmen.'
   },
   {
     id: 'dest-9',
@@ -504,6 +528,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'September bis November',
     averageDailyCost: 160,
     currency: 'USD',
+    visaInfo: 'ESTA-Genehmigung vorab online beantragen (21$, 2 Jahre gültig). Reisepass nötig.',
+    vaccinationInfo: 'Standardimpfungen.',
+    healthSafetyInfo: 'Medizinische Versorgung exzellent aber extrem teuer -> Auslandskrankenversicherung essentiell! Obdachlosigkeit in Downtown sichtbar.'
   },
   {
     id: 'dest-10',
@@ -516,6 +543,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'Mai bis Oktober',
     averageDailyCost: 90,
     currency: 'EUR',
+    visaInfo: 'Kein Visum erforderlich (EU/Schengen).',
+    vaccinationInfo: 'Keine speziellen Impfungen.',
+    healthSafetyInfo: 'Wetter wechselhaft. Sehr sicher. Baden im Meer: Strömungen beachten (nur bewachte Strände).'
   },
   {
     id: 'dest-11',
@@ -528,6 +558,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'November bis April',
     averageDailyCost: 50,
     currency: 'VND',
+    visaInfo: 'Visumfrei bis 45 Tage für deutsche Staatsangehörige (Änderungen prüfen!). E-Visum für längere Aufenthalte.',
+    vaccinationInfo: 'Hepatitis A, Typhus, Tollwut, Jap. Enzephalitis (je nach Region/Dauer).',
+    healthSafetyInfo: 'Dengue-Fieber Risiko. Verkehr ist chaotisch – Vorsicht beim Überqueren von Straßen! Kein Leitungswasser.'
   },
    {
     id: 'dest-12',
@@ -540,6 +573,9 @@ export const inspirationDestinations: Destination[] = [
     bestSeason: 'Mai bis Oktober',
     averageDailyCost: 55,
     currency: 'EUR',
+    visaInfo: 'Kein Visum erforderlich (EU/Schengen).',
+    vaccinationInfo: 'Standardimpfungen.',
+    healthSafetyInfo: 'Sonnenschutz wichtig. Vorsicht vor überteuerten Touristenfallen bei Restaurants.'
   },
 ];
 
