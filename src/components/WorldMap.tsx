@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup, Marker } from 'react-simple-maps';
 import { useNavigate } from 'react-router-dom';
-import { inspirationDestinations } from '@/data/mockData';
+import { inspirationDestinations, guidePosts } from '@/data/mockData';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -10,6 +10,7 @@ const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 export const WorldMap = () => {
   const navigate = useNavigate();
   const [zoom, setZoom] = useState(1);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const markers = useMemo(() => {
     const coordById: Record<string, [number, number]> = {
       'dest-1': [115, -8], // Bali, Indonesien
@@ -48,7 +49,13 @@ export const WorldMap = () => {
           e.stopPropagation();
         }}
       >
-        <ZoomableGroup center={[10, 20]} zoom={zoom}>
+        <ZoomableGroup
+          center={[10, 20]}
+          zoom={zoom}
+          onClick={() => {
+            setSelectedId(null);
+          }}
+        >
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => (
@@ -68,13 +75,54 @@ export const WorldMap = () => {
             <Marker
               key={m.id}
               coordinates={m.coords as [number, number]}
-              onClick={() => navigate(`/guides/${m.id}`)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedId(m.id);
+              }}
             >
               <circle r={4} className="fill-primary" />
-              {zoom >= 1.15 && (
-                <text className="text-xs fill-foreground drop-shadow-md" textAnchor="start" dx={6} dy={3}>
-                  {m.name}
-                </text>
+              {selectedId === m.id && (
+                <g transform="translate(8,-8)">
+                  <foreignObject x="0" y="0" width="220" height="120">
+                    <div className="rounded-md bg-background border border-border shadow-card p-3 text-xs">
+                      <div className="font-medium mb-2">{m.name}</div>
+                      <div className="flex gap-2">
+                        <button
+                          className="px-2 py-1 rounded bg-primary text-primary-foreground"
+                          onClick={(ev) => {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            navigate(`/guides/${m.id}`);
+                          }}
+                        >
+                          Guide öffnen
+                        </button>
+                        {guidePosts.find((p) => p.destinationId === m.id) && (
+                          <button
+                            className="px-2 py-1 rounded bg-muted text-foreground"
+                            onClick={(ev) => {
+                              ev.preventDefault();
+                              ev.stopPropagation();
+                               navigate(`/guides/${m.id}?section=posts`);
+                            }}
+                          >
+                            Beitrag
+                          </button>
+                        )}
+                        <button
+                          className="px-2 py-1 rounded bg-muted text-muted-foreground"
+                          onClick={(ev) => {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                            setSelectedId(null);
+                          }}
+                        >
+                          Schließen
+                        </button>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
               )}
             </Marker>
           ))}
