@@ -154,9 +154,9 @@ const Inspiration = () => {
                   </Badge>
                 </div>
 
-                  <div className="absolute bottom-4 left-4 right-4 text-primary-foreground drop-shadow-lg">
+                  <div className="absolute bottom-4 left-4 right-4 text-white drop-shadow-xl">
                     <h3 className="font-display text-xl font-semibold">{destination.name}</h3>
-                    <p className="text-sm opacity-80">{destination.country}</p>
+                    <p className="text-sm opacity-90">{destination.country}</p>
                   </div>
                 </div>
 
@@ -189,7 +189,7 @@ const Inspiration = () => {
             {guidePosts.map((p) => (
               <a
                 key={p.id}
-                href={`/guides/${p.destinationId}`}
+                href={`/guides/posts/${p.id}`}
                 className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
               >
                 <div className="relative h-40">

@@ -11,6 +11,7 @@ import Tipps from "./pages/Tipps";
 import Profile from "./pages/Profile";
 import Guides from "./pages/Guides";
 import GuideDetail from "./pages/GuideDetail";
+import GuidePostDetail from "./pages/GuidePostDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/inspiration" element={<Inspiration />} />
               <Route path="/guides" element={<Guides />} />
               <Route path="/guides/:id" element={<GuideDetail />} />
+              <Route path="/guides/posts/:id" element={<GuidePostDetail />} />
               <Route path="/tipps" element={<Tipps />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />

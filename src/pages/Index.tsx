@@ -107,7 +107,7 @@ const Index = () => {
                 {guidePosts.slice(0, 3).map((p) => (
                   <Link
                     key={p.id}
-                    to={`/guides/${p.destinationId}`}
+                    to={`/guides/posts/${p.id}`}
                     className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
                   >
                     <div className="relative h-40">
