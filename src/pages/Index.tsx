@@ -8,6 +8,9 @@ import { InspirationPreview } from '@/components/InspirationPreview';
 import { mockTrip } from '@/data/mockData';
 import { Country } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
+import { inspirationDestinations } from '@/data/mockData';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -81,6 +84,50 @@ const Index = () => {
         <main>
           <LandingHero />
           <InspirationPreview />
+          
+          <section className="py-12">
+            <div className="container">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-semibold">Orts-Guides & Beiträge</h2>
+                <Link
+                  to="/guides"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
+                >
+                  Alle Guides ansehen
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {inspirationDestinations.slice(0, 3).map((d) => (
+                  <Link
+                    key={d.id}
+                    to={`/guides/${d.id}`}
+                    className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+                  >
+                    <div className="relative h-40">
+                      <img
+                        src={d.imageUrl}
+                        alt={d.name}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="font-display text-xl font-semibold text-white">{d.name}</h3>
+                        <p className="text-white/80 text-sm line-clamp-2">{d.description}</p>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
+                        <span>{d.country}</span>
+                        <span>{d.bestSeason}</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
         </main>
         <footer className="border-t border-border mt-16 py-8">
           <div className="container text-center text-sm text-muted-foreground">

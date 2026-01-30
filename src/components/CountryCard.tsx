@@ -35,6 +35,7 @@ export const CountryCard = ({ country, onClick, index }: CountryCardProps) => {
           src={country.imageUrl}
           alt={country.name}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
         

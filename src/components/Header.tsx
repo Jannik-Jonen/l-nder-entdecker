@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { Compass, User, LogIn } from 'lucide-react';
+import { Compass, User, LogIn, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthDialog } from '@/components/AuthDialog';
 import { Button } from '@/components/ui/button';
+import { Toggle } from '@/components/ui/toggle';
+import { useTheme } from 'next-themes';
 
 export const Header = () => {
   const location = useLocation();
   const { user } = useAuth();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
 
   const navItems = [
     { path: '/', label: 'Dashboard' },
@@ -43,6 +46,13 @@ export const Header = () => {
                 {item.label}
               </Link>
             ))}
+            <Toggle
+              aria-label="Theme umschalten"
+              className="ml-2"
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+            >
+              {resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Toggle>
             
             {user ? (
               <Link

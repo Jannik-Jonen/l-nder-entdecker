@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { AddCountryDialog } from '@/components/AddCountryDialog';
 import { AuthDialog } from '@/components/AuthDialog';
 import { useAuth } from '@/hooks/useAuth';
-import { supabaseUntyped } from '@/lib/supabase-untyped';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface ProfileRow {
@@ -54,25 +54,37 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     if (!user) return;
-    const { data } = await supabaseUntyped
-      .from('profiles')
-      .select('display_name')
-      .eq('user_id', user.id)
-      .single();
-    if (data) setProfile(data as ProfileRow);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const resp = await fetch('/api/me', {
+        headers: {
+          Authorization: `Bearer ${token || ''}`,
+        },
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setProfile({ display_name: (data as ProfileRow).display_name });
+      }
+    } catch (e) {
+      // ignore
+    }
   };
 
   const fetchTrips = async () => {
     if (!user) return;
     setLoadingTrips(true);
-    const { data, error } = await supabaseUntyped
-      .from('saved_trips')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
-
-    if (data && data.length > 0) {
-      const mappedTrips: Country[] = (data as SavedTripRow[]).map((trip: SavedTripRow) => ({
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const resp = await fetch('/api/trips', {
+        headers: {
+          Authorization: `Bearer ${token || ''}`,
+        },
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        const mappedTrips: Country[] = (data as SavedTripRow[]).map((trip: SavedTripRow) => ({
         id: trip.id,
         name: trip.destination_name,
         code: trip.destination_code || 'XX',
@@ -88,51 +100,72 @@ const Profile = () => {
         flights: [],
         weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
       }));
-      setCountries(mappedTrips);
-    } else if (!error) {
-      // No saved trips, show mock data for demo
-      setCountries(mockCountries);
+        setCountries(mappedTrips);
+      } else {
+        setCountries(mockCountries);
+      }
+    } finally {
+      setLoadingTrips(false);
     }
-    setLoadingTrips(false);
   };
 
   const handleAddCountry = async (newCountry: Country) => {
     if (user) {
-      // Save to database
-      const { data, error } = await supabaseUntyped.from('saved_trips').insert({
-        user_id: user.id,
-        destination_name: newCountry.name,
-        destination_code: newCountry.code,
-        image_url: newCountry.imageUrl,
-        start_date: newCountry.startDate,
-        end_date: newCountry.endDate,
-        daily_budget: newCountry.dailyCost,
-        currency: newCountry.currency,
-      }).select().single();
-
-      if (error) {
-        toast.error('Fehler beim Speichern: ' + error.message);
-        return;
-      }
-
-      if (data) {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        const resp = await fetch('/api/trips', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token || ''}`,
+          },
+          body: JSON.stringify({
+            destination_name: newCountry.name,
+            destination_code: newCountry.code,
+            image_url: newCountry.imageUrl,
+            start_date: newCountry.startDate,
+            end_date: newCountry.endDate,
+            daily_budget: newCountry.dailyCost,
+            currency: newCountry.currency,
+          }),
+        });
+        if (!resp.ok) {
+          const err = await resp.json();
+          toast.error('Fehler beim Speichern: ' + (err.error || 'Unbekannter Fehler'));
+          return;
+        }
+        const data = await resp.json();
         const savedCountry: Country = {
           ...newCountry,
           id: (data as SavedTripRow).id,
         };
         setCountries([savedCountry, ...countries]);
         toast.success('Reise gespeichert!');
+      } catch {
+        toast.error('Fehler beim Speichern');
       }
     } else {
-      // Just add locally
       setCountries([...countries, newCountry]);
     }
   };
 
   const handleDeleteCountry = async (id: string) => {
     if (user) {
-      const { error } = await supabaseUntyped.from('saved_trips').delete().eq('id', id);
-      if (error) {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        const resp = await fetch(`/api/trips/${id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token || ''}`,
+          },
+        });
+        if (!resp.ok && resp.status !== 204) {
+          toast.error('Fehler beim Löschen');
+          return;
+        }
+      } catch {
         toast.error('Fehler beim Löschen');
         return;
       }

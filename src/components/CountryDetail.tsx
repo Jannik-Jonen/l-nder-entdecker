@@ -76,7 +76,12 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
 
       {/* Hero image */}
       <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
-        <img src={country.imageUrl} alt={country.name} className="h-full w-full object-cover" />
+        <img
+          src={country.imageUrl}
+          alt={country.name}
+          className="h-full w-full object-cover"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Bild+nicht+verfügbar'; }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6 text-primary-foreground">
           <div className="flex items-center gap-2 mb-2">
@@ -171,7 +176,12 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
                 className="group rounded-lg overflow-hidden border border-border hover:border-primary hover:shadow-lg transition-all duration-300"
               >
                 <div className="relative h-32 overflow-hidden">
-                  <img src={attr.imageUrl} alt={attr.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <img
+                    src={attr.imageUrl}
+                    alt={attr.name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                  />
                   {attr.externalUrl && (
                     <div className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity">
                       <ExternalLink className="h-3 w-3" />
@@ -209,7 +219,12 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
                   rel="noopener noreferrer"
                   className="group flex gap-3 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-colors"
                 >
-                  <img src={hotel.imageUrl} alt={hotel.name} className="h-16 w-16 rounded-lg object-cover" />
+                  <img
+                    src={hotel.imageUrl}
+                    alt={hotel.name}
+                    className="h-16 w-16 rounded-lg object-cover"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/160x160?text=Bild'; }}
+                  />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm group-hover:text-primary transition-colors flex items-center gap-1">
                       {hotel.name}
@@ -238,7 +253,12 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
                   rel="noopener noreferrer"
                   className="group flex gap-3 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 transition-colors"
                 >
-                  <img src={rest.imageUrl} alt={rest.name} className="h-16 w-16 rounded-lg object-cover" />
+                  <img
+                    src={rest.imageUrl}
+                    alt={rest.name}
+                    className="h-16 w-16 rounded-lg object-cover"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/160x160?text=Bild'; }}
+                  />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-sm group-hover:text-primary transition-colors flex items-center gap-1">
                       {rest.name}

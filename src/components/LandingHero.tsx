@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Compass, MapPin, Calendar, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AuthDialog } from '@/components/AuthDialog';
@@ -51,9 +52,8 @@ export const LandingHero = () => {
                 size="lg" 
                 variant="outline" 
                 className="text-lg px-8 bg-background/50 backdrop-blur-sm"
-                asChild
               >
-                <a href="/inspiration">Inspiration entdecken</a>
+                <Link to="/inspiration">Inspiration entdecken</Link>
               </Button>
             </div>
           </div>
