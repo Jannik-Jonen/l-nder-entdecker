@@ -660,7 +660,7 @@ export const guidePosts = [
     title: 'Kyoto: Tempel, Tee und Tradition',
     excerpt: 'Die schönsten Tempel, Teehäuser und Viertel für ein entschleunigtes Japan-Erlebnis.',
     imageUrl: 'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=800&q=80',
-    destinationId: 'dest-8',
+    destinationId: 'dest-3',
     tags: ['Kultur', 'Sightseeing'],
   },
 ];

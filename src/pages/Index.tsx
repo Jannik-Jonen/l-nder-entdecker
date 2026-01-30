@@ -83,12 +83,12 @@ const Index = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <main>
+          <LandingHero />
           <section className="py-8">
             <div className="container">
               <WorldMap />
             </div>
           </section>
-          <LandingHero />
           <InspirationPreview />
           
           <section className="py-12">
