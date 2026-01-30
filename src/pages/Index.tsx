@@ -8,9 +8,10 @@ import { InspirationPreview } from '@/components/InspirationPreview';
 import { mockTrip } from '@/data/mockData';
 import { Country } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
-import { inspirationDestinations } from '@/data/mockData';
+import { guidePosts } from '@/data/mockData';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { WorldMap } from '@/components/WorldMap';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -82,6 +83,11 @@ const Index = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <main>
+          <section className="py-8">
+            <div className="container">
+              <WorldMap />
+            </div>
+          </section>
           <LandingHero />
           <InspirationPreview />
           
@@ -98,29 +104,29 @@ const Index = () => {
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {inspirationDestinations.slice(0, 3).map((d) => (
+                {guidePosts.slice(0, 3).map((p) => (
                   <Link
-                    key={d.id}
-                    to={`/guides/${d.id}`}
+                    key={p.id}
+                    to={`/guides/${p.destinationId}`}
                     className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
                   >
                     <div className="relative h-40">
                       <img
-                        src={d.imageUrl}
-                        alt={d.name}
+                        src={p.imageUrl}
+                        alt={p.title}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h3 className="font-display text-xl font-semibold text-white">{d.name}</h3>
-                        <p className="text-white/80 text-sm line-clamp-2">{d.description}</p>
+                        <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                        <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
                       </div>
                     </div>
                     <div className="p-4">
                       <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>{d.country}</span>
-                        <span>{d.bestSeason}</span>
+                        <span>{p.tags.join(' • ')}</span>
+                        <span>Weiterlesen</span>
                       </div>
                     </div>
                   </Link>

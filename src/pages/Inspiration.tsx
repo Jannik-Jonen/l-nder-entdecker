@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
-import { inspirationDestinations } from '@/data/mockData';
+import { inspirationDestinations, guidePosts, travelTips } from '@/data/mockData';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -182,6 +182,52 @@ const Inspiration = () => {
             );
           })}
         </div>
+
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-semibold mb-4">Beiträge</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {guidePosts.map((p) => (
+              <a
+                key={p.id}
+                href={`/guides/${p.destinationId}`}
+                className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+              >
+                <div className="relative h-40">
+                  <img
+                    src={p.imageUrl}
+                    alt={p.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                    <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                  </div>
+                </div>
+                <div className="p-4 flex items-center justify-between text-sm text-muted-foreground">
+                  <span>{p.tags.join(' • ')}</span>
+                  <span>Weiterlesen</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-semibold mb-4">Tipps</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {travelTips.map((t) => (
+              <div key={t.id} className="rounded-xl bg-card p-5 shadow-card border border-border">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xl">{t.icon}</span>
+                  <h3 className="font-medium">{t.title}</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">{t.content}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Detail Modal */}
         {selectedDestination && (

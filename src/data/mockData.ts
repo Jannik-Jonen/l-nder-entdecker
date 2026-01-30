@@ -489,7 +489,7 @@ export const inspirationDestinations: Destination[] = [
   },
   {
     id: 'dest-7',
-    name: 'Santorin',
+    name: 'Santorini',
     country: 'Griechenland',
     type: 'island',
     imageUrl: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80',
@@ -635,5 +635,32 @@ export const travelTips: TravelTip[] = [
     title: 'Günstig übernachten',
     content: 'Erwäge Alternativen wie Hostels, Airbnb oder House-Sitting. Viele Hotels bieten bessere Preise bei Direktbuchung. Reise in der Nebensaison für deutlich günstigere Unterkünfte. Treueprogramme lohnen sich bei häufigem Reisen.',
     icon: '🏨',
+  },
+];
+
+export const guidePosts = [
+  {
+    id: 'post-bali-food',
+    title: 'Kulinarische Highlights in Bali',
+    excerpt: 'Von Nasi Goreng bis Babi Guling: Authentische Küche, Street-Food-Spots und lokale Märkte.',
+    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80',
+    destinationId: 'dest-1',
+    tags: ['Essen', 'Kultur', 'Budget'],
+  },
+  {
+    id: 'post-iceland-roadtrip',
+    title: 'Island Roadtrip: Die perfekte Route',
+    excerpt: 'Geysire, Gletscher und Wasserfälle: Tipps für Mietwagen, Unterkünfte und Etappen.',
+    imageUrl: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80',
+    destinationId: 'dest-2',
+    tags: ['Roadtrip', 'Natur', 'Planung'],
+  },
+  {
+    id: 'post-kyoto-temples',
+    title: 'Kyoto: Tempel, Tee und Tradition',
+    excerpt: 'Die schönsten Tempel, Teehäuser und Viertel für ein entschleunigtes Japan-Erlebnis.',
+    imageUrl: 'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=800&q=80',
+    destinationId: 'dest-8',
+    tags: ['Kultur', 'Sightseeing'],
   },
 ];
