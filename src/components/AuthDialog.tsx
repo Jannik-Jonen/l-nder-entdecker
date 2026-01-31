@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, Mail, Lock, User } from 'lucide-react';
 
@@ -19,7 +18,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
-  const { } = useAuth();
+  const { signIn, signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,59 +26,28 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
 
     try {
       if (isLogin) {
-        const resp = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await resp.json();
-        if (!resp.ok) {
-          toast.error('Anmeldung fehlgeschlagen: ' + (data.error || 'Unbekannter Fehler'));
+        const { error } = await signIn(email, password);
+        if (error) {
+          toast.error('Anmeldung fehlgeschlagen: ' + error.message);
         } else {
-          const { error } = await supabase.auth.setSession({
-            access_token: data.access_token,
-            refresh_token: data.refresh_token,
-          });
-          if (error) {
-            toast.error('Session-Fehler: ' + error.message);
+          toast.success('Erfolgreich angemeldet!');
+          onOpenChange(false);
+          resetForm();
+          window.location.href = '/';
+        }
+      } else {
+        const { error } = await signUp(email, password, displayName);
+        if (error) {
+          toast.error('Registrierung fehlgeschlagen: ' + error.message);
+        } else {
+          toast.success('Konto erfolgreich erstellt!');
+          const { error: loginError } = await signIn(email, password);
+          if (loginError) {
+            toast.error('Automatisches Anmelden fehlgeschlagen: ' + loginError.message);
           } else {
-            toast.success('Erfolgreich angemeldet!');
             onOpenChange(false);
             resetForm();
             window.location.href = '/';
-          }
-        }
-      } else {
-        const resp = await fetch('/api/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, displayName }),
-        });
-        const data = await resp.json();
-        if (!resp.ok) {
-          toast.error('Registrierung fehlgeschlagen: ' + (data.error || 'Unbekannter Fehler'));
-        } else {
-          const loginResp = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-          });
-          const loginData = await loginResp.json();
-          if (!loginResp.ok) {
-            toast.error('Automatisches Anmelden fehlgeschlagen: ' + (loginData.error || 'Unbekannter Fehler'));
-          } else {
-            const { error } = await supabase.auth.setSession({
-              access_token: loginData.access_token,
-              refresh_token: loginData.refresh_token,
-            });
-            if (error) {
-              toast.error('Session-Fehler: ' + error.message);
-            } else {
-              toast.success('Konto erfolgreich erstellt!');
-              onOpenChange(false);
-              resetForm();
-              window.location.href = '/';
-            }
           }
         }
       }
