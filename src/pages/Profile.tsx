@@ -35,7 +35,7 @@ interface SavedTripRow {
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
-  const [countries, setCountries] = useState<Country[]>(mockCountries);
+  const [countries, setCountries] = useState<Country[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
@@ -45,10 +45,12 @@ const Profile = () => {
   // Fetch profile and trips when user logs in
   useEffect(() => {
     if (user) {
+      setCountries([]);
       fetchProfile();
       fetchTrips();
     } else {
       setProfile(null);
+      setCountries(mockCountries);
     }
   }, [user]);
 
@@ -102,7 +104,7 @@ const Profile = () => {
       }));
         setCountries(mappedTrips);
       } else {
-        setCountries(mockCountries);
+        setCountries([]);
       }
     } finally {
       setLoadingTrips(false);
