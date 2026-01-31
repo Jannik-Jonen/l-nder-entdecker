@@ -86,7 +86,8 @@ const Profile = () => {
       });
       if (resp.ok) {
         const data = await resp.json();
-        const mappedTrips: Country[] = (data as SavedTripRow[]).map((trip: SavedTripRow) => ({
+        const rows = (data as SavedTripRow[]).filter((row) => row.user_id === (user?.id || ''));
+        const mappedTrips: Country[] = rows.map((trip: SavedTripRow) => ({
         id: trip.id,
         name: trip.destination_name,
         code: trip.destination_code || 'XX',
