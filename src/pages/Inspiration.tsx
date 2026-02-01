@@ -10,6 +10,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { LocationSearch, LocationResult } from '@/components/LocationSearch';
+import { fetchWikiData } from '@/services/wikipedia';
+import { Loader2 } from 'lucide-react';
 
 
 const typeIcons: Record<Destination['type'], React.ElementType> = {
@@ -31,8 +33,11 @@ const Inspiration = () => {
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
-  const handleLocationSelect = (location: LocationResult) => {
+  const handleLocationSelect = async (location: LocationResult) => {
+    setIsLoadingDetails(true);
+    
     // Map Nominatim type to our type
     let destType: Destination['type'] = 'city';
     const typeMap: Record<string, Destination['type']> = {
@@ -51,12 +56,18 @@ const Inspiration = () => {
       destType = 'region';
     }
 
+    // Fetch real data from Wikipedia
+    const wikiData = await fetchWikiData(location.name + (location.countryCode ? ` ${location.displayName.split(',').pop()}` : ''));
+    
+    // Fallback image if Wiki doesn't have one
+    const fallbackImage = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80';
+
     const customDestination: Destination = {
       id: `custom-${Date.now()}`,
       name: location.name,
       country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
-      description: `Benutzerdefinierter Ort: ${location.displayName}`,
-      imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80', // Generic travel image
+      description: wikiData?.description || `Ein wunderschönes Reiseziel: ${location.displayName}`,
+      imageUrl: wikiData?.imageUrl || fallbackImage,
       averageDailyCost: 100, // Default estimate
       bestSeason: 'Ganzjährig',
       type: destType,
@@ -67,6 +78,7 @@ const Inspiration = () => {
       healthSafetyInfo: undefined
     };
 
+    setIsLoadingDetails(false);
     setSelectedDestination(customDestination);
   };
 
@@ -134,7 +146,15 @@ const Inspiration = () => {
         {/* Search Section */}
         <div className="mb-8 max-w-2xl mx-auto">
           <div className="bg-card p-4 rounded-xl shadow-sm border border-border">
-             <h3 className="text-sm font-medium mb-2 text-muted-foreground">Wunschziel nicht dabei? Suche weltweit:</h3>
+             <div className="flex items-center justify-between mb-2">
+               <h3 className="text-sm font-medium text-muted-foreground">Wunschziel nicht dabei? Suche weltweit:</h3>
+               {isLoadingDetails && (
+                  <div className="flex items-center gap-2 text-xs text-primary animate-pulse">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    Lade Infos & Bilder...
+                  </div>
+               )}
+             </div>
              <LocationSearch onSelect={handleLocationSelect} />
           </div>
         </div>
