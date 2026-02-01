@@ -9,7 +9,8 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
- 
+import { LocationSearch, LocationResult } from '@/components/LocationSearch';
+
 
 const typeIcons: Record<Destination['type'], React.ElementType> = {
   country: Globe,
@@ -30,6 +31,44 @@ const Inspiration = () => {
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+
+  const handleLocationSelect = (location: LocationResult) => {
+    // Map Nominatim type to our type
+    let destType: Destination['type'] = 'city';
+    const typeMap: Record<string, Destination['type']> = {
+      'city': 'city',
+      'town': 'city',
+      'village': 'city',
+      'administrative': 'region',
+      'country': 'country',
+      'island': 'island',
+      'archipelago': 'island'
+    };
+
+    if (typeMap[location.type]) {
+      destType = typeMap[location.type];
+    } else if (location.type === 'administrative') {
+      destType = 'region';
+    }
+
+    const customDestination: Destination = {
+      id: `custom-${Date.now()}`,
+      name: location.name,
+      country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
+      description: `Benutzerdefinierter Ort: ${location.displayName}`,
+      imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80', // Generic travel image
+      averageDailyCost: 100, // Default estimate
+      bestSeason: 'Ganzjährig',
+      type: destType,
+      currency: 'EUR',
+      highlights: [],
+      visaInfo: undefined,
+      vaccinationInfo: undefined,
+      healthSafetyInfo: undefined
+    };
+
+    setSelectedDestination(customDestination);
+  };
 
   const addToMyTrips = async (destination: Destination) => {
     if (!user) return;
@@ -91,6 +130,14 @@ const Inspiration = () => {
             </p>
           </div>
         </section>
+
+        {/* Search Section */}
+        <div className="mb-8 max-w-2xl mx-auto">
+          <div className="bg-card p-4 rounded-xl shadow-sm border border-border">
+             <h3 className="text-sm font-medium mb-2 text-muted-foreground">Wunschziel nicht dabei? Suche weltweit:</h3>
+             <LocationSearch onSelect={handleLocationSelect} />
+          </div>
+        </div>
 
         {/* Filter */}
         <div className="flex flex-wrap gap-2 mb-8">
