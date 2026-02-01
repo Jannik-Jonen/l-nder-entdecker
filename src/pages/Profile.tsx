@@ -57,16 +57,14 @@ const Profile = () => {
   const fetchProfile = async () => {
     if (!user) return;
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      const resp = await fetch('/api/me', {
-        headers: {
-          Authorization: `Bearer ${token || ''}`,
-        },
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        setProfile({ display_name: (data as ProfileRow).display_name });
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (data) {
+        setProfile({ display_name: data.display_name });
       }
     } catch (e) {
       // ignore
@@ -77,36 +75,42 @@ const Profile = () => {
     if (!user) return;
     setLoadingTrips(true);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      const resp = await fetch('/api/trips', {
-        headers: {
-          Authorization: `Bearer ${token || ''}`,
-        },
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        const rows = (data as SavedTripRow[]).filter((row) => row.user_id === (user?.id || ''));
-        const mappedTrips: Country[] = rows.map((trip: SavedTripRow) => ({
-        id: trip.id,
-        name: trip.destination_name,
-        code: trip.destination_code || 'XX',
-        imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
-        startDate: trip.start_date || new Date().toISOString(),
-        endDate: trip.end_date || new Date().toISOString(),
-        dailyCost: Number(trip.daily_budget) || 100,
-        currency: trip.currency || 'EUR',
-        todos: defaultTodos.map((t, i) => ({ ...t, id: `${trip.id}-${i}` })),
-        attractions: [],
-        hotels: [],
-        restaurants: [],
-        flights: [],
-        weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
-      }));
+      const { data, error } = await supabase
+        .from('saved_trips')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        toast.error('Fehler beim Laden der Reisen');
+        setCountries([]);
+        return;
+      }
+
+      if (data) {
+        const mappedTrips: Country[] = (data as SavedTripRow[]).map((trip: SavedTripRow) => ({
+          id: trip.id,
+          name: trip.destination_name,
+          code: trip.destination_code || 'XX',
+          imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+          startDate: trip.start_date || new Date().toISOString(),
+          endDate: trip.end_date || new Date().toISOString(),
+          dailyCost: Number(trip.daily_budget) || 100,
+          currency: trip.currency || 'EUR',
+          todos: defaultTodos.map((t, i) => ({ ...t, id: `${trip.id}-${i}` })),
+          attractions: [],
+          hotels: [],
+          restaurants: [],
+          flights: [],
+          weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
+        }));
         setCountries(mappedTrips);
       } else {
         setCountries([]);
       }
+    } catch (error) {
+      toast.error('Fehler beim Laden der Reisen');
+      setCountries([]);
     } finally {
       setLoadingTrips(false);
     }
@@ -115,15 +119,10 @@ const Profile = () => {
   const handleAddCountry = async (newCountry: Country) => {
     if (user) {
       try {
-        const { data: sessionData } = await supabase.auth.getSession();
-        const token = sessionData?.session?.access_token;
-        const resp = await fetch('/api/trips', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token || ''}`,
-          },
-          body: JSON.stringify({
+        const { data, error } = await supabase
+          .from('saved_trips')
+          .insert({
+            user_id: user.id,
             destination_name: newCountry.name,
             destination_code: newCountry.code,
             image_url: newCountry.imageUrl,
@@ -131,20 +130,23 @@ const Profile = () => {
             end_date: newCountry.endDate,
             daily_budget: newCountry.dailyCost,
             currency: newCountry.currency,
-          }),
-        });
-        if (!resp.ok) {
-          const err = await resp.json();
-          toast.error('Fehler beim Speichern: ' + (err.error || 'Unbekannter Fehler'));
+          })
+          .select()
+          .single();
+
+        if (error) {
+          toast.error('Fehler beim Speichern: ' + error.message);
           return;
         }
-        const data = await resp.json();
-        const savedCountry: Country = {
-          ...newCountry,
-          id: (data as SavedTripRow).id,
-        };
-        setCountries([savedCountry, ...countries]);
-        toast.success('Reise gespeichert!');
+
+        if (data) {
+          const savedCountry: Country = {
+            ...newCountry,
+            id: (data as SavedTripRow).id,
+          };
+          setCountries([savedCountry, ...countries]);
+          toast.success('Reise gespeichert!');
+        }
       } catch {
         toast.error('Fehler beim Speichern');
       }
@@ -156,15 +158,13 @@ const Profile = () => {
   const handleDeleteCountry = async (id: string) => {
     if (user) {
       try {
-        const { data: sessionData } = await supabase.auth.getSession();
-        const token = sessionData?.session?.access_token;
-        const resp = await fetch(`/api/trips/${id}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token || ''}`,
-          },
-        });
-        if (!resp.ok && resp.status !== 204) {
+        const { error } = await supabase
+          .from('saved_trips')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', user.id);
+
+        if (error) {
           toast.error('Fehler beim Löschen');
           return;
         }
