@@ -88,8 +88,10 @@ const Profile = () => {
       }
 
       if (data) {
-        const mappedTrips: Country[] = (data as SavedTripRow[]).map((trip: SavedTripRow) => ({
-          id: trip.id,
+        const mappedTrips: Country[] = (data as SavedTripRow[])
+          .filter((trip) => trip.user_id === user.id)
+          .map((trip: SavedTripRow) => ({
+            id: trip.id,
           name: trip.destination_name,
           code: trip.destination_code || 'XX',
           imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
