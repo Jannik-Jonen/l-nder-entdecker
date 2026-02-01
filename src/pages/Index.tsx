@@ -10,10 +10,11 @@ import { Country, Trip } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
 import { guidePosts } from '@/data/mockData';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles, Globe } from 'lucide-react';
 import { WorldMap } from '@/components/WorldMap';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 interface SavedTripRow {
   id: string;
@@ -37,16 +38,32 @@ const Index = () => {
   });
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isLoadingTrips, setIsLoadingTrips] = useState(false);
+  const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
     if (user) {
       fetchUserTrips();
+      fetchProfile();
     } else {
-      // For non-authenticated users, we don't show any trips in the dashboard view
-      // The landing page view is handled separately
       setTrip({ ...trip, countries: [] });
     }
   }, [user]);
+
+  const fetchProfile = async () => {
+    if (!user) return;
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('user_id', user.id)
+        .single();
+      if (data?.display_name) {
+        setUserName(data.display_name);
+      }
+    } catch (e) {
+      // ignore
+    }
+  };
 
   const fetchUserTrips = async () => {
     if (!user) return;
@@ -229,18 +246,79 @@ const Index = () => {
             onToggleTodo={handleToggleTodo}
           />
         ) : (
-          <>
-            <HeroSection
-              tripName={trip.name}
-              totalCountries={trip.countries.length}
-              completedTasks={completedTasks}
-              totalTasks={totalTasks}
-            />
+          <div className="space-y-12">
+            {/* Welcome Section */}
+            <section className="flex flex-col md:flex-row gap-8 items-start justify-between">
+              <div className="w-full md:w-2/3">
+                <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">
+                  Willkommen zurück{userName ? `, ${userName}` : ''}! 👋
+                </h1>
+                <p className="text-muted-foreground text-lg mb-6">
+                  Hier ist deine Kommandozentrale. Wohin soll die nächste Reise gehen?
+                </p>
+                <HeroSection
+                  tripName={trip.name}
+                  totalCountries={trip.countries.length}
+                  completedTasks={completedTasks}
+                  totalTasks={totalTasks}
+                />
+              </div>
+              
+              {/* Quick Actions Card */}
+              <div className="w-full md:w-1/3 bg-card border border-border rounded-2xl p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  Schnellzugriff
+                </h3>
+                <div className="space-y-3">
+                  <Link to="/inspiration">
+                    <Button className="w-full justify-start" variant="default">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Neue Reise planen
+                    </Button>
+                  </Link>
+                  <Link to="/guides">
+                    <Button className="w-full justify-start" variant="outline">
+                      <MapIcon className="mr-2 h-4 w-4" />
+                      Guides entdecken
+                    </Button>
+                  </Link>
+                  <Link to="/profile">
+                    <Button className="w-full justify-start" variant="ghost">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Mein Profil & Einstellungen
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </section>
 
+            {/* World Map Section - Authenticated View */}
             <section>
-              <h2 className="font-display text-2xl font-semibold mb-6">
-                Überblick über alle geplanten Länder
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
+                  <Globe className="h-6 w-6 text-primary" />
+                  Entdecke die Welt
+                </h2>
+              </div>
+              <div className="bg-card/50 border border-border rounded-2xl p-1 shadow-sm overflow-hidden">
+                 <WorldMap />
+              </div>
+            </section>
+
+            {/* Trips Grid */}
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-semibold">
+                  Deine geplanten Reisen
+                </h2>
+                {trip.countries.length > 0 && (
+                  <Link to="/inspiration" className="text-primary hover:underline text-sm font-medium">
+                    + Weitere hinzufügen
+                  </Link>
+                )}
+              </div>
+              
               {trip.countries.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {trip.countries.map((country, index) => (
@@ -252,7 +330,7 @@ const Index = () => {
                     />
                   ))}
                   
-                  {/* Add new trip card */}
+                  {/* Add new trip card - Mini version */}
                   <Link to="/inspiration" className="flex items-center justify-center rounded-xl border-2 border-dashed border-border h-full min-h-[300px] hover:border-primary hover:bg-primary/5 transition-colors group">
                     <div className="text-center">
                       <Plus className="h-10 w-10 mx-auto text-muted-foreground group-hover:text-primary transition-colors" />
@@ -263,20 +341,25 @@ const Index = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="text-center py-12 bg-muted/30 rounded-xl border border-dashed border-border">
+                <div className="text-center py-16 bg-muted/30 rounded-xl border border-dashed border-border">
+                  <div className="bg-background w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <MapIcon className="h-8 w-8 text-muted-foreground" />
+                  </div>
                   <h3 className="text-xl font-medium mb-2">Noch keine Reisen geplant</h3>
-                  <p className="text-muted-foreground mb-6">Starte jetzt und plane dein nächstes Abenteuer!</p>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    Deine Reiseliste ist noch leer. Lass dich inspirieren und starte deine erste Planung!
+                  </p>
                   <Link 
                     to="/inspiration" 
-                    className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                    className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="h-5 w-5 mr-2" />
                     Erste Reise planen
                   </Link>
                 </div>
               )}
             </section>
-          </>
+          </div>
         )}
       </main>
 
@@ -288,5 +371,6 @@ const Index = () => {
     </div>
   );
 };
+
 
 export default Index;
