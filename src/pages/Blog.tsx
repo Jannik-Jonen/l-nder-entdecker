@@ -126,15 +126,16 @@ const Blog = () => {
       }
       setLoadingDetail(true);
       try {
-        // Zuerst versuchen, aus bereits geladenen Arrays zu finden (vollständiger Typ)
+        // Zuerst versuchen, aus bereits geladenen Arrays zu finden (Cache)
         const fromGuides = posts.find((p) => p.id === postId);
-        if (fromGuides) {
-          setActiveDetail(fromGuides as unknown as CombinedPost);
-        } else {
-          const fromGeneral = generalPosts.find((p) => p.id === postId);
-          if (fromGeneral) {
-            setActiveDetail({ ...fromGeneral, destination_id: undefined });
-          }
+        const fromGeneral = generalPosts.find((p) => p.id === postId);
+        const cacheDetail = fromGuides
+          ? (fromGuides as unknown as CombinedPost)
+          : fromGeneral
+          ? ({ ...fromGeneral, destination_id: undefined } as CombinedPost)
+          : null;
+        if (cacheDetail) {
+          setActiveDetail(cacheDetail);
         }
 
         // Try guide_posts first (destination-linked)
@@ -157,7 +158,7 @@ const Blog = () => {
           .maybeSingle();
         if (blog) {
           setActiveDetail(blog as unknown as CombinedPost);
-        } else {
+        } else if (!cacheDetail) {
           setActiveDetail(null);
         }
       } finally {
@@ -188,11 +189,13 @@ const Blog = () => {
           </div>
         </section>
         <section className="mb-8">
-          <div className="rounded-2xl border border-border bg-card p-4">
-            <p className="text-sm text-muted-foreground">
-              Inspiration zeigt kompakte Ideen und Ziele. Der Blog bietet ausführliche Artikel und Guides – hier findest du Tiefe und konkrete Planungshilfen.
-            </p>
-          </div>
+          {!postId && (
+            <div className="rounded-2xl border border-border bg-card p-4">
+              <p className="text-sm text-muted-foreground">
+                Inspiration zeigt kompakte Ideen und Ziele. Der Blog bietet ausführliche Artikel und Guides – hier findest du Tiefe und konkrete Planungshilfen.
+              </p>
+            </div>
+          )}
         </section>
 
         {activePost && (
