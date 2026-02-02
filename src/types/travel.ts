@@ -100,6 +100,7 @@ export interface Country {
   tips?: string[];
   transportNotes?: string[];
   itinerary?: string[];
+  stops?: TripStop[];
 }
 
 export interface Trip {
@@ -124,6 +125,7 @@ export interface Destination {
   visaInfo?: string;
   vaccinationInfo?: string;
   healthSafetyInfo?: string;
+  source?: string;
 }
 
 export interface TravelTip {
@@ -132,6 +134,14 @@ export interface TravelTip {
   title: string;
   content: string;
   icon: string;
+}
+
+export interface TripStop {
+  id: string;
+  name: string;
+  type: 'city' | 'poi';
+  notes?: string;
+  tips?: string[];
 }
 
 export const categoryLabels: Record<TodoItem['category'], string> = {

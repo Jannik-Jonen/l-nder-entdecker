@@ -26,7 +26,7 @@ export const Header = () => {
     { path: '/guides', label: 'Guides' },
     { path: '/blog', label: 'Blog' },
     { path: '/tipps', label: 'Reisetipps' },
-    { path: '/profile', label: 'Meine Reisen' },
+    { path: '/profile', label: 'Profil' },
   ];
 
   return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Country, PackingItem } from '@/types/travel';
+import { Country, PackingItem, TripStop } from '@/types/travel';
 import { TodoItemComponent } from './TodoItem';
 import { PackingList } from './PackingList';
 import { Progress } from '@/components/ui/progress';
@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LocationSearch, LocationResult } from '@/components/LocationSearch';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface CountryDetailProps {
   country: Country;
@@ -39,6 +41,8 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   const [selectedCity, setSelectedCity] = useState<string>(() => {
     try { return localStorage.getItem(`tripCity::${country.id}`) || ''; } catch { return ''; }
   });
+  const [stops, setStops] = useState<TripStop[]>(country.stops || []);
+  const [newPoi, setNewPoi] = useState<string>('');
   const [eurAmount, setEurAmount] = useState<string>('100');
   const [rate, setRate] = useState<number | null>(null);
   const [converted, setConverted] = useState<number | null>(null);
@@ -83,6 +87,58 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
       localStorage.setItem(`tripCity::${country.id}`, loc.name);
     } catch (e) {
       // ignore
+    }
+    const stop: TripStop = {
+      id: `stop-${Date.now()}`,
+      name: loc.name,
+      type: 'city',
+      tips: [
+        'Free Walking Tour',
+        'Museen und Pässe prüfen',
+        'ÖPNV‑Apps installieren',
+        'Lokale Märkte besuchen',
+      ],
+    };
+    const next = [...stops, stop];
+    setStops(next);
+    persistStops(next);
+  };
+  const addPoi = () => {
+    if (!newPoi.trim()) return;
+    const stop: TripStop = {
+      id: `stop-${Date.now()}`,
+      name: newPoi.trim(),
+      type: 'poi',
+      tips: ['Öffnungszeiten prüfen', 'Tickets vorab buchen', 'Beste Besuchszeit wählen'],
+    };
+    const next = [...stops, stop];
+    setStops(next);
+    setNewPoi('');
+    persistStops(next);
+  };
+  const persistStops = async (nextStops: TripStop[]) => {
+    try {
+      const { data } = await supabase
+        .from('saved_trips')
+        .select('notes')
+        .eq('id', country.id)
+        .limit(1)
+        .maybeSingle();
+      let notes: { stops?: TripStop[]; [key: string]: unknown } = {};
+      try {
+        notes = data?.notes ? (JSON.parse(data.notes as string) as { stops?: TripStop[]; [key: string]: unknown }) : {};
+      } catch {
+        notes = {};
+      }
+      notes.stops = nextStops;
+      const { error } = await supabase
+        .from('saved_trips')
+        .update({ notes: JSON.stringify(notes) })
+        .eq('id', country.id);
+      if (error) throw error;
+      toast.success('Stop hinzugefügt');
+    } catch {
+      toast.error('Speichern fehlgeschlagen');
     }
   };
 
@@ -382,6 +438,7 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
             <TabsTrigger value="todos">To-do Liste</TabsTrigger>
             <TabsTrigger value="packing">Packliste</TabsTrigger>
             <TabsTrigger value="city">Stadt auswählen</TabsTrigger>
+            <TabsTrigger value="stops">Geplante Stops</TabsTrigger>
           </TabsList>
           <TabsContent value="todos">
             <div className="space-y-3">
@@ -407,6 +464,35 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
                   Ausgewählte Stadt: <span className="font-medium">{selectedCity}</span>
                 </p>
               )}
+            </div>
+          </TabsContent>
+          <TabsContent value="stops">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Input placeholder="Sehenswürdigkeit/Ort hinzufügen" value={newPoi} onChange={(e) => setNewPoi(e.target.value)} />
+                <Button onClick={addPoi}>Hinzufügen</Button>
+              </div>
+              <div className="space-y-2">
+                {stops.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Noch keine Stops geplant.</p>
+                ) : (
+                  stops.map((s) => (
+                    <div key={s.id} className="rounded-lg border border-border p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="font-medium text-sm">{s.name}</div>
+                        <Badge variant="outline" className="text-xs">{s.type === 'city' ? 'Stadt' : 'POI'}</Badge>
+                      </div>
+                      {s.tips && s.tips.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {s.tips.map((t, i) => (
+                            <Badge key={`${s.id}-tip-${i}`} variant="secondary">{t}</Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </TabsContent>
         </Tabs>

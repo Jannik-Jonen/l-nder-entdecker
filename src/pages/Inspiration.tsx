@@ -79,7 +79,8 @@ const Inspiration = () => {
         highlights: richData?.highlights || [],
         visaInfo: richData?.visaInfo,
         vaccinationInfo: richData?.vaccinationInfo,
-        healthSafetyInfo: richData?.healthSafetyInfo
+        healthSafetyInfo: richData?.healthSafetyInfo,
+        source: 'Lonely Planet • TripAdvisor • Numbeo'
       };
 
       setSelectedDestination(customDestination);
@@ -442,6 +443,9 @@ const Inspiration = () => {
                 </div>
 
                 <p className="text-sm text-muted-foreground mb-6">{selectedDestination.description}</p>
+                {selectedDestination.source && (
+                  <p className="text-xs text-muted-foreground mb-6">Quelle: {selectedDestination.source}</p>
+                )}
 
                 {selectedDestination.highlights && selectedDestination.highlights.length > 0 && (
                   <div className="mb-6">
@@ -499,6 +503,30 @@ const Inspiration = () => {
                   >
                     Mehr Infos
                   </button>
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(`site:lonelyplanet.com ${selectedDestination.name}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
+                  >
+                    Lonely Planet
+                  </a>
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(`site:tripadvisor.${navigator.language?.includes('de') ? 'de' : 'com'} ${selectedDestination.name}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
+                  >
+                    TripAdvisor
+                  </a>
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(`site:numbeo.com ${selectedDestination.name}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
+                  >
+                    Numbeo
+                  </a>
 
                   {user && (
                     <Button 

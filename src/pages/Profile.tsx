@@ -104,6 +104,7 @@ const Profile = () => {
               tips?: string[];
               transportNotes?: string[];
               itinerary?: string[];
+              stops?: { id: string; name: string; type: 'city' | 'poi'; notes?: string; tips?: string[] }[];
             } = {};
             try {
               parsed = trip.notes ? JSON.parse(trip.notes) : {};
@@ -134,6 +135,7 @@ const Profile = () => {
               restaurants: [],
               flights: [],
               weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: parsed.bestTimeToVisit || '', packingTips: [] },
+              stops: parsed.stops || [],
             } as Country;
           });
         setCountries(mappedTrips);

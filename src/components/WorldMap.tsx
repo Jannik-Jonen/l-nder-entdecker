@@ -1,9 +1,15 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup, Marker } from 'react-simple-maps';
 import { useNavigate } from 'react-router-dom';
-import { inspirationDestinations, guidePosts } from '@/data/mockData';
+import { inspirationDestinations, guidePosts, defaultTodos } from '@/data/mockData';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { fetchRichDestinationData } from '@/services/travelData';
+import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
+import type { Destination } from '@/types/travel';
+import { toast } from 'sonner';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -11,17 +17,21 @@ export const WorldMap = () => {
   const navigate = useNavigate();
   const [zoom, setZoom] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const markers = useMemo(() => {
+  const { user } = useAuth();
+  const [markers, setMarkers] = useState<Array<{ id: string; name: string; coords: [number, number] }>>([]);
+  const [geoDetail, setGeoDetail] = useState<{ name: string; destination: Destination | null } | null>(null);
+  const [openPlan, setOpenPlan] = useState(false);
+  const defaultMarkers = useMemo(() => {
     const coordById: Record<string, [number, number]> = {
-      'dest-1': [115, -8], // Bali, Indonesien
-      'dest-2': [-19, 65], // Island
-      'dest-3': [135, 35], // Kyoto, Japan
-      'dest-4': [18, -34], // Kapstadt, Südafrika
-      'dest-5': [73, 4], // Malediven
-      'dest-6': [-72, -51], // Patagonien
-      'dest-7': [25, 36], // Santorini
-      'dest-8': [-8, 31], // Marrakesch
-      'dest-12': [20.8, 37.8], // Zakynthos
+      'dest-1': [115, -8],
+      'dest-2': [-19, 65],
+      'dest-3': [135, 35],
+      'dest-4': [18, -34],
+      'dest-5': [73, 4],
+      'dest-6': [-72, -51],
+      'dest-7': [25, 36],
+      'dest-8': [-8, 31],
+      'dest-12': [20.8, 37.8],
     };
     return inspirationDestinations
       .map((d) => ({
@@ -31,6 +41,36 @@ export const WorldMap = () => {
       }))
       .filter((m) => Array.isArray(m.coords));
   }, []);
+
+  useEffect(() => {
+    const loadMarkers = async () => {
+      if (!user) {
+        setMarkers(defaultMarkers as Array<{ id: string; name: string; coords: [number, number] }>);
+        return;
+      }
+      const { data, error } = await supabase
+        .from('saved_trips')
+        .select('id,destination_name');
+      if (error) {
+        setMarkers(defaultMarkers as Array<{ id: string; name: string; coords: [number, number] }>);
+        return;
+      }
+      const names = (data || []).map((d) => d.destination_name.toLowerCase());
+      const coordMap = Object.fromEntries(
+        (defaultMarkers as Array<{ id: string; name: string; coords: [number, number] }>).map((m) => [m.id, m.coords])
+      ) as Record<string, [number, number]>;
+      const planned = inspirationDestinations
+        .filter((d) => names.includes(d.name.toLowerCase()))
+        .map((d) => ({
+          id: d.id,
+          name: d.name,
+          coords: coordMap[d.id],
+        }))
+        .filter((m) => Array.isArray(m.coords)) as Array<{ id: string; name: string; coords: [number, number] }>;
+      setMarkers(planned);
+    };
+    loadMarkers();
+  }, [user, defaultMarkers]);
 
   return (
     <div
@@ -66,6 +106,27 @@ export const WorldMap = () => {
                     default: { fill: 'hsl(var(--muted))', stroke: 'hsl(var(--border))', outline: 'none' },
                     hover: { fill: 'hsl(var(--accent)/0.4)', stroke: 'hsl(var(--border))', outline: 'none' },
                     pressed: { fill: 'hsl(var(--accent)/0.6)', stroke: 'hsl(var(--border))', outline: 'none' },
+                  }}
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    const name = (geo.properties as { name?: string })?.name || '';
+                    if (!name) return;
+                    const rich = await fetchRichDestinationData(name);
+                    const dest: Destination = {
+                      id: `geo-${Date.now()}`,
+                      name,
+                      country: name,
+                      type: 'country',
+                      imageUrl: rich?.imageUrl || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80',
+                      description: rich?.description || `Inspiration für ${name}.`,
+                      highlights: rich?.highlights || [],
+                      bestSeason: rich?.bestSeason || 'Ganzjährig',
+                      averageDailyCost: rich?.averageDailyCost || 100,
+                      currency: rich?.currency || 'EUR',
+                      source: 'Lonely Planet • TripAdvisor • Numbeo',
+                    };
+                    setGeoDetail({ name, destination: dest });
+                    setOpenPlan(false);
                   }}
                 />
               ))
@@ -128,6 +189,59 @@ export const WorldMap = () => {
           ))}
         </ZoomableGroup>
       </ComposableMap>
+      {geoDetail && (
+        <div className="absolute bottom-3 left-3 right-3 z-10">
+          <div className="rounded-md bg-background border border-border shadow-card p-4">
+            <div className="font-display text-lg font-semibold mb-1">{geoDetail.destination?.name}</div>
+            <p className="text-sm text-muted-foreground mb-3">{geoDetail.destination?.description}</p>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => setOpenPlan(true)}>Zu Reisen hinzufügen</Button>
+              <Button size="sm" variant="outline" onClick={() => setGeoDetail(null)}>Schließen</Button>
+            </div>
+          </div>
+        </div>
+      )}
+      {geoDetail && openPlan && geoDetail.destination && (
+        <PlanTripDialog
+          open={openPlan}
+          onOpenChange={(o) => {
+            if (!o) setOpenPlan(false);
+          }}
+          destination={geoDetail.destination}
+          onConfirm={async (data: TripPlanData) => {
+            if (!user || !geoDetail.destination) {
+              toast.error('Bitte anmelden');
+              return;
+            }
+            try {
+              const startIso = new Date(data.startDate).toISOString();
+              const endIso = new Date(data.endDate).toISOString();
+              const { error } = await supabase
+                .from('saved_trips')
+                .insert({
+                  user_id: user.id,
+                  destination_name: geoDetail.destination.name,
+                  destination_code: geoDetail.destination.countryCode || 'XX',
+                  image_url: geoDetail.destination.imageUrl,
+                  daily_budget: data.dailyBudget,
+                  currency: geoDetail.destination.currency || 'EUR',
+                  start_date: startIso,
+                  end_date: endIso,
+                  notes: JSON.stringify({
+                    peopleCount: data.peopleCount,
+                    todos: defaultTodos,
+                  }),
+                });
+              if (error) throw error;
+              toast.success('Reise hinzugefügt');
+              setOpenPlan(false);
+              setGeoDetail(null);
+            } catch (e) {
+              toast.error('Fehler beim Speichern');
+            }
+          }}
+        />
+      )}
     </div>
   );
 };
