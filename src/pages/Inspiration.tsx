@@ -30,6 +30,8 @@ const typeLabels: Record<Destination['type'], string> = {
   region: 'Region',
 };
 
+import { fetchRichDestinationData } from '@/services/travelData';
+
 const Inspiration = () => {
   const { user } = useAuth();
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
@@ -59,38 +61,34 @@ const Inspiration = () => {
       destType = 'region';
     }
 
-    // Fallback Bild
-    const fallbackImage = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80';
+    try {
+      // Fetch rich data from Wikivoyage (LP alternative) and other sources
+      const richData = await fetchRichDestinationData(location.name + (location.countryCode ? ` ${location.displayName.split(',').pop()}` : ''));
+      
+      const customDestination: Destination = {
+        id: `custom-${Date.now()}`,
+        name: location.name,
+        country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
+        countryCode: location.countryCode,
+        description: richData?.description || `Keine Beschreibung verfügbar.`,
+        imageUrl: richData?.imageUrl || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80',
+        averageDailyCost: richData?.averageDailyCost || 100,
+        bestSeason: richData?.bestSeason || 'Ganzjährig',
+        type: destType,
+        currency: richData?.currency || 'EUR',
+        highlights: richData?.highlights || [],
+        visaInfo: richData?.visaInfo,
+        vaccinationInfo: richData?.vaccinationInfo,
+        healthSafetyInfo: richData?.healthSafetyInfo
+      };
 
-    const lpUrl = `https://www.lonelyplanet.com/search?q=${encodeURIComponent(location.name)}`;
-    const taUrl = `https://www.tripadvisor.de/Search?q=${encodeURIComponent(location.name)}`;
-    const nbUrl = `https://www.numbeo.com/search/?query=${encodeURIComponent(location.name)}`;
-    const overview = [
-      `Überblick basierend auf externen Quellen:`,
-      `• Lonely Planet – Sehenswürdigkeiten & Routen`,
-      `• Tripadvisor – Bewertungen & Trends`,
-      `• Numbeo – Lebenshaltungskosten & Preisniveau`
-    ].join("\n");
-
-    const customDestination: Destination = {
-      id: `custom-${Date.now()}`,
-      name: location.name,
-      country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
-      countryCode: location.countryCode,
-      description: overview,
-      imageUrl: fallbackImage,
-      averageDailyCost: 100, // Default estimate
-      bestSeason: 'Abhängig von Region',
-      type: destType,
-      currency: 'EUR',
-      highlights: [],
-      visaInfo: undefined,
-      vaccinationInfo: undefined,
-      healthSafetyInfo: undefined
-    };
-
-    setIsLoadingDetails(false);
-    setSelectedDestination(customDestination);
+      setSelectedDestination(customDestination);
+    } catch (error) {
+      console.error('Failed to fetch destination details:', error);
+      toast.error('Fehler beim Laden der Details.');
+    } finally {
+      setIsLoadingDetails(false);
+    }
   };
 
   const startPlanningTrip = (destination: Destination) => {
@@ -504,33 +502,6 @@ const Inspiration = () => {
                       {isAdding ? '...' : 'Planen'}
                     </Button>
                   )}
-                </div>
-                
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <a
-                    href={`https://www.lonelyplanet.com/search?q=${encodeURIComponent(selectedDestination.name)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Lonely Planet
-                  </a>
-                  <a
-                    href={`https://www.tripadvisor.de/Search?q=${encodeURIComponent(selectedDestination.name)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Tripadvisor
-                  </a>
-                  <a
-                    href={`https://www.numbeo.com/search/?query=${encodeURIComponent(selectedDestination.name)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Numbeo
-                  </a>
                 </div>
               </div>
             </div>
