@@ -221,12 +221,22 @@ const Inspiration = () => {
         itinerary,
       });
 
+      let countryCode = planningDestination.countryCode || 'XX';
+      try {
+        const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(planningDestination.name)}&limit=1&addressdetails=1&accept-language=de`);
+        const arr = await resp.json();
+        const first = Array.isArray(arr) && arr[0];
+        const cc = first?.address?.country_code || first?.country_code || null;
+        if (cc && typeof cc === 'string') {
+          countryCode = cc.toUpperCase();
+        }
+      } catch { void 0; }
       const { error } = await supabase
         .from('saved_trips')
         .insert({
           user_id: user.id,
           destination_name: planningDestination.name,
-          destination_code: planningDestination.countryCode || 'XX',
+          destination_code: countryCode,
           image_url: planningDestination.imageUrl,
           daily_budget: data.dailyBudget,
           currency: planningDestination.currency || 'EUR',

@@ -10,6 +10,7 @@ import { fetchRichDestinationData } from '@/services/travelData';
 import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
 import type { Destination } from '@/types/travel';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -181,7 +182,19 @@ export const WorldMap = () => {
         <div className="absolute bottom-3 left-3 right-3 z-10">
           <div className="rounded-md bg-background border border-border shadow-card p-4">
             <div className="font-display text-lg font-semibold mb-1">{geoDetail.destination?.name}</div>
-            <p className="text-sm text-muted-foreground mb-3">{geoDetail.destination?.description}</p>
+                <p className="text-sm text-muted-foreground mb-3">{geoDetail.destination?.description}</p>
+                {geoDetail.destination?.highlights && geoDetail.destination.highlights.length > 0 && (
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {geoDetail.destination.highlights.slice(0, 6).map((h, i) => (
+                      <Badge key={`hl-${i}`} variant="secondary">{h}</Badge>
+                    ))}
+                  </div>
+                )}
+                <div className="mb-3 text-xs text-muted-foreground">
+                  <span className="mr-3">Beste Reisezeit: {geoDetail.destination?.bestSeason}</span>
+                  <span className="mr-3">Ø Tagesbudget: {geoDetail.destination?.averageDailyCost} {geoDetail.destination?.currency}</span>
+                  <span>Quelle: {geoDetail.destination?.source}</span>
+                </div>
             <div className="flex gap-2">
               <Button size="sm" onClick={() => setOpenPlan(true)}>Zu Reisen hinzufügen</Button>
               <Button size="sm" variant="outline" onClick={() => setGeoDetail(null)}>Schließen</Button>
@@ -202,6 +215,16 @@ export const WorldMap = () => {
               return;
             }
             try {
+                  let code = geoDetail.destination.countryCode || 'XX';
+                  try {
+                    const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(geoDetail.destination.name)}&limit=1&addressdetails=1&accept-language=de`);
+                    const arr = await resp.json();
+                    const first = Array.isArray(arr) && arr[0];
+                    const cc = first?.address?.country_code || first?.country_code || null;
+                    if (cc && typeof cc === 'string') {
+                      code = cc.toUpperCase();
+                    }
+                  } catch { void 0; }
               const startIso = new Date(data.startDate).toISOString();
               const endIso = new Date(data.endDate).toISOString();
               const { error } = await supabase
@@ -209,7 +232,7 @@ export const WorldMap = () => {
                 .insert({
                   user_id: user.id,
                   destination_name: geoDetail.destination.name,
-                  destination_code: geoDetail.destination.countryCode || 'XX',
+                      destination_code: code,
                   image_url: geoDetail.destination.imageUrl,
                   daily_budget: data.dailyBudget,
                   currency: geoDetail.destination.currency || 'EUR',

@@ -89,7 +89,22 @@ const Index = () => {
             flights: [],
             weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
           }));
-        mappedCountries = mappedCountries.sort(
+        const withCodes = await Promise.all(
+          mappedCountries.map(async (c) => {
+            if (c.code !== 'XX') return c;
+            try {
+              const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(c.name)}&limit=1&addressdetails=1&accept-language=de`);
+              const arr = await resp.json();
+              const first = Array.isArray(arr) && arr[0];
+              const cc = first?.address?.country_code || first?.country_code || null;
+              if (cc && typeof cc === 'string') {
+                return { ...c, code: cc.toUpperCase() };
+              }
+            } catch { void 0; }
+            return c;
+          })
+        );
+        mappedCountries = withCodes.sort(
           (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
         );
         setTrip(prev => ({ ...prev, countries: mappedCountries }));

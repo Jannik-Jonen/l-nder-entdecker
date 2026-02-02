@@ -138,7 +138,22 @@ const Profile = () => {
               stops: parsed.stops || [],
             } as Country;
           });
-        mappedTrips = mappedTrips.sort(
+        const withCodes = await Promise.all(
+          mappedTrips.map(async (c) => {
+            if (c.code !== 'XX') return c;
+            try {
+              const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(c.name)}&limit=1&addressdetails=1&accept-language=de`);
+              const arr = await resp.json();
+              const first = Array.isArray(arr) && arr[0];
+              const cc = first?.address?.country_code || first?.country_code || null;
+              if (cc && typeof cc === 'string') {
+                return { ...c, code: cc.toUpperCase() };
+              }
+            } catch { void 0; }
+            return c;
+          })
+        );
+        mappedTrips = withCodes.sort(
           (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
         );
         setCountries(mappedTrips);
@@ -757,11 +772,11 @@ const Profile = () => {
                       {country.tips && country.tips.length > 0 && (
                         <div>
                           <div className="text-sm font-medium mb-1">Geheimtipps</div>
-                          <ul className="text-xs text-muted-foreground space-y-1">
+                          <div className="flex flex-wrap gap-2">
                             {country.tips.map((tip, idx) => (
-                              <li key={`tip-${country.id}-${idx}`}>• {tip}</li>
+                              <Badge key={`tip-${country.id}-${idx}`} variant="secondary">{tip}</Badge>
                             ))}
-                          </ul>
+                          </div>
                         </div>
                       )}
                       {country.itinerary && country.itinerary.length > 0 && (
