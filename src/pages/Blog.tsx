@@ -109,6 +109,16 @@ const Blog = () => {
     : undefined;
 
   useEffect(() => {
+    // Sofortige Anzeige aus bereits geladenen Listen (Cache),
+    // selbst wenn Content fehlt – Supabase-Detailabruf aktualisiert später.
+    if (activePost) {
+      setActiveDetail(activePost);
+    } else if (!postId) {
+      setActiveDetail(null);
+    }
+  }, [activePost, postId]);
+
+  useEffect(() => {
     const fetchDetail = async () => {
       if (!postId) {
         setActiveDetail(null);
@@ -116,6 +126,17 @@ const Blog = () => {
       }
       setLoadingDetail(true);
       try {
+        // Zuerst versuchen, aus bereits geladenen Arrays zu finden (vollständiger Typ)
+        const fromGuides = posts.find((p) => p.id === postId);
+        if (fromGuides) {
+          setActiveDetail(fromGuides as unknown as CombinedPost);
+        } else {
+          const fromGeneral = generalPosts.find((p) => p.id === postId);
+          if (fromGeneral) {
+            setActiveDetail({ ...fromGeneral, destination_id: undefined });
+          }
+        }
+
         // Try guide_posts first (destination-linked)
         const { data: guide } = await supabaseUntyped
           .from('guide_posts')
@@ -144,7 +165,7 @@ const Blog = () => {
       }
     };
     fetchDetail();
-  }, [postId]);
+  }, [postId, posts, generalPosts]);
 
   return (
     <div className="min-h-screen bg-background">
