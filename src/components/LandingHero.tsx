@@ -52,6 +52,7 @@ export const LandingHero = () => {
                 size="lg" 
                 variant="outline" 
                 className="text-lg px-8 bg-background/50 backdrop-blur-sm"
+                asChild
               >
                 <Link to="/inspiration">Inspiration entdecken</Link>
               </Button>

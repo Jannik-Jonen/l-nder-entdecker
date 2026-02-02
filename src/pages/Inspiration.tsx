@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { inspirationDestinations, guidePosts, travelTips } from '@/data/mockData';
 import { Destination } from '@/types/travel';
@@ -254,9 +255,9 @@ const Inspiration = () => {
           <h2 className="font-display text-2xl font-semibold mb-4">Beiträge</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {guidePosts.map((p) => (
-              <a
+              <Link
                 key={p.id}
-                href={`/guides/posts/${p.id}`}
+                to={`/guides/posts/${p.id}`}
                 className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
               >
                 <div className="relative h-40">
@@ -276,7 +277,7 @@ const Inspiration = () => {
                   <span>{p.tags.join(' • ')}</span>
                   <span>Weiterlesen</span>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </section>
