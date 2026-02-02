@@ -99,6 +99,7 @@ export interface Country {
   packingList?: PackingItem[];
   tips?: string[];
   transportNotes?: string[];
+  itinerary?: string[];
 }
 
 export interface Trip {

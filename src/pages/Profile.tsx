@@ -48,6 +48,13 @@ const Profile = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [profile, setProfile] = useState<{ display_name: string | null } | null>(null);
   const [loadingTrips, setLoadingTrips] = useState(false);
+  const [homeAirport, setHomeAirport] = useState<string>(() => {
+    try {
+      return localStorage.getItem('homeAirport') || 'FRA';
+    } catch {
+      return 'FRA';
+    }
+  });
 
   // Fetch profile and trips when user logs in
   useEffect(() => {
@@ -105,6 +112,7 @@ const Profile = () => {
               bestTimeToVisit?: string;
               tips?: string[];
               transportNotes?: string[];
+              itinerary?: string[];
             } = {};
             try {
               parsed = trip.notes ? JSON.parse(trip.notes) : {};
@@ -129,6 +137,7 @@ const Profile = () => {
               packingList: parsed.packingList || [],
               tips: parsed.tips || [],
               transportNotes: parsed.transportNotes || [],
+              itinerary: parsed.itinerary || [],
               attractions: [],
               hotels: [],
               restaurants: [],
@@ -531,7 +540,7 @@ const Profile = () => {
                     <div className="px-4 pb-4 space-y-3">
                       <div className="grid grid-cols-2 gap-2">
                         <a
-                          href={`https://www.kayak.de/flights?destination=${encodeURIComponent(country.name)}&dates=${encodeURIComponent(country.startDate)}-${encodeURIComponent(country.endDate)}`}
+                          href={`https://www.kayak.de/flights?origin=${encodeURIComponent(homeAirport)}&destination=${encodeURIComponent(country.name)}&dates=${encodeURIComponent(country.startDate)}-${encodeURIComponent(country.endDate)}`}
                           target="_blank"
                           rel="noreferrer"
                           className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
@@ -539,12 +548,20 @@ const Profile = () => {
                           Flüge (Kayak)
                         </a>
                         <a
-                          href={`https://www.skyscanner.de/transport/flights-to/${encodeURIComponent(country.name)}/?depart=${encodeURIComponent(country.startDate)}&return=${encodeURIComponent(country.endDate)}`}
+                          href={`https://www.skyscanner.de/transport/flights-to/${encodeURIComponent(country.name)}/?depart=${encodeURIComponent(country.startDate)}&return=${encodeURIComponent(country.endDate)}&origin=${encodeURIComponent(homeAirport)}`}
                           target="_blank"
                           rel="noreferrer"
                           className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
                         >
                           Flüge (Skyscanner)
+                        </a>
+                        <a
+                          href={`https://www.google.com/travel/flights?hl=de&q=${encodeURIComponent(`Flüge von ${homeAirport} nach ${country.name} ${country.startDate} ${country.endDate}`)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Flüge (Google)
                         </a>
                         <a
                           href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(country.name)}`}
@@ -587,6 +604,21 @@ const Profile = () => {
                           value={country.peopleCount || 1}
                           onChange={(e) => updatePeopleCount(country.id, Math.max(1, Number(e.target.value) || 1))}
                           className="w-20 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Heimatflughafen (IATA)</span>
+                        <input
+                          type="text"
+                          value={homeAirport}
+                          onChange={(e) => {
+                            const v = e.target.value.toUpperCase().slice(0, 3);
+                            setHomeAirport(v);
+                            try {
+                              localStorage.setItem('homeAirport', v);
+                            } catch {}
+                          }}
+                          className="w-24 rounded-md border border-border bg-background px-2 py-1 text-sm uppercase"
                         />
                       </div>
                       <div>
@@ -704,6 +736,16 @@ const Profile = () => {
                           <ul className="text-xs text-muted-foreground space-y-1">
                             {country.tips.map((tip, idx) => (
                               <li key={`tip-${country.id}-${idx}`}>• {tip}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {country.itinerary && country.itinerary.length > 0 && (
+                        <div>
+                          <div className="text-sm font-medium mb-1">Itinerary</div>
+                          <ul className="text-xs text-muted-foreground space-y-1">
+                            {country.itinerary.map((item, idx) => (
+                              <li key={`it-${country.id}-${idx}`}>• {item}</li>
                             ))}
                           </ul>
                         </div>

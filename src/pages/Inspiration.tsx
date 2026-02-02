@@ -166,6 +166,17 @@ const Inspiration = () => {
           ? ['Fähren vorab buchen (Hauptzeiten beachten)', 'Roller/Fahrrad mieten', 'Küstenstraßen langsam fahren']
           : ['Mietwagen für flexible Routen', 'Zug/Fernbus zwischen Städten', 'Maut & Parkzonen beachten'];
 
+      const itinerary: string[] = Array.from({ length: days }).map((_, i) => {
+        const d = i + 1;
+        if (planningDestination.type === 'city') {
+          return `Tag ${d}: Altstadt, Museumsbesuch, Aussichtspunkt, lokale Küche`;
+        } else if (planningDestination.type === 'island') {
+          return `Tag ${d}: Strand/Water‑Activity, Sonnenuntergangs‑Spot, Seafood‑Dinner`;
+        } else {
+          return `Tag ${d}: Panorama‑Route, Natur‑Stopps, Marktbesuch, regionale Spezialitäten`;
+        }
+      });
+
       const notes = JSON.stringify({
         peopleCount: data.peopleCount,
         packingList,
@@ -173,6 +184,7 @@ const Inspiration = () => {
         bestTimeToVisit: planningDestination.bestSeason,
         tips,
         transportNotes,
+        itinerary,
       });
 
       const { error } = await supabase
