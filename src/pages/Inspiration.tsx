@@ -151,17 +151,26 @@ const Inspiration = () => {
               'Kostenlose Stadtführungen (Free Walking Tours) nutzen',
               'Aussichtspunkte bei Sonnenaufgang meiden Andrang',
               'Streetfood-Märkte für günstige, authentische Küche',
+              'ÖPNV-Apps installieren (Tickets, Routen, Echtzeit)',
+              'Reservierung für Top-Restaurants frühzeitig vornehmen',
+              'City Pass prüfen (Museen, Attraktionen, Ermäßigungen)',
             ]
           : planningDestination.type === 'island'
           ? [
               'Sonnenaufgang am Strand: ruhige Spots abseits der Hauptstrände',
               'Lokaler Fischmarkt besuchen für frische Spezialitäten',
               'Schnorchelspots vorab recherchieren (Sichtweiten, Strömung)',
+              'Sonnenschutz & Trinkwasser immer mitnehmen',
+              'Riffschutz beachten (kein Anfassen, umweltfreundliche Sonnencreme)',
+              'Roller/Fahrrad vor Ort vergleichen (Versicherung, Helm)',
             ]
           : [
               'Panorama-Route mit Foto‑Stopps planen',
               'Regionalmärkte: beste Zeit am Vormittag',
               'Sonnenuntergangs‑Spots mit wenig Verkehr',
+              'Offline-Karten laden (Fernstraßen, Funklöcher möglich)',
+              'Tankstellen-/Mautplanung vorab checken',
+              'Notfallkit im Auto (Wasser, Snacks, Powerbank)',
             ];
 
       const transportNotes: string[] =

@@ -774,18 +774,7 @@ const Profile = () => {
                 );
               })}
 
-              {/* Add new card */}
-              <button 
-                onClick={() => setAddDialogOpen(true)}
-                className="flex items-center justify-center rounded-xl border-2 border-dashed border-border h-64 hover:border-primary hover:bg-primary/5 transition-colors group"
-              >
-                <div className="text-center">
-                  <Plus className="h-10 w-10 mx-auto text-muted-foreground group-hover:text-primary transition-colors" />
-                  <p className="mt-2 text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
-                    Neue Reise planen
-                  </p>
-                </div>
-              </button>
+              {/* Add new card entfernt – oben existiert bereits "Reise hinzufügen" */}
             </div>
           )}
 

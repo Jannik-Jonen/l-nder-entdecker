@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Country, PackingItem } from '@/types/travel';
 import { TodoItemComponent } from './TodoItem';
 import { PackingList } from './PackingList';
@@ -9,6 +9,9 @@ import { ArrowLeft, Calendar, MapPin, Clock, Sun, Cloud, CloudRain, Snowflake, P
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { LocationSearch, LocationResult } from '@/components/LocationSearch';
 
 interface CountryDetailProps {
   country: Country;
@@ -33,6 +36,12 @@ const priceLevelLabels = {
 
 export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailProps) => {
   const [packingItems, setPackingItems] = useState<PackingItem[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>(() => {
+    try { return localStorage.getItem(`tripCity::${country.id}`) || ''; } catch { return ''; }
+  });
+  const [eurAmount, setEurAmount] = useState<string>('100');
+  const [rate, setRate] = useState<number | null>(null);
+  const [converted, setConverted] = useState<number | null>(null);
 
   const completedTodos = country.todos.filter((t) => t.completed).length;
   const totalTodos = country.todos.length;
@@ -66,6 +75,46 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   const handleDeletePacking = (id: string) => {
     setPackingItems(packingItems.filter((item) => item.id !== id));
   };
+
+  const handleCitySelect = (loc: LocationResult) => {
+    if (loc.type !== 'city' && loc.type !== 'town' && loc.type !== 'village') return;
+    setSelectedCity(loc.name);
+    try {
+      localStorage.setItem(`tripCity::${country.id}`, loc.name);
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      if (!country.currency || country.currency === 'EUR') {
+        setRate(1);
+        setConverted(Number(eurAmount));
+        return;
+      }
+      try {
+        const res = await fetch(`https://api.exchangerate.host/latest?base=EUR&symbols=${encodeURIComponent(country.currency)}`);
+        const data = await res.json();
+        const r = data?.rates?.[country.currency] || null;
+        setRate(r);
+        if (r) setConverted(Math.round(Number(eurAmount) * r * 100) / 100);
+      } catch {
+        setRate(null);
+        setConverted(null);
+      }
+    };
+    fetchRate();
+  }, [country.currency, eurAmount]);
+
+  const flightRange = (() => {
+    const cur = (country.currency || 'EUR').toUpperCase();
+    if (cur === 'EUR') return '150–400 € (Europa, saisonabhängig)';
+    if (['USD','CAD'].includes(cur)) return '500–900 € (Nordamerika, saisonabhängig)';
+    if (['JPY','THB','VND','IDR','INR','CNY','KRW'].includes(cur)) return '600–1200 € (Asien, saisonabhängig)';
+    if (['AUD','NZD'].includes(cur)) return '900–1400 € (Ozeanien, saisonabhängig)';
+    return '400–1000 € (je nach Distanz & Saison)';
+  })();
 
   return (
     <div className="animate-fade-up">
@@ -120,6 +169,26 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
               <h3 className="font-medium">Tagesbudget</h3>
             </div>
             <p className="text-lg font-semibold">~{country.dailyCost} {country.currency}/Tag</p>
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="eurAmount" className="text-xs">Währungsumrechner (EUR → {country.currency || 'EUR'})</Label>
+                <div className="flex items-center gap-2 mt-1">
+                  <Input
+                    id="eurAmount"
+                    type="number"
+                    value={eurAmount}
+                    onChange={(e) => setEurAmount(e.target.value)}
+                    className="w-28"
+                  />
+                  <span className="text-sm">EUR ≈ {converted !== null ? converted : '–'} {country.currency || 'EUR'}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">{rate ? `Kurs: 1 EUR ≈ ${rate} ${country.currency}` : 'Kurs nicht verfügbar'}</p>
+              </div>
+              <div>
+                <Label className="text-xs">Flugkosten‑Spanne</Label>
+                <p className="mt-1 text-sm">{flightRange}</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -312,6 +381,7 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
           <TabsList className="mb-4">
             <TabsTrigger value="todos">To-do Liste</TabsTrigger>
             <TabsTrigger value="packing">Packliste</TabsTrigger>
+            <TabsTrigger value="city">Stadt auswählen</TabsTrigger>
           </TabsList>
           <TabsContent value="todos">
             <div className="space-y-3">
@@ -327,6 +397,17 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
               onAdd={handleAddPacking}
               onDelete={handleDeletePacking}
             />
+          </TabsContent>
+          <TabsContent value="city">
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">Wähle eine Stadt für deine Vorbereitung innerhalb des Ziels.</p>
+              <LocationSearch onSelect={handleCitySelect} />
+              {selectedCity && (
+                <p className="text-sm">
+                  Ausgewählte Stadt: <span className="font-medium">{selectedCity}</span>
+                </p>
+              )}
+            </div>
           </TabsContent>
         </Tabs>
       </div>

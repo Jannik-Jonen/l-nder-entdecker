@@ -26,6 +26,7 @@ export const Header = () => {
     { path: '/guides', label: 'Guides' },
     { path: '/blog', label: 'Blog' },
     { path: '/tipps', label: 'Reisetipps' },
+    { path: '/profile', label: 'Meine Reisen' },
   ];
 
   return (
@@ -63,20 +64,7 @@ export const Header = () => {
               {resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Toggle>
             
-            {user ? (
-              <Link
-                to="/profile"
-                className={cn(
-                  "px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5",
-                  location.pathname === '/profile'
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                )}
-              >
-                <User className="h-4 w-4" />
-                Profil
-              </Link>
-            ) : (
+            {user ? null : (
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -134,21 +122,7 @@ export const Header = () => {
                     
                     <div className="my-2 border-t border-border/50" />
                     
-                    {user ? (
-                      <Link
-                        to="/profile"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
-                          "px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2",
-                          location.pathname === '/profile'
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                        )}
-                      >
-                        <User className="h-4 w-4" />
-                        Profil
-                      </Link>
-                    ) : (
+                    {user ? null : (
                       <Button 
                         variant="ghost" 
                         className="justify-start px-4"
