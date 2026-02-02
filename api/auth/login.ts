@@ -1,4 +1,6 @@
-export default async function handler(req: any, res: any) {
+import type { IncomingMessage, ServerResponse } from 'http';
+
+export default async function handler(req: IncomingMessage & { method?: string }, res: ServerResponse) {
   if (req.method !== 'POST') {
     res.statusCode = 405;
     res.setHeader('Allow', 'POST');
@@ -48,9 +50,10 @@ export default async function handler(req: any, res: any) {
       refresh_token: data.refresh_token,
       user: data.user,
     }));
-  } catch (e: any) {
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Unknown error';
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ error: e.message }));
+    res.end(JSON.stringify({ error: msg }));
   }
 }

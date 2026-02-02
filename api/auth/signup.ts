@@ -1,6 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: IncomingMessage & { method?: string }, res: ServerResponse) {
   if (req.method !== 'POST') {
     res.statusCode = 405;
     res.setHeader('Allow', 'POST');
@@ -27,7 +28,7 @@ export default async function handler(req: any, res: any) {
     const url = process.env.SUPABASE_URL as string;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
 
-    const supabaseAdmin = createClient(url, serviceKey);
+    const supabaseAdmin: SupabaseClient = createClient(url, serviceKey);
 
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email,
@@ -48,9 +49,10 @@ export default async function handler(req: any, res: any) {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ user_id: data.user?.id }));
-  } catch (e: any) {
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Unknown error';
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ error: e.message }));
+    res.end(JSON.stringify({ error: msg }));
   }
 }

@@ -1,12 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-async function getUserFromToken(supabaseAdmin: any, token: string) {
+async function getUserFromToken(supabaseAdmin: SupabaseClient, token: string) {
   const { data, error } = await supabaseAdmin.auth.getUser(token);
   if (error || !data?.user) return null;
   return data.user;
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: IncomingMessage & { method?: string; headers: Record<string, string | string[] | undefined> }, res: ServerResponse) {
   const authHeader = req.headers['authorization'] || '';
   const token = Array.isArray(authHeader)
     ? authHeader[0]?.replace('Bearer ', '')
@@ -95,10 +96,11 @@ export default async function handler(req: any, res: any) {
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(data));
       return;
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Unknown error';
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ error: e.message }));
+      res.end(JSON.stringify({ error: msg }));
       return;
     }
   }

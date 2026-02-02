@@ -1,19 +1,26 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-async function getUserFromToken(supabaseAdmin: any, token: string) {
+async function getUserFromToken(supabaseAdmin: SupabaseClient, token: string) {
   const { data, error } = await supabaseAdmin.auth.getUser(token);
   if (error || !data?.user) return null;
   return data.user;
 }
 
-export default async function handler(req: any, res: any) {
-  const { id } = req.query || {};
-  const method = req.method;
+type RequestWithQuery = IncomingMessage & {
+  method?: string;
+  headers: Record<string, string | string[] | undefined>;
+  query?: Record<string, string | string[] | undefined>;
+};
+
+export default async function handler(req: RequestWithQuery, res: ServerResponse) {
+  const { id } = (req.query || {}) as { id?: string | string[] };
+  const method = req.method || 'GET';
 
   const authHeader = req.headers['authorization'] || '';
   const token = Array.isArray(authHeader)
     ? authHeader[0]?.replace('Bearer ', '')
-    : authHeader.replace('Bearer ', '');
+    : (authHeader || '').replace('Bearer ', '');
 
   if (!token) {
     res.statusCode = 401;
@@ -82,7 +89,7 @@ export default async function handler(req: any, res: any) {
         'currency',
         'notes',
       ] as const;
-      const update: Record<string, any> = {};
+      const update: Partial<Record<(typeof fields)[number], unknown>> = {};
       for (const key of fields) {
         if (key in body) update[key] = body[key];
       }
@@ -106,10 +113,11 @@ export default async function handler(req: any, res: any) {
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify(data));
       return;
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Unknown error';
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ error: e.message }));
+      res.end(JSON.stringify({ error: msg }));
       return;
     }
   }

@@ -1,6 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { IncomingMessage, ServerResponse } from 'http';
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: IncomingMessage & { method?: string; headers: Record<string, string | string[] | undefined> }, res: ServerResponse) {
   if (req.method !== 'GET') {
     res.statusCode = 405;
     res.setHeader('Allow', 'GET');
@@ -11,7 +12,7 @@ export default async function handler(req: any, res: any) {
   const authHeader = req.headers['authorization'] || '';
   const token = Array.isArray(authHeader)
     ? authHeader[0]?.replace('Bearer ', '')
-    : authHeader.replace('Bearer ', '');
+    : (authHeader || '').replace('Bearer ', '');
 
   if (!token) {
     res.statusCode = 401;
@@ -23,7 +24,7 @@ export default async function handler(req: any, res: any) {
   try {
     const url = process.env.SUPABASE_URL as string;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
-    const supabaseAdmin = createClient(url, serviceKey);
+    const supabaseAdmin: SupabaseClient = createClient(url, serviceKey);
 
     const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
     if (userError || !userData?.user) {
@@ -34,8 +35,9 @@ export default async function handler(req: any, res: any) {
     }
 
     const userId = userData.user.id;
-    const displayName = (userData.user.user_metadata as any)?.display_name || null;
-    const avatarUrl = (userData.user.user_metadata as any)?.avatar_url || null;
+    const meta = (userData.user.user_metadata || {}) as { display_name?: string; avatar_url?: string };
+    const displayName = meta.display_name ?? null;
+    const avatarUrl = meta.avatar_url ?? null;
 
     const { data: profile } = await supabaseAdmin
       .from('profiles')
@@ -85,9 +87,10 @@ export default async function handler(req: any, res: any) {
       avatar_url: profile.avatar_url,
       trips_count: count ?? 0,
     }));
-  } catch (e: any) {
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Unknown error';
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ error: e.message }));
+    res.end(JSON.stringify({ error: msg }));
   }
 }

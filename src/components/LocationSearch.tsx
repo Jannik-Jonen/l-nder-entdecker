@@ -34,7 +34,15 @@ export function LocationSearch({ onSelect }: LocationSearchProps) {
   const [open, setOpen] = React.useState(false)
   const [query, setQuery] = React.useState("")
   const [loading, setLoading] = React.useState(false)
-  const [results, setResults] = React.useState<any[]>([])
+  type NominatimResult = {
+    place_id: string | number;
+    display_name: string;
+    lat: string;
+    lon: string;
+    type: string;
+    address?: { country_code?: string };
+  };
+  const [results, setResults] = React.useState<NominatimResult[]>([])
 
   React.useEffect(() => {
     if (!query || query.length < 3) {
@@ -99,7 +107,7 @@ export function LocationSearch({ onSelect }: LocationSearchProps) {
                </div>
             )}
             <CommandGroup>
-              {results.map((item) => (
+              {results.map((item: NominatimResult) => (
                 <CommandItem
                   key={item.place_id}
                   value={item.display_name}
@@ -109,7 +117,7 @@ export function LocationSearch({ onSelect }: LocationSearchProps) {
                       displayName: item.display_name,
                       lat: item.lat,
                       lon: item.lon,
-                      countryCode: item.address?.country_code?.toUpperCase() || 'XX',
+                      countryCode: (item.address?.country_code || '').toUpperCase() || 'XX',
                       type: item.type
                     })
                     setOpen(false)

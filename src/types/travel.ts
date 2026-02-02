@@ -113,6 +113,7 @@ export interface Destination {
   id: string;
   name: string;
   country: string;
+  countryCode?: string;
   type: 'country' | 'island' | 'city' | 'region';
   imageUrl: string;
   description: string;

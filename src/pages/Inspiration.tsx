@@ -70,6 +70,7 @@ const Inspiration = () => {
       id: `custom-${Date.now()}`,
       name: location.name,
       country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
+      countryCode: location.countryCode,
       description: wikiData?.description || `Ein wunderschönes Reiseziel: ${location.displayName}`,
       imageUrl: wikiData?.imageUrl || fallbackImage,
       averageDailyCost: 100, // Default estimate
@@ -211,7 +212,7 @@ const Inspiration = () => {
         .insert({
           user_id: user.id,
           destination_name: planningDestination.name,
-          destination_code: 'XX',
+          destination_code: planningDestination.countryCode || 'XX',
           image_url: planningDestination.imageUrl,
           daily_budget: data.dailyBudget,
           currency: planningDestination.currency || 'EUR',

@@ -362,14 +362,31 @@ const Profile = () => {
     setCountries((prev) =>
       prev.map((c) => {
         if (c.id !== tripId) return c;
+        const days = Math.max(
+          1,
+          Math.ceil((new Date(c.endDate).getTime() - new Date(c.startDate).getTime()) / (1000 * 60 * 60 * 24)),
+        );
+        const recomputed: PackingItem[] = [
+          { id: `${tripId}-doc`, name: `Dokumente für ${count} Person(en)`, packed: false, category: 'documents' },
+          { id: `${tripId}-shirts`, name: `T-Shirts ${Math.max(count * days, days)}`, packed: false, category: 'clothing' },
+          { id: `${tripId}-socks`, name: `Socken ${count * days}`, packed: false, category: 'clothing' },
+          { id: `${tripId}-underwear`, name: `Unterwäsche ${count * days}`, packed: false, category: 'clothing' },
+          { id: `${tripId}-jacket`, name: 'Leichte Jacke/Regenschutz', packed: false, category: 'clothing' },
+          { id: `${tripId}-powerbank`, name: 'Powerbank', packed: false, category: 'electronics' },
+          { id: `${tripId}-adapter`, name: 'Steckdosenadapter (falls nötig)', packed: false, category: 'electronics' },
+        ];
+        const byName = new Map((c.packingList || []).map((p) => [p.name, p]));
+        const merged = recomputed.map((p) => (byName.has(p.name) ? { ...p, packed: byName.get(p.name)!.packed } : p));
+        const extras = (c.packingList || []).filter((p) => !merged.find((m) => m.name === p.name));
+        const finalPacking = [...merged, ...extras];
         const notes = {
           peopleCount: count,
-          packingList: c.packingList || [],
+          packingList: finalPacking,
           todos: c.todos,
           bestTimeToVisit: c.weather?.bestTimeToVisit || '',
         };
         updateTripNotes(tripId, notes);
-        return { ...c, peopleCount: count };
+        return { ...c, peopleCount: count, packingList: finalPacking };
       }),
     );
   };
@@ -616,7 +633,7 @@ const Profile = () => {
                             setHomeAirport(v);
                             try {
                               localStorage.setItem('homeAirport', v);
-                            } catch {}
+                            } catch (e) { void e; }
                           }}
                           className="w-24 rounded-md border border-border bg-background px-2 py-1 text-sm uppercase"
                         />

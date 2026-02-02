@@ -14,6 +14,16 @@ const GuideDetail = () => {
   const postsRef = useRef<HTMLDivElement | null>(null);
   const tipsRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    const section = searchParams.get('section');
+    if (section === 'posts' && postsRef.current) {
+      postsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (section === 'tips' && tipsRef.current) {
+      tipsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [searchParams]);
+
   if (!dest) {
     return (
       <div className="min-h-screen bg-background">
@@ -27,16 +37,6 @@ const GuideDetail = () => {
       </div>
     );
   }
-
-  useEffect(() => {
-    const section = searchParams.get('section');
-    if (section === 'posts' && postsRef.current) {
-      postsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    if (section === 'tips' && tipsRef.current) {
-      tipsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-background">
