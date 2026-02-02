@@ -55,19 +55,27 @@ export const WorldMap = () => {
         setMarkers(defaultMarkers as Array<{ id: string; name: string; coords: [number, number] }>);
         return;
       }
-      const names = (data || []).map((d) => d.destination_name.toLowerCase());
-      const coordMap = Object.fromEntries(
-        (defaultMarkers as Array<{ id: string; name: string; coords: [number, number] }>).map((m) => [m.id, m.coords])
-      ) as Record<string, [number, number]>;
-      const planned = inspirationDestinations
-        .filter((d) => names.includes(d.name.toLowerCase()))
-        .map((d) => ({
-          id: d.id,
-          name: d.name,
-          coords: coordMap[d.id],
-        }))
-        .filter((m) => Array.isArray(m.coords)) as Array<{ id: string; name: string; coords: [number, number] }>;
-      setMarkers(planned);
+      const trips = (data || []) as Array<{ id: string; destination_name: string }>;
+      const geocoded = await Promise.all(
+        trips.map(async (t) => {
+          try {
+            const resp = await fetch(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                t.destination_name
+              )}&limit=1&accept-language=de`
+            );
+            const arr = await resp.json();
+            const first = Array.isArray(arr) && arr[0];
+            if (!first || !first.lat || !first.lon) return null;
+            const lat = Number(first.lat);
+            const lon = Number(first.lon);
+            return { id: t.id, name: t.destination_name, coords: [lon, lat] as [number, number] };
+          } catch {
+            return null;
+          }
+        })
+      );
+      setMarkers(geocoded.filter(Boolean) as Array<{ id: string; name: string; coords: [number, number] }>);
     };
     loadMarkers();
   }, [user, defaultMarkers]);
@@ -148,28 +156,6 @@ export const WorldMap = () => {
                     <div className="rounded-md bg-background border border-border shadow-card p-3 text-xs">
                       <div className="font-medium mb-2">{m.name}</div>
                       <div className="flex gap-2">
-                        <button
-                          className="px-2 py-1 rounded bg-primary text-primary-foreground"
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            ev.stopPropagation();
-                            navigate(`/guides/${m.id}`);
-                          }}
-                        >
-                          Guide öffnen
-                        </button>
-                        {guidePosts.find((p) => p.destinationId === m.id) && (
-                          <button
-                            className="px-2 py-1 rounded bg-muted text-foreground"
-                            onClick={(ev) => {
-                              ev.preventDefault();
-                              ev.stopPropagation();
-                               navigate(`/guides/${m.id}?section=posts`);
-                            }}
-                          >
-                            Beitrag
-                          </button>
-                        )}
                         <button
                           className="px-2 py-1 rounded bg-muted text-muted-foreground"
                           onClick={(ev) => {

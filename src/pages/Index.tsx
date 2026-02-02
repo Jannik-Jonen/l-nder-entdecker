@@ -71,7 +71,7 @@ const Index = () => {
       if (error) throw error;
 
       if (data) {
-        const mappedCountries: Country[] = (data as SavedTripRow[])
+        let mappedCountries: Country[] = (data as SavedTripRow[])
           .filter(row => row.user_id === user.id) // Client-side security filter
           .map((row) => ({
             id: row.id,
@@ -89,7 +89,9 @@ const Index = () => {
             flights: [],
             weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
           }));
-        
+        mappedCountries = mappedCountries.sort(
+          (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
         setTrip(prev => ({ ...prev, countries: mappedCountries }));
       }
     } catch (error) {

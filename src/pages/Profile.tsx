@@ -93,7 +93,7 @@ const Profile = () => {
       }
 
       if (data) {
-        const mappedTrips: Country[] = (data as SavedTripRow[])
+        let mappedTrips: Country[] = (data as SavedTripRow[])
           .filter((trip) => trip.user_id === user.id)
           .map((trip: SavedTripRow) => {
             let parsed: {
@@ -138,6 +138,9 @@ const Profile = () => {
               stops: parsed.stops || [],
             } as Country;
           });
+        mappedTrips = mappedTrips.sort(
+          (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
         setCountries(mappedTrips);
       } else {
         setCountries([]);

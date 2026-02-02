@@ -371,56 +371,6 @@ const Blog = () => {
           </div>
         </section>
 
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-2xl font-semibold">Externe Quellen</h2>
-            <div className="text-sm text-muted-foreground">Lonely Planet • Urlaubsguru • ausgewählte Blogs</div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {inspirationDestinations.slice(0, 6).map((d) => (
-              <div key={`ext-${d.id}`} className="rounded-xl bg-card border border-border p-4">
-                <div className="flex items-center gap-2 mb-2 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
-                  <span>{d.name}</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href={`https://www.lonelyplanet.com/search?q=${encodeURIComponent(d.name)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Lonely Planet <ExternalLink className="h-4 w-4 ml-1" />
-                  </a>
-                  <a
-                    href={`https://www.urlaubsguru.de/?s=${encodeURIComponent(d.name)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Urlaubsguru <ExternalLink className="h-4 w-4 ml-1" />
-                  </a>
-                  <a
-                    href={`https://www.google.com/search?q=${encodeURIComponent(`${d.name} BetterBeyond Blog`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    BetterBeyond <ExternalLink className="h-4 w-4 ml-1" />
-                  </a>
-                  <a
-                    href={`https://www.google.com/search?q=${encodeURIComponent(`${d.name} Reiseblog Tipps`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Weitere Blogs <ExternalLink className="h-4 w-4 ml-1" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
       </main>
     </div>
   );
