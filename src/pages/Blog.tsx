@@ -19,7 +19,25 @@ const Blog = () => {
     tags?: string[];
     sources?: string[];
   };
+  type BlogPostRow = {
+    id: string;
+    title: string;
+    excerpt: string;
+    image_url: string;
+    tags?: string[];
+    sources?: string[];
+  };
+  type CombinedPost = {
+    id: string;
+    title: string;
+    excerpt: string;
+    image_url: string;
+    destination_id?: string;
+    tags?: string[];
+    sources?: string[];
+  };
   const [posts, setPosts] = useState<GuidePostRow[]>([]);
+  const [generalPosts, setGeneralPosts] = useState<BlogPostRow[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -41,12 +59,22 @@ const Blog = () => {
             tags: p.tags,
             sources: [],
           })));
-          return;
-        }
-        if (data && Array.isArray(data)) {
-          setPosts(data as unknown as GuidePostRow[]);
         } else {
-          setPosts([]);
+          if (data && Array.isArray(data)) {
+            setPosts(data as unknown as GuidePostRow[]);
+          } else {
+            setPosts([]);
+          }
+        }
+        const { data: blogData, error: blogError } = await supabaseUntyped
+          .from('blog_posts')
+          .select('id,title,excerpt,image_url,tags,sources,status')
+          .eq('status', 'published')
+          .order('created_at', { ascending: false });
+        if (!blogError && blogData && Array.isArray(blogData)) {
+          setGeneralPosts(blogData as unknown as BlogPostRow[]);
+        } else {
+          setGeneralPosts([]);
         }
       } catch {
         setPosts(guidePostsFallback.map((p) => ({
@@ -58,6 +86,7 @@ const Blog = () => {
           tags: p.tags,
           sources: [],
         })));
+        setGeneralPosts([]);
       } finally {
         setLoading(false);
       }
@@ -70,8 +99,8 @@ const Blog = () => {
     ? posts.filter((p) => p.destination_id === destinationId)
     : posts;
 
-  const activePost = postId
-    ? posts.find((p) => p.id === postId)
+  const activePost: CombinedPost | undefined = postId
+    ? [...posts, ...generalPosts.map((p) => ({ ...p, destination_id: undefined }))].find((p) => p.id === postId)
     : undefined;
 
   return (
@@ -94,6 +123,13 @@ const Blog = () => {
             </p>
           </div>
         </section>
+        <section className="mb-8">
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-sm text-muted-foreground">
+              Inspiration zeigt kompakte Ideen und Ziele. Der Blog bietet ausführliche Artikel und Guides – hier findest du Tiefe und konkrete Planungshilfen.
+            </p>
+          </div>
+        </section>
 
         {activePost && (
           <section className="mb-8">
@@ -107,12 +143,14 @@ const Blog = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="flex items-center gap-2 mb-2 text-white/80">
-                    <MapPin className="h-4 w-4" />
-                    <span>
-                      {(inspirationDestinations.find((d) => d.id === activePost.destination_id)?.name) || 'Destination'}
-                    </span>
-                  </div>
+                  {!!activePost.destination_id && (
+                    <div className="flex items-center gap-2 mb-2 text-white/80">
+                      <MapPin className="h-4 w-4" />
+                      <span>
+                        {(inspirationDestinations.find((d) => d.id === activePost.destination_id)?.name) || 'Destination'}
+                      </span>
+                    </div>
+                  )}
                   <h2 className="font-display text-2xl font-semibold">{activePost.title}</h2>
                   <p className="text-white/80 text-sm mt-1">{activePost.excerpt}</p>
                 </div>
@@ -123,7 +161,7 @@ const Blog = () => {
 
         <section className="mb-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-2xl font-semibold">Beiträge</h2>
+            <h2 className="font-display text-2xl font-semibold">Guides mit Destination</h2>
             {destinationId && (
               <Button variant="ghost" asChild>
                 <Link to="/blog">
@@ -157,6 +195,48 @@ const Blog = () => {
                     <span>{(inspirationDestinations.find((d) => d.id === p.destination_id)?.name) || 'Destination'}</span>
                   </div>
                   <div className="mt-3 flex justify-end">
+                    <Button variant="outline" size="sm" className="gap-2" asChild>
+                      <Link to={`/blog?post=${p.id}`}>
+                        Öffnen <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+        
+        <section className="mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-2xl font-semibold">Allgemeine Blogartikel</h2>
+            {!destinationId && (
+              <Button variant="ghost" asChild>
+                <Link to="/blog/create">Artikel erstellen</Link>
+              </Button>
+            )}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {generalPosts.map((p) => (
+              <div
+                key={p.id}
+                className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+              >
+                <div className="relative h-40">
+                  <img
+                    src={p.image_url}
+                    alt={p.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                    <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="mt-1 flex justify-end">
                     <Button variant="outline" size="sm" className="gap-2" asChild>
                       <Link to={`/blog?post=${p.id}`}>
                         Öffnen <ArrowRight className="h-4 w-4" />

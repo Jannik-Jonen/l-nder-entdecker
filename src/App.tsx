@@ -14,6 +14,7 @@ import Guides from "./pages/Guides";
 import GuideDetail from "./pages/GuideDetail";
 import GuidePostDetail from "./pages/GuidePostDetail";
 import CreateGuidePost from "./pages/CreateGuidePost";
+import CreateBlogPost from "./pages/CreateBlogPost";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import AdminReview from "./pages/AdminReview";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/guides/create" element={<CreateGuidePost />} />
               <Route path="/admin/review" element={<AdminReview />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/create" element={<CreateBlogPost />} />
               <Route path="/tipps" element={<Tipps />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />

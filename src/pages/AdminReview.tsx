@@ -16,12 +16,20 @@ type GuidePostRow = {
   destination_id: string;
   status: "draft" | "pending_review" | "published" | "rejected";
 };
+type BlogPostRow = {
+  id: string;
+  title: string;
+  excerpt: string;
+  image_url: string;
+  status: "draft" | "pending_review" | "published" | "rejected";
+};
 
 const AdminReview = () => {
   const { user } = useAuth();
   const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   const [posts, setPosts] = useState<GuidePostRow[]>([]);
+  const [generalPosts, setGeneralPosts] = useState<BlogPostRow[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,6 +45,16 @@ const AdminReview = () => {
           setPosts(data as unknown as GuidePostRow[]);
         } else {
           setPosts([]);
+        }
+        const { data: blogData, error: blogErr } = await supabaseUntyped
+          .from("blog_posts")
+          .select("id,title,excerpt,image_url,status")
+          .eq("status", "pending_review")
+          .order("created_at", { ascending: false });
+        if (!blogErr && blogData) {
+          setGeneralPosts(blogData as unknown as BlogPostRow[]);
+        } else {
+          setGeneralPosts([]);
         }
       } finally {
         setLoading(false);
@@ -56,6 +74,22 @@ const AdminReview = () => {
         return;
       }
       setPosts((prev) => prev.filter((p) => p.id !== id));
+      toast.success(status === "published" ? "Veröffentlicht" : "Zurückgewiesen");
+    } catch {
+      toast.error("Update fehlgeschlagen");
+    }
+  };
+  const updateBlogStatus = async (id: string, status: BlogPostRow["status"]) => {
+    try {
+      const { error } = await supabaseUntyped
+        .from("blog_posts")
+        .update({ status })
+        .eq("id", id);
+      if (error) {
+        toast.error("Update fehlgeschlagen");
+        return;
+      }
+      setGeneralPosts((prev) => prev.filter((p) => p.id !== id));
       toast.success(status === "published" ? "Veröffentlicht" : "Zurückgewiesen");
     } catch {
       toast.error("Update fehlgeschlagen");
@@ -119,45 +153,145 @@ const AdminReview = () => {
           }}>
             <Sparkles className="h-4 w-4" /> Beispiel‑Beiträge hinzufügen
           </Button>
+          <Button variant="secondary" className="gap-2" onClick={async () => {
+            try {
+              const now = Date.now();
+              const samples = [
+                {
+                  id: `blog-seed-${now}-a`,
+                  author_id: user?.id,
+                  title: "Minimalistische Packliste: Reisen mit Handgepäck",
+                  excerpt: "Was wirklich in deinen Rucksack gehört – praxisnah & leicht.",
+                  content: [
+                    "Einleitung",
+                    "Warum minimalistisches Packen Freiheit schafft.",
+                    "",
+                    "Liste",
+                    "• Kleidung, Hygiene, Technik, Notfall",
+                    "",
+                    "Tipps",
+                    "• Multi-Use Items, Layering, Kompression"
+                  ].join("\n"),
+                  image_url: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&q=80",
+                  tags: ["Packen", "Ausrüstung", "Leicht"],
+                  sources: [],
+                  status: "pending_review" as const,
+                },
+                {
+                  id: `blog-seed-${now}-b`,
+                  author_id: user?.id,
+                  title: "Reisebudget planen: Von Tageskosten bis Notfallpuffer",
+                  excerpt: "Struktur und Tools für ein realistisches Budget ohne Stress.",
+                  content: [
+                    "Einleitung",
+                    "Budget-Bausteine und typische Kosten.",
+                    "",
+                    "Aufteilung",
+                    "• Fixkosten, variable Ausgaben, Puffer",
+                    "",
+                    "Werkzeuge",
+                    "• Tabellen, Apps, Bargeldstrategie"
+                  ].join("\n"),
+                  image_url: "https://images.unsplash.com/photo-1518546305927-5a555bb702b3?w=800&q=80",
+                  tags: ["Budget", "Planung", "Finanzen"],
+                  sources: [],
+                  status: "pending_review" as const,
+                },
+              ];
+              const { error } = await supabaseUntyped.from("blog_posts").insert(samples);
+              if (error) {
+                toast.error("Seeding fehlgeschlagen");
+                return;
+              }
+              toast.success("Beispiel‑Artikel hinzugefügt");
+            } catch {
+              toast.error("Seeding fehlgeschlagen");
+            }
+          }}>
+            <Sparkles className="h-4 w-4" /> Beispiel‑Artikel hinzufügen
+          </Button>
         </div>
         {loading ? (
           <div className="text-muted-foreground">Laden…</div>
-        ) : posts.length === 0 ? (
-          <div className="text-muted-foreground">Keine Beiträge zur Prüfung</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((p) => (
-              <div key={p.id} className="rounded-xl bg-card border border-border overflow-hidden">
-                <div className="relative h-40">
-                  <img
-                    src={p.image_url}
-                    alt={p.title}
-                    className="h-full w-full object-cover"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
-                  />
+          <>
+            <div className="mb-8">
+              <h2 className="font-display text-2xl font-semibold mb-3">Guides mit Destination</h2>
+              {posts.length === 0 ? (
+                <div className="text-muted-foreground">Keine Guide-Beiträge zur Prüfung</div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {posts.map((p) => (
+                    <div key={p.id} className="rounded-xl bg-card border border-border overflow-hidden">
+                      <div className="relative h-40">
+                        <img
+                          src={p.image_url}
+                          alt={p.title}
+                          className="h-full w-full object-cover"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                        />
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                          <MapPin className="h-4 w-4" />
+                          <span>{(inspirationDestinations.find((d) => d.id === p.destination_id)?.name) || "Destination"}</span>
+                        </div>
+                        <h3 className="font-display text-lg font-semibold mt-1">{p.title}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
+                        <div className="mt-4 flex items-center gap-2">
+                          <Button variant="outline" asChild size="sm">
+                            <Link to={`/guides/posts/${p.id}`}>Öffnen</Link>
+                          </Button>
+                          <Button variant="default" size="sm" className="gap-1" onClick={() => updateStatus(p.id, "published")}>
+                            <Check className="h-4 w-4" /> Freigeben
+                          </Button>
+                          <Button variant="destructive" size="sm" className="gap-1" onClick={() => updateStatus(p.id, "rejected")}>
+                            <X className="h-4 w-4" /> Ablehnen
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="p-4">
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                    <MapPin className="h-4 w-4" />
-                    <span>{(inspirationDestinations.find((d) => d.id === p.destination_id)?.name) || "Destination"}</span>
-                  </div>
-                  <h3 className="font-display text-lg font-semibold mt-1">{p.title}</h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <Button variant="outline" asChild size="sm">
-                      <Link to={`/guides/posts/${p.id}`}>Öffnen</Link>
-                    </Button>
-                    <Button variant="default" size="sm" className="gap-1" onClick={() => updateStatus(p.id, "published")}>
-                      <Check className="h-4 w-4" /> Freigeben
-                    </Button>
-                    <Button variant="destructive" size="sm" className="gap-1" onClick={() => updateStatus(p.id, "rejected")}>
-                      <X className="h-4 w-4" /> Ablehnen
-                    </Button>
-                  </div>
+              )}
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-semibold mb-3">Allgemeine Blogartikel</h2>
+              {generalPosts.length === 0 ? (
+                <div className="text-muted-foreground">Keine Artikel zur Prüfung</div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {generalPosts.map((p) => (
+                    <div key={p.id} className="rounded-xl bg-card border border-border overflow-hidden">
+                      <div className="relative h-40">
+                        <img
+                          src={p.image_url}
+                          alt={p.title}
+                          className="h-full w-full object-cover"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-display text-lg font-semibold mt-1">{p.title}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
+                        <div className="mt-4 flex items-center gap-2">
+                          <Button variant="outline" asChild size="sm">
+                            <Link to={`/blog?post=${p.id}`}>Öffnen</Link>
+                          </Button>
+                          <Button variant="default" size="sm" className="gap-1" onClick={() => updateBlogStatus(p.id, "published")}>
+                            <Check className="h-4 w-4" /> Freigeben
+                          </Button>
+                          <Button variant="destructive" size="sm" className="gap-1" onClick={() => updateBlogStatus(p.id, "rejected")}>
+                            <X className="h-4 w-4" /> Ablehnen
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
+              )}
+            </div>
+          </>
         )}
       </main>
     </div>
