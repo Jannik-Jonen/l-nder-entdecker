@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { CountryCard } from '@/components/CountryCard';
@@ -40,16 +40,9 @@ const Index = () => {
   const [isLoadingTrips, setIsLoadingTrips] = useState(false);
   const [userName, setUserName] = useState<string>('');
 
-  useEffect(() => {
-    if (user) {
-      fetchUserTrips();
-      fetchProfile();
-    } else {
-      setTrip({ ...trip, countries: [] });
-    }
-  }, [user]);
+  
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     if (!user) return;
     try {
       const { data } = await supabase
@@ -63,9 +56,9 @@ const Index = () => {
     } catch (e) {
       // ignore
     }
-  };
+  }, [user]);
 
-  const fetchUserTrips = async () => {
+  const fetchUserTrips = useCallback(async () => {
     if (!user) return;
     setIsLoadingTrips(true);
     try {
@@ -105,7 +98,16 @@ const Index = () => {
     } finally {
       setIsLoadingTrips(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserTrips();
+      fetchProfile();
+    } else {
+      setTrip((prev) => ({ ...prev, countries: [] }));
+    }
+  }, [user, fetchUserTrips, fetchProfile]);
 
   const totalTasks = trip.countries.reduce((acc, c) => acc + c.todos.length, 0);
   const completedTasks = trip.countries.reduce(

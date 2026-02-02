@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { mockCountries, defaultTodos } from '@/data/mockData';
 import { Country, TodoItem, PackingItem } from '@/types/travel';
@@ -57,18 +57,9 @@ const Profile = () => {
   });
 
   // Fetch profile and trips when user logs in
-  useEffect(() => {
-    if (user) {
-      setCountries([]);
-      fetchProfile();
-      fetchTrips();
-    } else {
-      setProfile(null);
-      setCountries(mockCountries);
-    }
-  }, [user]);
+  
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     if (!user) return;
     try {
       const { data, error } = await supabase
@@ -83,9 +74,9 @@ const Profile = () => {
     } catch (e) {
       // ignore
     }
-  };
+  }, [user]);
 
-  const fetchTrips = async () => {
+  const fetchTrips = useCallback(async () => {
     if (!user) return;
     setLoadingTrips(true);
     try {
@@ -155,7 +146,18 @@ const Profile = () => {
     } finally {
       setLoadingTrips(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      setCountries([]);
+      fetchProfile();
+      fetchTrips();
+    } else {
+      setProfile(null);
+      setCountries(mockCountries);
+    }
+  }, [user, fetchProfile, fetchTrips]);
 
   const handleAddCountry = async (newCountry: Country) => {
     if (user) {
