@@ -95,6 +95,10 @@ export interface Country {
   restaurants?: Restaurant[];
   flights?: FlightConnection[];
   weather?: WeatherInfo;
+  peopleCount?: number;
+  packingList?: PackingItem[];
+  tips?: string[];
+  transportNotes?: string[];
 }
 
 export interface Trip {

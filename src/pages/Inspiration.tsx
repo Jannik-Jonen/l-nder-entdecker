@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { inspirationDestinations, guidePosts, travelTips } from '@/data/mockData';
+import { inspirationDestinations, guidePosts, travelTips, defaultTodos } from '@/data/mockData';
+import type { PackingItem, TodoItem } from '@/types/travel';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -98,6 +99,82 @@ const Inspiration = () => {
     setIsAdding(true);
 
     try {
+      const startIso = new Date(data.startDate).toISOString();
+      const endIso = new Date(data.endDate).toISOString();
+      const days =
+        Math.max(
+          1,
+          Math.ceil((new Date(data.endDate).getTime() - new Date(data.startDate).getTime()) / (1000 * 60 * 60 * 24)),
+        );
+
+      // Generate initial packing list heuristically
+      const basePacking: PackingItem[] = [
+        { id: `doc-${Date.now()}`, name: 'Reisedokumente (Pass/Personalausweis)', packed: false, category: 'documents' },
+        { id: `phone-${Date.now()}`, name: 'Smartphone + Ladegerät', packed: false, category: 'electronics' },
+        { id: `adapter-${Date.now()}`, name: 'Steckdosenadapter (falls nötig)', packed: false, category: 'electronics' },
+        { id: `sunscreen-${Date.now()}`, name: 'Sonnencreme', packed: false, category: 'toiletries' },
+        { id: `meds-${Date.now()}`, name: 'Reiseapotheke', packed: false, category: 'toiletries' },
+      ];
+      const clothingItems: PackingItem[] = [
+        { id: `tops-${Date.now()}`, name: `${days}× Oberteile`, packed: false, category: 'clothing' },
+        { id: `bottoms-${Date.now()}`, name: `${Math.ceil(days / 2)}× Hosen/Röcke`, packed: false, category: 'clothing' },
+        { id: `under-${Date.now()}`, name: `${days}× Unterwäsche & Socken`, packed: false, category: 'clothing' },
+        { id: `shoes-${Date.now()}`, name: 'Bequeme Schuhe', packed: false, category: 'clothing' },
+        { id: `jacket-${Date.now()}`, name: 'Leichte Jacke/Regenschutz', packed: false, category: 'clothing' },
+      ];
+      const typeExtras: PackingItem[] =
+        planningDestination.type === 'island'
+          ? [
+              { id: `swim-${Date.now()}`, name: 'Badesachen', packed: false, category: 'other' },
+              { id: `hat-${Date.now()}`, name: 'Sonnenhut/Cap', packed: false, category: 'other' },
+            ]
+          : planningDestination.type === 'region' || planningDestination.type === 'country'
+          ? [{ id: `hike-${Date.now()}`, name: 'Wanderausrüstung (falls geplant)', packed: false, category: 'other' }]
+          : [{ id: `powerbank-${Date.now()}`, name: 'Powerbank', packed: false, category: 'electronics' }];
+      const packingList: PackingItem[] = [...basePacking, ...clothingItems, ...typeExtras];
+
+      const todos: TodoItem[] = defaultTodos.map((t, i) => ({
+        ...t,
+        id: `todo-${Date.now()}-${i}`,
+        completed: false,
+      }));
+
+      // Generate travel tips & transport notes
+      const tips: string[] =
+        planningDestination.type === 'city'
+          ? [
+              'Kostenlose Stadtführungen (Free Walking Tours) nutzen',
+              'Aussichtspunkte bei Sonnenaufgang meiden Andrang',
+              'Streetfood-Märkte für günstige, authentische Küche',
+            ]
+          : planningDestination.type === 'island'
+          ? [
+              'Sonnenaufgang am Strand: ruhige Spots abseits der Hauptstrände',
+              'Lokaler Fischmarkt besuchen für frische Spezialitäten',
+              'Schnorchelspots vorab recherchieren (Sichtweiten, Strömung)',
+            ]
+          : [
+              'Panorama-Route mit Foto‑Stopps planen',
+              'Regionalmärkte: beste Zeit am Vormittag',
+              'Sonnenuntergangs‑Spots mit wenig Verkehr',
+            ];
+
+      const transportNotes: string[] =
+        planningDestination.type === 'city'
+          ? ['ÖPNV‑Pass kaufen (Tages/Mehrtagestickets)', 'Bike‑Sharing und Metro nutzen', 'App‑Tickets vorbereiten']
+          : planningDestination.type === 'island'
+          ? ['Fähren vorab buchen (Hauptzeiten beachten)', 'Roller/Fahrrad mieten', 'Küstenstraßen langsam fahren']
+          : ['Mietwagen für flexible Routen', 'Zug/Fernbus zwischen Städten', 'Maut & Parkzonen beachten'];
+
+      const notes = JSON.stringify({
+        peopleCount: data.peopleCount,
+        packingList,
+        todos,
+        bestTimeToVisit: planningDestination.bestSeason,
+        tips,
+        transportNotes,
+      });
+
       const { error } = await supabase
         .from('saved_trips')
         .insert({
@@ -107,15 +184,17 @@ const Inspiration = () => {
           image_url: planningDestination.imageUrl,
           daily_budget: data.dailyBudget,
           currency: planningDestination.currency || 'EUR',
-          start_date: new Date(data.startDate).toISOString(),
-          end_date: new Date(data.endDate).toISOString(),
+          start_date: startIso,
+          end_date: endIso,
+          notes,
         });
 
       if (error) throw error;
-      toast.success('Reise erfolgreich gespeichert!');
+      toast.success('Reise erfolgreich gespeichert! Packtipps & Aufgaben wurden hinzugefügt.');
       setPlanningDestination(null);
-    } catch (error: any) {
-      toast.error('Fehler beim Speichern: ' + error.message);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : 'Unbekannter Fehler';
+      toast.error('Fehler beim Speichern: ' + msg);
     } finally {
       setIsAdding(false);
     }

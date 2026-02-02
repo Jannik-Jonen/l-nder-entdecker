@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { mockCountries, defaultTodos } from '@/data/mockData';
-import { Country } from '@/types/travel';
+import { Country, TodoItem, PackingItem } from '@/types/travel';
 import { User, MapPin, Calendar, Settings, Plus, Trash2, Edit2, LogOut, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,6 +32,13 @@ interface SavedTripRow {
   created_at: string;
   updated_at: string;
 }
+
+type NotesData = {
+  peopleCount: number;
+  packingList: PackingItem[];
+  todos: TodoItem[];
+  bestTimeToVisit: string;
+};
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -90,22 +97,45 @@ const Profile = () => {
       if (data) {
         const mappedTrips: Country[] = (data as SavedTripRow[])
           .filter((trip) => trip.user_id === user.id)
-          .map((trip: SavedTripRow) => ({
-            id: trip.id,
-          name: trip.destination_name,
-          code: trip.destination_code || 'XX',
-          imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
-          startDate: trip.start_date || new Date().toISOString(),
-          endDate: trip.end_date || new Date().toISOString(),
-          dailyCost: Number(trip.daily_budget) || 100,
-          currency: trip.currency || 'EUR',
-          todos: defaultTodos.map((t, i) => ({ ...t, id: `${trip.id}-${i}` })),
-          attractions: [],
-          hotels: [],
-          restaurants: [],
-          flights: [],
-          weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
-        }));
+          .map((trip: SavedTripRow) => {
+            let parsed: {
+              todos?: TodoItem[];
+              peopleCount?: number;
+              packingList?: PackingItem[];
+              bestTimeToVisit?: string;
+              tips?: string[];
+              transportNotes?: string[];
+            } = {};
+            try {
+              parsed = trip.notes ? JSON.parse(trip.notes) : {};
+            } catch {
+              parsed = {};
+            }
+            const todosFromNotes: TodoItem[] =
+              parsed.todos && Array.isArray(parsed.todos)
+                ? parsed.todos.map((t: TodoItem, idx: number) => ({ ...t, id: t.id || `${trip.id}-todo-${idx}` }))
+                : defaultTodos.map((t, i) => ({ ...t, id: `${trip.id}-${i}` }));
+            return {
+              id: trip.id,
+              name: trip.destination_name,
+              code: trip.destination_code || 'XX',
+              imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+              startDate: trip.start_date || new Date().toISOString(),
+              endDate: trip.end_date || new Date().toISOString(),
+              dailyCost: Number(trip.daily_budget) || 100,
+              currency: trip.currency || 'EUR',
+              todos: todosFromNotes,
+              peopleCount: parsed.peopleCount || 1,
+              packingList: parsed.packingList || [],
+              tips: parsed.tips || [],
+              transportNotes: parsed.transportNotes || [],
+              attractions: [],
+              hotels: [],
+              restaurants: [],
+              flights: [],
+              weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: parsed.bestTimeToVisit || '', packingTips: [] },
+            } as Country;
+          });
         setCountries(mappedTrips);
       } else {
         setCountries([]);
@@ -183,6 +213,156 @@ const Profile = () => {
     await signOut();
     setCountries(mockCountries);
     toast.success('Erfolgreich abgemeldet');
+  };
+
+  const updateTripNotes = async (tripId: string, notes: NotesData) => {
+    if (!user) return;
+    try {
+      const { error } = await supabase
+        .from('saved_trips')
+        .update({ notes: JSON.stringify(notes) })
+        .eq('id', tripId)
+        .eq('user_id', user.id);
+      if (error) {
+        toast.error('Änderungen konnten nicht gespeichert werden');
+      }
+    } catch {
+      toast.error('Änderungen konnten nicht gespeichert werden');
+    }
+  };
+
+  const togglePackingItem = async (tripId: string, itemId: string) => {
+    setCountries((prev) =>
+      prev.map((c) => {
+        if (c.id !== tripId) return c;
+        const updatedPacking = (c.packingList || []).map((p) => (p.id === itemId ? { ...p, packed: !p.packed } : p));
+        const notes = {
+          peopleCount: c.peopleCount || 1,
+          packingList: updatedPacking,
+          todos: c.todos,
+          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
+        };
+        updateTripNotes(tripId, notes);
+        return { ...c, packingList: updatedPacking };
+      }),
+    );
+  };
+
+  const addPackingItem = async (tripId: string, name: string, category: PackingItem['category'] = 'other') => {
+    if (!name.trim()) return;
+    setCountries((prev) =>
+      prev.map((c) => {
+        if (c.id !== tripId) return c;
+        const newItem: PackingItem = {
+          id: `${tripId}-pack-${Date.now()}`,
+          name,
+          packed: false,
+          category,
+        };
+        const updated = [newItem, ...(c.packingList || [])];
+        const notes = {
+          peopleCount: c.peopleCount || 1,
+          packingList: updated,
+          todos: c.todos,
+          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
+        };
+        updateTripNotes(tripId, notes);
+        return { ...c, packingList: updated };
+      }),
+    );
+  };
+
+  const generatePackingSuggestions = (days: number, people: number): PackingItem[] => {
+    const suggestions: PackingItem[] = [
+      { id: `sugg-doc-${Date.now()}`, name: `Dokumente für ${people} Person(en)`, packed: false, category: 'documents' },
+      { id: `sugg-tee-${Date.now()}`, name: `T-Shirts ${Math.max(people, days)}`, packed: false, category: 'clothing' },
+      { id: `sugg-socks-${Date.now()}`, name: `Socken ${days}`, packed: false, category: 'clothing' },
+      { id: `sugg-uh-${Date.now()}`, name: `Unterwäsche ${days}`, packed: false, category: 'clothing' },
+      { id: `sugg-jacke-${Date.now()}`, name: 'Leichte Jacke/Regenschutz', packed: false, category: 'clothing' },
+      { id: `sugg-rt-${Date.now()}`, name: 'Reisehandtuch', packed: false, category: 'other' },
+      { id: `sugg-pb-${Date.now()}`, name: 'Powerbank', packed: false, category: 'electronics' },
+      { id: `sugg-adapter-${Date.now()}`, name: 'Steckdosenadapter (falls nötig)', packed: false, category: 'electronics' },
+    ];
+    return suggestions;
+  };
+
+  const applyAISuggestions = async (tripId: string) => {
+    const target = countries.find((c) => c.id === tripId);
+    if (!target) return;
+    const days = Math.max(
+      1,
+      Math.ceil((new Date(target.endDate).getTime() - new Date(target.startDate).getTime()) / (1000 * 60 * 60 * 24)),
+    );
+    const people = target.peopleCount || 1;
+    const suggestions = generatePackingSuggestions(days, people);
+    const mergedNames = new Set((target.packingList || []).map((p) => p.name));
+    const merged = [...(target.packingList || []), ...suggestions.filter((s) => !mergedNames.has(s.name))];
+    const notes = {
+      peopleCount: people,
+      packingList: merged,
+      todos: target.todos,
+      bestTimeToVisit: target.weather?.bestTimeToVisit || '',
+    };
+    await updateTripNotes(tripId, notes);
+    setCountries((prev) => prev.map((c) => (c.id === tripId ? { ...c, packingList: merged } : c)));
+    toast.success('KI‑Vorschläge übernommen');
+  };
+
+  const toggleTodo = async (tripId: string, todoId: string) => {
+    setCountries((prev) =>
+      prev.map((c) => {
+        if (c.id !== tripId) return c;
+        const updatedTodos = c.todos.map((t) => (t.id === todoId ? { ...t, completed: !t.completed } : t));
+        const notes = {
+          peopleCount: c.peopleCount || 1,
+          packingList: c.packingList || [],
+          todos: updatedTodos,
+          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
+        };
+        updateTripNotes(tripId, notes);
+        return { ...c, todos: updatedTodos };
+      }),
+    );
+  };
+
+  const addTodo = async (tripId: string, title: string) => {
+    if (!title.trim()) return;
+    setCountries((prev) =>
+      prev.map((c) => {
+        if (c.id !== tripId) return c;
+        const newTodo: TodoItem = {
+          id: `${tripId}-custom-${Date.now()}`,
+          category: 'preparation',
+          title,
+          completed: false,
+        };
+        const updatedTodos = [newTodo, ...c.todos];
+        const notes = {
+          peopleCount: c.peopleCount || 1,
+          packingList: c.packingList || [],
+          todos: updatedTodos,
+          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
+        };
+        updateTripNotes(tripId, notes);
+        return { ...c, todos: updatedTodos };
+      }),
+    );
+  };
+
+  const updatePeopleCount = async (tripId: string, count: number) => {
+    setCountries((prev) =>
+      prev.map((c) => {
+        if (c.id !== tripId) return c;
+        const notes = {
+          peopleCount: count,
+          packingList: c.packingList || [],
+          todos: c.todos,
+          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
+        };
+        updateTripNotes(tripId, notes);
+        return { ...c, peopleCount: count };
+      }),
+    );
   };
 
   const totalTrips = countries.length;
@@ -347,6 +527,187 @@ const Profile = () => {
                       <p className="mt-2 text-xs text-muted-foreground">
                         {completedCount} von {country.todos.length} Aufgaben
                       </p>
+                    </div>
+                    <div className="px-4 pb-4 space-y-3">
+                      <div className="grid grid-cols-2 gap-2">
+                        <a
+                          href={`https://www.kayak.de/flights?destination=${encodeURIComponent(country.name)}&dates=${encodeURIComponent(country.startDate)}-${encodeURIComponent(country.endDate)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Flüge (Kayak)
+                        </a>
+                        <a
+                          href={`https://www.skyscanner.de/transport/flights-to/${encodeURIComponent(country.name)}/?depart=${encodeURIComponent(country.startDate)}&return=${encodeURIComponent(country.endDate)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Flüge (Skyscanner)
+                        </a>
+                        <a
+                          href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(country.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Unterkünfte
+                        </a>
+                        <a
+                          href={`https://www.getyourguide.de/s/?q=${encodeURIComponent(country.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Aktivitäten
+                        </a>
+                        <a
+                          href={`https://www.rentalcars.com/SearchResults.do?locationName=${encodeURIComponent(country.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Mietwagen
+                        </a>
+                        <a
+                          href={`https://www.rome2rio.com/s/${encodeURIComponent(country.name)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
+                        >
+                          Fortbewegung (Rome2Rio)
+                        </a>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Personen</span>
+                        <input
+                          type="number"
+                          min={1}
+                          value={country.peopleCount || 1}
+                          onChange={(e) => updatePeopleCount(country.id, Math.max(1, Number(e.target.value) || 1))}
+                          className="w-20 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                        />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium mb-2">Aufgaben</div>
+                        <div className="space-y-2">
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Neue Aufgabe hinzufügen..."
+                              className="flex-1 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  addTodo(country.id, (e.target as HTMLInputElement).value);
+                                  (e.target as HTMLInputElement).value = '';
+                                }
+                              }}
+                            />
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                const input = (e.currentTarget.parentElement?.querySelector('input[type=text]') as HTMLInputElement) || null;
+                                if (input && input.value.trim()) {
+                                  addTodo(country.id, input.value);
+                                  input.value = '';
+                                }
+                              }}
+                            >
+                              Hinzufügen
+                            </Button>
+                          </div>
+                          <ul className="space-y-1">
+                            {country.todos.map((t) => (
+                              <li key={t.id} className="flex items-center justify-between text-sm">
+                                <label className="flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={t.completed}
+                                    onChange={() => toggleTodo(country.id, t.id)}
+                                    className="rounded"
+                                  />
+                                  <span className={cn(t.completed && 'line-through text-muted-foreground')}>{t.title}</span>
+                                </label>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium">Packliste</div>
+                          <Button variant="ghost" size="sm" onClick={() => applyAISuggestions(country.id)}>
+                            KI‑Vorschläge
+                          </Button>
+                        </div>
+                        <div className="flex gap-2 mb-2">
+                          <input
+                            type="text"
+                            placeholder="Neues Packitem..."
+                            className="flex-1 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                addPackingItem(country.id, (e.target as HTMLInputElement).value);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }}
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              const input = (e.currentTarget.parentElement?.querySelector('input[type=text]') as HTMLInputElement) || null;
+                              if (input && input.value.trim()) {
+                                addPackingItem(country.id, input.value);
+                                input.value = '';
+                              }
+                            }}
+                          >
+                            Hinzufügen
+                          </Button>
+                        </div>
+                        <ul className="space-y-1">
+                          {(country.packingList || []).map((p) => (
+                            <li key={p.id} className="flex items-center justify-between text-sm">
+                              <label className="flex items-center gap-2">
+                                <input type="checkbox" checked={p.packed} onChange={() => togglePackingItem(country.id, p.id)} />
+                                <span className={cn(p.packed && 'line-through text-muted-foreground')}>{p.name}</span>
+                              </label>
+                              <span className="text-xs text-muted-foreground">{p.category}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium mb-1">Beste Reisezeit & Fortbewegung</div>
+                        <p className="text-sm text-muted-foreground">
+                          Beste Zeit: {country.weather?.bestTimeToVisit ? country.weather.bestTimeToVisit : '—'}
+                        </p>
+                        <ul className="text-xs text-muted-foreground space-y-1 mt-1">
+                          {(country.transportNotes && country.transportNotes.length > 0
+                            ? country.transportNotes
+                            : [
+                                'ÖPNV, zu Fuß, App‑Tickets',
+                                'Mietwagen, Fernbus/Zug',
+                                'Fähren, Roller/Moped',
+                              ]
+                          ).map((note, idx) => (
+                            <li key={`tn-${country.id}-${idx}`}>• {note}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      {country.tips && country.tips.length > 0 && (
+                        <div>
+                          <div className="text-sm font-medium mb-1">Geheimtipps</div>
+                          <ul className="text-xs text-muted-foreground space-y-1">
+                            {country.tips.map((tip, idx) => (
+                              <li key={`tip-${country.id}-${idx}`}>• {tip}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

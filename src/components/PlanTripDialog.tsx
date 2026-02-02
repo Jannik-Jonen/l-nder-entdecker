@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Destination } from '@/types/travel';
-import { Calendar, DollarSign } from 'lucide-react';
+import { Calendar, DollarSign, Users } from 'lucide-react';
 
 interface PlanTripDialogProps {
   open: boolean;
@@ -17,12 +17,15 @@ export interface TripPlanData {
   startDate: string;
   endDate: string;
   dailyBudget: number;
+  peopleCount: number;
 }
 
 export const PlanTripDialog = ({ open, onOpenChange, destination, onConfirm }: PlanTripDialogProps) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [dailyBudget, setDailyBudget] = useState('');
+  const [peopleCount, setPeopleCount] = useState('1');
+  const [dateError, setDateError] = useState<string | null>(null);
 
   useEffect(() => {
     if (open && destination) {
@@ -35,17 +38,27 @@ export const PlanTripDialog = ({ open, onOpenChange, destination, onConfirm }: P
       setStartDate(start.toISOString().split('T')[0]);
       setEndDate(end.toISOString().split('T')[0]);
       setDailyBudget(destination.averageDailyCost.toString());
+      setPeopleCount('1');
+      setDateError(null);
     }
   }, [open, destination]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!startDate || !endDate) return;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (end < start) {
+      setDateError('Das Enddatum darf nicht vor dem Startdatum liegen.');
+      return;
+    }
+    setDateError(null);
 
     onConfirm({
       startDate,
       endDate,
       dailyBudget: Number(dailyBudget) || 0,
+      peopleCount: Math.max(1, Number(peopleCount) || 1),
     });
   };
 
@@ -92,6 +105,9 @@ export const PlanTripDialog = ({ open, onOpenChange, destination, onConfirm }: P
               </div>
             </div>
           </div>
+          {dateError && (
+            <p className="text-xs text-destructive">{dateError}</p>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="budget">Tagesbudget (€)</Label>
@@ -109,6 +125,26 @@ export const PlanTripDialog = ({ open, onOpenChange, destination, onConfirm }: P
             </div>
             <p className="text-xs text-muted-foreground">
               Empfohlen für {destination.name}: ~{destination.averageDailyCost}€
+            </p>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="people">Personen</Label>
+            <div className="relative">
+              <Users className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="people"
+                type="number"
+                min="1"
+                className="pl-9"
+                value={peopleCount}
+                onChange={(e) => setPeopleCount(e.target.value)}
+                placeholder="1"
+                required
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Für Packtipps und Checklisten berücksichtigen wir die Personenanzahl.
             </p>
           </div>
 
