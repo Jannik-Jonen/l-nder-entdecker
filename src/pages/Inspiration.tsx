@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { LocationSearch, LocationResult } from '@/components/LocationSearch';
 import { fetchWikiData } from '@/services/wikipedia';
+import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
 import { Loader2 } from 'lucide-react';
 
 
@@ -33,6 +34,7 @@ const Inspiration = () => {
   const { user } = useAuth();
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [planningDestination, setPlanningDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
@@ -83,8 +85,16 @@ const Inspiration = () => {
     setSelectedDestination(customDestination);
   };
 
-  const addToMyTrips = async (destination: Destination) => {
-    if (!user) return;
+  const startPlanningTrip = (destination: Destination) => {
+    if (!user) {
+      toast.error('Bitte melde dich an, um eine Reise zu planen.');
+      return;
+    }
+    setPlanningDestination(destination);
+  };
+
+  const handlePlanConfirm = async (data: TripPlanData) => {
+    if (!user || !planningDestination) return;
     setIsAdding(true);
 
     try {
@@ -92,17 +102,18 @@ const Inspiration = () => {
         .from('saved_trips')
         .insert({
           user_id: user.id,
-          destination_name: destination.name,
+          destination_name: planningDestination.name,
           destination_code: 'XX',
-          image_url: destination.imageUrl,
-          daily_budget: destination.averageDailyCost,
-          currency: destination.currency || 'EUR',
-          start_date: new Date().toISOString(),
-          end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          image_url: planningDestination.imageUrl,
+          daily_budget: data.dailyBudget,
+          currency: planningDestination.currency || 'EUR',
+          start_date: new Date(data.startDate).toISOString(),
+          end_date: new Date(data.endDate).toISOString(),
         });
 
       if (error) throw error;
       toast.success('Reise erfolgreich gespeichert!');
+      setPlanningDestination(null);
     } catch (error: any) {
       toast.error('Fehler beim Speichern: ' + error.message);
     } finally {
@@ -411,13 +422,13 @@ const Inspiration = () => {
 
                   {user && (
                     <Button 
-                      onClick={() => addToMyTrips(selectedDestination)}
+                      onClick={() => startPlanningTrip(selectedDestination)}
                       disabled={isAdding}
                       size="sm"
                       className="gap-2"
                     >
                       <Plus className="h-4 w-4" />
-                      {isAdding ? '...' : 'Zur Reise hinzufügen'}
+                      {isAdding ? '...' : 'Planen'}
                     </Button>
                   )}
                 </div>
@@ -425,6 +436,12 @@ const Inspiration = () => {
             </div>
           </div>
         )}
+        <PlanTripDialog 
+          open={!!planningDestination} 
+          onOpenChange={(open) => !open && setPlanningDestination(null)}
+          destination={planningDestination}
+          onConfirm={handlePlanConfirm}
+        />
       </main>
 
       <footer className="border-t border-border mt-16 py-8">

@@ -37,7 +37,7 @@ export const fetchWikiData = async (query: string): Promise<WikiData | null> => 
       extract: page.extract
     };
   } catch (error) {
-    console.error('Error fetching Wiki data:', error);
+    console.error('Error fetching Wikivoyage data:', error);
     return null;
   }
 };
