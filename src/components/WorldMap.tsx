@@ -21,6 +21,7 @@ export const WorldMap = () => {
   const [markers, setMarkers] = useState<Array<{ id: string; name: string; coords: [number, number] }>>([]);
   const [geoDetail, setGeoDetail] = useState<{ name: string; destination: Destination | null } | null>(null);
   const [openPlan, setOpenPlan] = useState(false);
+  const [center, setCenter] = useState<[number, number]>([10, 20]);
   const defaultMarkers = useMemo(() => {
     const coordById: Record<string, [number, number]> = {
       'dest-1': [115, -8],
@@ -98,7 +99,7 @@ export const WorldMap = () => {
         }}
       >
         <ZoomableGroup
-          center={[10, 20]}
+          center={center}
           zoom={zoom}
           onClick={() => {
             setSelectedId(null);
@@ -147,9 +148,10 @@ export const WorldMap = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 setSelectedId(m.id);
+                setCenter(m.coords);
               }}
             >
-              <circle r={4} className="fill-primary" />
+              <circle r={4 + (zoom - 1) * 2} className="fill-primary" />
               {selectedId === m.id && (
                 <g transform="translate(8,-8)">
                   <foreignObject x="0" y="0" width="220" height="120">
