@@ -18,6 +18,7 @@ const Blog = () => {
     destination_id: string;
     tags?: string[];
     sources?: string[];
+    content?: string;
   };
   type BlogPostRow = {
     id: string;
@@ -26,6 +27,7 @@ const Blog = () => {
     image_url: string;
     tags?: string[];
     sources?: string[];
+    content?: string;
   };
   type CombinedPost = {
     id: string;
@@ -35,10 +37,13 @@ const Blog = () => {
     destination_id?: string;
     tags?: string[];
     sources?: string[];
+    content?: string;
   };
   const [posts, setPosts] = useState<GuidePostRow[]>([]);
   const [generalPosts, setGeneralPosts] = useState<BlogPostRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [activeDetail, setActiveDetail] = useState<CombinedPost | null>(null);
+  const [loadingDetail, setLoadingDetail] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -103,6 +108,44 @@ const Blog = () => {
     ? [...posts, ...generalPosts.map((p) => ({ ...p, destination_id: undefined }))].find((p) => p.id === postId)
     : undefined;
 
+  useEffect(() => {
+    const fetchDetail = async () => {
+      if (!postId) {
+        setActiveDetail(null);
+        return;
+      }
+      setLoadingDetail(true);
+      try {
+        // Try guide_posts first (destination-linked)
+        const { data: guide } = await supabaseUntyped
+          .from('guide_posts')
+          .select('*')
+          .eq('id', postId)
+          .eq('status', 'published')
+          .maybeSingle();
+        if (guide) {
+          setActiveDetail(guide as unknown as CombinedPost);
+          return;
+        }
+        // Fallback to general blog_posts
+        const { data: blog } = await supabaseUntyped
+          .from('blog_posts')
+          .select('*')
+          .eq('id', postId)
+          .eq('status', 'published')
+          .maybeSingle();
+        if (blog) {
+          setActiveDetail(blog as unknown as CombinedPost);
+        } else {
+          setActiveDetail(null);
+        }
+      } finally {
+        setLoadingDetail(false);
+      }
+    };
+    fetchDetail();
+  }, [postId]);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -155,6 +198,45 @@ const Blog = () => {
                   <p className="text-white/80 text-sm mt-1">{activePost.excerpt}</p>
                 </div>
               </div>
+            </div>
+          </section>
+        )}
+
+        {postId && (
+          <section className="mb-10">
+            <div className="rounded-2xl border border-border bg-card p-6">
+              {loadingDetail && (
+                <div className="text-sm text-muted-foreground">Lade Beitrag…</div>
+              )}
+              {!loadingDetail && activeDetail && (
+                <article className="prose prose-slate dark:prose-invert max-w-none">
+                  {activeDetail.destination_id && (
+                    <p className="text-sm text-muted-foreground">
+                      Verknüpft mit: {(inspirationDestinations.find((d) => d.id === activeDetail.destination_id)?.name) || 'Destination'}
+                    </p>
+                  )}
+                  <p className="text-muted-foreground">{activeDetail.excerpt}</p>
+                  {activeDetail.content && <div className="mt-4 whitespace-pre-wrap">{activeDetail.content}</div>}
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {(activeDetail.tags || []).map((t) => (
+                      <span key={t} className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">{t}</span>
+                    ))}
+                  </div>
+                  {(activeDetail.sources && activeDetail.sources.length > 0) && (
+                    <div className="mt-8">
+                      <h3>Quellen</h3>
+                      <ul className="list-disc ml-5">
+                        {activeDetail.sources.map((s) => (
+                          <li key={s}><a href={s} target="_blank" rel="noreferrer" className="text-primary underline">{s}</a></li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </article>
+              )}
+              {!loadingDetail && !activeDetail && (
+                <div className="text-sm text-muted-foreground">Beitrag konnte nicht geladen werden.</div>
+              )}
             </div>
           </section>
         )}
