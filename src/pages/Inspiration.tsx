@@ -73,7 +73,7 @@ const Inspiration = () => {
       description: wikiData?.description || `Ein wunderschönes Reiseziel: ${location.displayName}`,
       imageUrl: wikiData?.imageUrl || fallbackImage,
       averageDailyCost: 100, // Default estimate
-      bestSeason: 'Ganzjährig',
+      bestSeason: wikiData?.bestSeason || 'Ganzjährig',
       type: destType,
       currency: 'EUR',
       highlights: [],
@@ -168,13 +168,32 @@ const Inspiration = () => {
 
       const itinerary: string[] = Array.from({ length: days }).map((_, i) => {
         const d = i + 1;
-        if (planningDestination.type === 'city') {
-          return `Tag ${d}: Altstadt, Museumsbesuch, Aussichtspunkt, lokale Küche`;
-        } else if (planningDestination.type === 'island') {
-          return `Tag ${d}: Strand/Water‑Activity, Sonnenuntergangs‑Spot, Seafood‑Dinner`;
-        } else {
-          return `Tag ${d}: Panorama‑Route, Natur‑Stopps, Marktbesuch, regionale Spezialitäten`;
-        }
+        const baseCity = [
+          '08:30 Frühstück',
+          '10:00 Free Walking Tour (Altstadt)',
+          '13:00 Lunch',
+          '15:00 Museum/Galerie',
+          '18:00 Aussichtspunkt/Skyline',
+          '20:00 Dinner (lokale Küche)'
+        ];
+        const baseIsland = [
+          '08:00 Strand/Spaziergang',
+          '10:30 Schnorcheln/Bootstour',
+          '13:00 Lunch (Seafood)',
+          '15:30 Küstenroute/Hidden Beach',
+          '18:30 Sonnenuntergangs‑Spot',
+          '20:00 Dinner'
+        ];
+        const baseRegion = [
+          '08:30 Frühstück',
+          '10:00 Panorama‑Route (Fotostopps)',
+          '13:00 Lunch/Markt',
+          '15:30 Natur‑Highlight',
+          '18:00 Aussichtspunkt',
+          '20:00 Dinner'
+        ];
+        const plan = planningDestination.type === 'city' ? baseCity : planningDestination.type === 'island' ? baseIsland : baseRegion;
+        return `Tag ${d}: ${plan.join(' • ')}`;
       });
 
       const notes = JSON.stringify({
