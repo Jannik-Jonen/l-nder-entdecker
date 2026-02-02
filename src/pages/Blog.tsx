@@ -1,21 +1,76 @@
 import { Header } from '@/components/Header';
-import { guidePosts, inspirationDestinations, travelTips } from '@/data/mockData';
+import { inspirationDestinations, travelTips, guidePosts as guidePostsFallback } from '@/data/mockData';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BookOpen, MapPin, ArrowRight, ListChecks, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { supabaseUntyped } from '@/lib/supabase-untyped';
 
 const Blog = () => {
   const [searchParams] = useSearchParams();
   const destinationId = searchParams.get('destination');
   const postId = searchParams.get('post');
+  type GuidePostRow = {
+    id: string;
+    title: string;
+    excerpt: string;
+    image_url: string;
+    destination_id: string;
+    tags?: string[];
+    sources?: string[];
+  };
+  const [posts, setPosts] = useState<GuidePostRow[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabaseUntyped
+          .from('guide_posts')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) {
+          setPosts(guidePostsFallback.map((p) => ({
+            id: p.id,
+            title: p.title,
+            excerpt: p.excerpt,
+            image_url: p.imageUrl,
+            destination_id: p.destinationId,
+            tags: p.tags,
+            sources: [],
+          })));
+          return;
+        }
+        if (data && Array.isArray(data)) {
+          setPosts(data as unknown as GuidePostRow[]);
+        } else {
+          setPosts([]);
+        }
+      } catch {
+        setPosts(guidePostsFallback.map((p) => ({
+          id: p.id,
+          title: p.title,
+          excerpt: p.excerpt,
+          image_url: p.imageUrl,
+          destination_id: p.destinationId,
+          tags: p.tags,
+          sources: [],
+        })));
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const destination = inspirationDestinations.find((d) => d.id === destinationId || undefined);
   const filteredPosts = destinationId
-    ? guidePosts.filter((p) => p.destinationId === destinationId)
-    : guidePosts;
+    ? posts.filter((p) => p.destination_id === destinationId)
+    : posts;
 
   const activePost = postId
-    ? guidePosts.find((p) => p.id === postId)
+    ? posts.find((p) => p.id === postId)
     : undefined;
 
   return (
@@ -44,7 +99,7 @@ const Blog = () => {
             <div className="rounded-2xl overflow-hidden border border-border bg-card">
               <div className="relative h-56">
                 <img
-                  src={activePost.imageUrl}
+                  src={activePost.image_url}
                   alt={activePost.title}
                   className="h-full w-full object-cover"
                   onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Bild+nicht+verfügbar'; }}
@@ -54,7 +109,7 @@ const Blog = () => {
                   <div className="flex items-center gap-2 mb-2 text-white/80">
                     <MapPin className="h-4 w-4" />
                     <span>
-                      {(inspirationDestinations.find((d) => d.id === activePost.destinationId)?.name) || 'Destination'}
+                      {(inspirationDestinations.find((d) => d.id === activePost.destination_id)?.name) || 'Destination'}
                     </span>
                   </div>
                   <h2 className="font-display text-2xl font-semibold">{activePost.title}</h2>
@@ -84,7 +139,7 @@ const Blog = () => {
               >
                 <div className="relative h-40">
                   <img
-                    src={p.imageUrl}
+                    src={p.image_url}
                     alt={p.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
@@ -98,7 +153,7 @@ const Blog = () => {
                 <div className="p-4">
                   <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     <MapPin className="h-4 w-4" />
-                    <span>{(inspirationDestinations.find((d) => d.id === p.destinationId)?.name) || 'Destination'}</span>
+                    <span>{(inspirationDestinations.find((d) => d.id === p.destination_id)?.name) || 'Destination'}</span>
                   </div>
                   <div className="mt-3 flex justify-end">
                     <Button variant="outline" size="sm" className="gap-2" asChild>

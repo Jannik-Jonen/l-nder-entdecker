@@ -3,8 +3,10 @@ import { inspirationDestinations, guidePosts } from '@/data/mockData';
 import { Link } from 'react-router-dom';
 import { MapPin, BookOpen, ArrowRight, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 const Guides = () => {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -27,9 +29,16 @@ const Guides = () => {
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-2xl font-semibold">Ziel‑Guides</h2>
-            <Button asChild variant="ghost">
-              <Link to="/inspiration" className="gap-2">Zur Inspiration <ArrowRight className="h-4 w-4" /></Link>
-            </Button>
+            <div className="flex items-center gap-2">
+              {user && (
+                <Button asChild variant="default">
+                  <Link to="/guides/create" className="gap-2">Beitrag erstellen</Link>
+                </Button>
+              )}
+              <Button asChild variant="ghost">
+                <Link to="/inspiration" className="gap-2">Zur Inspiration <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {inspirationDestinations.map((d) => (
