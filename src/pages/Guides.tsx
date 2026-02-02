@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Guides = () => {
   const { user } = useAuth();
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   return (
     <div className="min-h-screen bg-background">

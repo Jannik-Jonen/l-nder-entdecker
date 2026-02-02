@@ -11,7 +11,7 @@ const GuidePostDetail = () => {
   const { id } = useParams();
   const fallback = guidePosts.find((p) => p.id === id);
   const { user } = useAuth();
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   type GuidePostRow = {
     id: string;
@@ -44,6 +44,7 @@ const GuidePostDetail = () => {
           .from('guide_posts')
           .select('*')
           .eq('id', id)
+          .eq('status', 'published')
           .maybeSingle();
         if (data) {
           setPost(data as unknown as GuidePostRow);

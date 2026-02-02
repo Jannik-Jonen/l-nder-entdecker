@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabaseUntyped } from "@/lib/supabase-untyped";
 import { inspirationDestinations } from "@/data/mockData";
-import { MapPin, Check, X } from "lucide-react";
+import { MapPin, Check, X, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -19,7 +19,7 @@ type GuidePostRow = {
 
 const AdminReview = () => {
   const { user } = useAuth();
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   const [posts, setPosts] = useState<GuidePostRow[]>([]);
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,49 @@ const AdminReview = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container py-8">
-        <h1 className="font-display text-3xl md:text-4xl font-bold mb-6">Beiträge prüfen</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="font-display text-3xl md:text-4xl font-bold">Beiträge prüfen</h1>
+          <Button variant="secondary" className="gap-2" onClick={async () => {
+            try {
+              const samples = inspirationDestinations.slice(0, 3).map((d, i) => ({
+                id: `seed-${Date.now()}-${i}`,
+                author_id: user?.id,
+                destination_id: d.id,
+                title: `Guide: ${d.name} – Route & Tipps`,
+                excerpt: `Kompletter Reise-Guide für ${d.name} mit Route, Budget und praktischen Hinweisen.`,
+                content: [
+                  `Einleitung`,
+                  `Warum ${d.name} und was erwartet dich.`,
+                  ``,
+                  `Praktische Infos`,
+                  `• Beste Reisezeit: ${d.bestSeason}`,
+                  `• Ø Tagesbudget: ${d.averageDailyCost} ${d.currency}/Tag`,
+                  ``,
+                  `Beispielroute`,
+                  `• Tag 1–2: Highlights und Orientierung`,
+                  `• Tag 3–5: Natur/Kultur je nach Region`,
+                  ``,
+                  `Budgettipps & Vorbereitung`,
+                  `• Transport, Unterkunft, Packliste, Versicherungen`,
+                ].join("\n"),
+                image_url: d.imageUrl,
+                tags: ["Guide", "Planung", d.type],
+                sources: [],
+                status: "pending_review" as const,
+              }));
+              const { error } = await supabaseUntyped.from("guide_posts").insert(samples);
+              if (error) {
+                toast.error("Seeding fehlgeschlagen");
+                return;
+              }
+              toast.success("Beispiel‑Beiträge hinzugefügt");
+            } catch {
+              toast.error("Seeding fehlgeschlagen");
+            }
+          }}>
+            <Sparkles className="h-4 w-4" /> Beispiel‑Beiträge hinzufügen
+          </Button>
+        </div>
         {loading ? (
           <div className="text-muted-foreground">Laden…</div>
         ) : posts.length === 0 ? (
