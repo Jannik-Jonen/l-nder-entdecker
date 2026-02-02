@@ -20,6 +20,7 @@ const CreateGuidePost = () => {
   const [tagsInput, setTagsInput] = useState("");
   const [sourcesInput, setSourcesInput] = useState("");
   const [saving, setSaving] = useState(false);
+  const [templating, setTemplating] = useState(false);
 
   const destOptions = inspirationDestinations.map((d) => ({ id: d.id, name: d.name }));
 
@@ -53,6 +54,7 @@ const CreateGuidePost = () => {
         image_url: imageUrl,
         tags,
         sources,
+        status: "pending_review",
       });
       if (error) throw error;
       toast.success("Beitrag erstellt");
@@ -61,6 +63,54 @@ const CreateGuidePost = () => {
       toast.error("Speichern fehlgeschlagen");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const insertTemplate = () => {
+    if (!destinationId) {
+      toast.error("Bitte zuerst eine Destination auswählen");
+      return;
+    }
+    setTemplating(true);
+    try {
+      const dest = inspirationDestinations.find((d) => d.id === destinationId);
+      const template = [
+        `Einleitung`,
+        ``,
+        `Warum ${dest?.name}:`,
+        `• Highlights: ${(dest?.highlights || []).slice(0, 5).join(", ") || "Top-Sehenswürdigkeiten"}`,
+        ``,
+        `Praktische Infos`,
+        `• Beste Reisezeit: ${dest?.bestSeason || "Ganzjährig"}`,
+        `• Ø Tagesbudget: ${dest?.averageDailyCost} ${dest?.currency}/Tag`,
+        ``,
+        `Anreise & Transport`,
+        `• Flughäfen, Zugverbindungen, lokale Transportmittel`,
+        ``,
+        `Unterkunft & Viertel`,
+        `• Empfehlungen für Stadtteile und Unterkunftsarten`,
+        ``,
+        `Gesundheit & Sicherheit`,
+        `• Hinweise: ${dest?.healthSafetyInfo || "Allgemeine Sicherheitstipps"}`,
+        ``,
+        `Visa & Einreise`,
+        `• Informationen: ${dest?.visaInfo || "Visabedingungen und Einreisebestimmungen prüfen"}`,
+        ``,
+        `Beispielroute (3–7 Tage)`,
+        `• Tag 1–${dest ? 3 : 3}: Sightseeing und Orientierung`,
+        `• Tag ${dest ? 4 : 4}–${dest ? 5 : 5}: Natur/Strand/Kultur`,
+        `• Tag ${dest ? 6 : 6}–${dest ? 7 : 7}: Ausflug & lokale Küche`,
+        ``,
+        `Budgettipps`,
+        `• Sparen bei Transport, Unterkunft und Essen`,
+        ``,
+        `Packliste & Vorbereitung`,
+        `• Essentials, Adapter, Versicherungen, Offline-Karten`,
+      ].join("\n");
+      setContent((prev) => prev ? prev : template);
+      if (!excerpt) setExcerpt(`Praktischer Guide für ${dest?.name} mit Reisezeit, Budget, Route und Tipps.`);
+    } finally {
+      setTemplating(false);
     }
   };
 
@@ -142,6 +192,9 @@ const CreateGuidePost = () => {
         </div>
 
         <div className="mt-6 flex gap-3">
+          <Button onClick={insertTemplate} disabled={templating} variant="secondary">
+            {templating ? "Fülle Template…" : "Template einfügen"}
+          </Button>
           <Button onClick={onSubmit} disabled={saving} variant="default">
             {saving ? "Speichern..." : "Beitrag speichern"}
           </Button>

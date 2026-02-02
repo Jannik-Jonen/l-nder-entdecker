@@ -5,10 +5,14 @@ import { ArrowLeft, BookOpen, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
+import { useAuth } from '@/hooks/useAuth';
 
 const GuidePostDetail = () => {
   const { id } = useParams();
   const fallback = guidePosts.find((p) => p.id === id);
+  const { user } = useAuth();
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+  const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   type GuidePostRow = {
     id: string;
     title: string;
@@ -18,6 +22,7 @@ const GuidePostDetail = () => {
     destination_id: string;
     tags?: string[];
     sources?: string[];
+    status?: 'draft' | 'pending_review' | 'published' | 'rejected';
   };
   const [post, setPost] = useState<GuidePostRow | null>(fallback ? {
     id: fallback.id,
@@ -77,6 +82,29 @@ const GuidePostDetail = () => {
 
   const destination = inspirationDestinations.find((d) => d.id === post.destination_id);
 
+  if (post.status && post.status !== 'published' && !isAdmin) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container py-20 text-center">
+          <div className="text-muted-foreground">Beitrag nicht veröffentlicht</div>
+          <Link to="/guides" className="mt-4 inline-block text-primary underline">Zur Übersicht</Link>
+        </main>
+      </div>
+    );
+  }
+
+  const approve = async () => {
+    if (!id) return;
+    const { error } = await supabaseUntyped.from('guide_posts').update({ status: 'published' }).eq('id', id);
+    if (!error) setPost((p) => (p ? { ...p, status: 'published' } : p));
+  };
+  const reject = async () => {
+    if (!id) return;
+    const { error } = await supabaseUntyped.from('guide_posts').update({ status: 'rejected' }).eq('id', id);
+    if (!error) setPost((p) => (p ? { ...p, status: 'rejected' } : p));
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -87,6 +115,13 @@ const GuidePostDetail = () => {
             Zurück zu den Guides
           </Link>
         </Button>
+        {isAdmin && post.status && post.status !== 'published' && (
+          <div className="mb-6 flex items-center gap-3">
+            <span className="text-sm text-muted-foreground">Status: {post.status}</span>
+            <Button variant="default" size="sm" onClick={approve}>Freigeben</Button>
+            <Button variant="destructive" size="sm" onClick={reject}>Ablehnen</Button>
+          </div>
+        )}
 
         <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
           <img

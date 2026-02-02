@@ -16,6 +16,7 @@ import GuidePostDetail from "./pages/GuidePostDetail";
 import CreateGuidePost from "./pages/CreateGuidePost";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
+import AdminReview from "./pages/AdminReview";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/guides/:id" element={<GuideDetail />} />
               <Route path="/guides/posts/:id" element={<GuidePostDetail />} />
               <Route path="/guides/create" element={<CreateGuidePost />} />
+              <Route path="/admin/review" element={<AdminReview />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/tipps" element={<Tipps />} />
               <Route path="/profile" element={<Profile />} />

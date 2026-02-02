@@ -7,6 +7,8 @@ import { useAuth } from '@/hooks/useAuth';
 
 const Guides = () => {
   const { user } = useAuth();
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
+  const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -33,6 +35,11 @@ const Guides = () => {
               {user && (
                 <Button asChild variant="default">
                   <Link to="/guides/create" className="gap-2">Beitrag erstellen</Link>
+                </Button>
+              )}
+              {isAdmin && (
+                <Button asChild variant="outline">
+                  <Link to="/admin/review" className="gap-2">Beiträge prüfen</Link>
                 </Button>
               )}
               <Button asChild variant="ghost">

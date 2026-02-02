@@ -29,6 +29,7 @@ const Blog = () => {
         const { data, error } = await supabaseUntyped
           .from('guide_posts')
           .select('*')
+          .eq('status', 'published')
           .order('created_at', { ascending: false });
         if (error) {
           setPosts(guidePostsFallback.map((p) => ({
