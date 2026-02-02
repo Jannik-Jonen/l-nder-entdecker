@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { inspirationDestinations, guidePosts, travelTips, defaultTodos } from '@/data/mockData';
+import { inspirationDestinations, defaultTodos } from '@/data/mockData';
 import type { PackingItem, TodoItem } from '@/types/travel';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
@@ -12,7 +12,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { LocationSearch, LocationResult } from '@/components/LocationSearch';
-import { fetchWikiData } from '@/services/wikipedia';
 import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
 import { Loader2 } from 'lucide-react';
 
@@ -60,21 +59,28 @@ const Inspiration = () => {
       destType = 'region';
     }
 
-    // Fetch real data from Wikipedia
-    const wikiData = await fetchWikiData(location.name + (location.countryCode ? ` ${location.displayName.split(',').pop()}` : ''));
-    
-    // Fallback image if Wiki doesn't have one
+    // Fallback Bild
     const fallbackImage = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80';
+
+    const lpUrl = `https://www.lonelyplanet.com/search?q=${encodeURIComponent(location.name)}`;
+    const taUrl = `https://www.tripadvisor.de/Search?q=${encodeURIComponent(location.name)}`;
+    const nbUrl = `https://www.numbeo.com/search/?query=${encodeURIComponent(location.name)}`;
+    const overview = [
+      `Überblick basierend auf externen Quellen:`,
+      `• Lonely Planet – Sehenswürdigkeiten & Routen`,
+      `• Tripadvisor – Bewertungen & Trends`,
+      `• Numbeo – Lebenshaltungskosten & Preisniveau`
+    ].join("\n");
 
     const customDestination: Destination = {
       id: `custom-${Date.now()}`,
       name: location.name,
       country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
       countryCode: location.countryCode,
-      description: wikiData?.description || `Ein wunderschönes Reiseziel: ${location.displayName}`,
-      imageUrl: wikiData?.imageUrl || fallbackImage,
+      description: overview,
+      imageUrl: fallbackImage,
       averageDailyCost: 100, // Default estimate
-      bestSeason: wikiData?.bestSeason || 'Ganzjährig',
+      bestSeason: 'Abhängig von Region',
       type: destType,
       currency: 'EUR',
       highlights: [],
@@ -373,51 +379,7 @@ const Inspiration = () => {
           })}
         </div>
 
-        <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold mb-4">Beiträge</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {guidePosts.map((p) => (
-              <Link
-                key={p.id}
-                to={`/guides/posts/${p.id}`}
-                className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
-              >
-                <div className="relative h-40">
-                  <img
-                    src={p.imageUrl}
-                    alt={p.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
-                    <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
-                  </div>
-                </div>
-                <div className="p-4 flex items-center justify-between text-sm text-muted-foreground">
-                  <span>{p.tags.join(' • ')}</span>
-                  <span>Weiterlesen</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold mb-4">Tipps</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {travelTips.map((t) => (
-              <div key={t.id} className="rounded-xl bg-card p-5 shadow-card border border-border">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">{t.icon}</span>
-                  <h3 className="font-medium">{t.title}</h3>
-                </div>
-                <p className="text-sm text-muted-foreground">{t.content}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        
 
         {/* Detail Modal */}
         {selectedDestination && (
@@ -542,6 +504,33 @@ const Inspiration = () => {
                       {isAdding ? '...' : 'Planen'}
                     </Button>
                   )}
+                </div>
+                
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <a
+                    href={`https://www.lonelyplanet.com/search?q=${encodeURIComponent(selectedDestination.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Lonely Planet
+                  </a>
+                  <a
+                    href={`https://www.tripadvisor.de/Search?q=${encodeURIComponent(selectedDestination.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Tripadvisor
+                  </a>
+                  <a
+                    href={`https://www.numbeo.com/search/?query=${encodeURIComponent(selectedDestination.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Numbeo
+                  </a>
                 </div>
               </div>
             </div>
