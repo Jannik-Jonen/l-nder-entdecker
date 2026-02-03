@@ -50,32 +50,60 @@ export const WorldMap = () => {
       }
       const { data, error } = await supabase
         .from('saved_trips')
-        .select('id,destination_name');
+        .select('id,destination_name,notes');
       if (error) {
         setMarkers(defaultMarkers as Array<{ id: string; name: string; coords: [number, number] }>);
         return;
       }
-      const trips = (data || []) as Array<{ id: string; destination_name: string }>;
-      const geocoded = await Promise.all(
-        trips.map(async (t) => {
-          try {
-            const resp = await fetch(
-              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                t.destination_name
-              )}&limit=1&accept-language=de`
-            );
-            const arr = await resp.json();
-            const first = Array.isArray(arr) && arr[0];
-            if (!first || !first.lat || !first.lon) return null;
-            const lat = Number(first.lat);
-            const lon = Number(first.lon);
-            return { id: t.id, name: t.destination_name, coords: [lon, lat] as [number, number] };
-          } catch {
-            return null;
+      const trips = (data || []) as Array<{ id: string; destination_name: string; notes: string | null }>;
+      const markersList: Array<{ id: string; name: string; coords: [number, number] }> = [];
+      for (const t of trips) {
+        let coords: [number, number] | null = null;
+        try {
+          const parsed = t.notes ? JSON.parse(t.notes as string) as { coords?: { lat: number; lon: number } } : {};
+          if (parsed.coords && typeof parsed.coords.lat === 'number' && typeof parsed.coords.lon === 'number') {
+            coords = [parsed.coords.lon, parsed.coords.lat];
           }
-        })
-      );
-      setMarkers(geocoded.filter(Boolean) as Array<{ id: string; name: string; coords: [number, number] }>);
+        } catch { /* ignore parse errors */ }
+        if (!coords) {
+          try {
+            const cacheKey = `geo::${t.destination_name}`;
+            const cached = sessionStorage.getItem(cacheKey);
+            if (cached) {
+              const obj = JSON.parse(cached) as { lat: number; lon: number };
+              coords = [obj.lon, obj.lat];
+            } else {
+              const resp = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                  t.destination_name
+                )}&limit=1&accept-language=de`
+              );
+              const arr = await resp.json();
+              const first = Array.isArray(arr) && arr[0];
+              if (first?.lat && first?.lon) {
+                const lat = Number(first.lat);
+                const lon = Number(first.lon);
+                coords = [lon, lat];
+                try {
+                  sessionStorage.setItem(cacheKey, JSON.stringify({ lat, lon }));
+                } catch { /* ignore */ }
+                try {
+                  const currentNotes = t.notes ? JSON.parse(t.notes as string) : {};
+                  currentNotes.coords = { lat, lon };
+                  await supabase
+                    .from('saved_trips')
+                    .update({ notes: JSON.stringify(currentNotes) })
+                    .eq('id', t.id);
+                } catch { /* ignore db update */ }
+              }
+            }
+          } catch { /* ignore fetch errors */ }
+        }
+        if (coords) {
+          markersList.push({ id: t.id, name: t.destination_name, coords });
+        }
+      }
+      setMarkers(markersList);
     };
     loadMarkers();
   }, [user, defaultMarkers]);
@@ -225,6 +253,17 @@ export const WorldMap = () => {
                   } catch { void 0; }
               const startIso = new Date(data.startDate).toISOString();
               const endIso = new Date(data.endDate).toISOString();
+              let lat: number | null = null;
+              let lon: number | null = null;
+              try {
+                const resp2 = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(geoDetail.destination.name)}&limit=1&accept-language=de`);
+                const arr2 = await resp2.json();
+                const first2 = Array.isArray(arr2) && arr2[0];
+                if (first2?.lat && first2?.lon) {
+                  lat = Number(first2.lat);
+                  lon = Number(first2.lon);
+                }
+              } catch { /* ignore */ }
               const { error } = await supabase
                 .from('saved_trips')
                 .insert({
@@ -239,6 +278,7 @@ export const WorldMap = () => {
                   notes: JSON.stringify({
                     peopleCount: data.peopleCount,
                     todos: defaultTodos,
+                    coords: lat !== null && lon !== null ? { lat, lon } : undefined,
                   }),
                 });
               if (error) throw error;

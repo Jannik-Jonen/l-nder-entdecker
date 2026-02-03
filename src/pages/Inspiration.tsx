@@ -215,17 +215,9 @@ const Inspiration = () => {
         return `Tag ${d}: ${plan.join(' • ')}`;
       });
 
-      const notes = JSON.stringify({
-        peopleCount: data.peopleCount,
-        packingList,
-        todos,
-        bestTimeToVisit: planningDestination.bestSeason,
-        tips,
-        transportNotes,
-        itinerary,
-      });
-
       let countryCode = planningDestination.countryCode || 'XX';
+      let lat: number | null = null;
+      let lon: number | null = null;
       try {
         const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(planningDestination.name)}&limit=1&addressdetails=1&accept-language=de`);
         const arr = await resp.json();
@@ -233,6 +225,10 @@ const Inspiration = () => {
         const cc = first?.address?.country_code || first?.country_code || null;
         if (cc && typeof cc === 'string') {
           countryCode = cc.toUpperCase();
+        }
+        if (first?.lat && first?.lon) {
+          lat = Number(first.lat);
+          lon = Number(first.lon);
         }
       } catch { void 0; }
       const { error } = await supabase
@@ -246,7 +242,16 @@ const Inspiration = () => {
           currency: planningDestination.currency || 'EUR',
           start_date: startIso,
           end_date: endIso,
-          notes,
+          notes: JSON.stringify({
+            peopleCount: data.peopleCount,
+            packingList,
+            todos,
+            bestTimeToVisit: planningDestination.bestSeason,
+            tips,
+            transportNotes,
+            itinerary,
+            coords: lat !== null && lon !== null ? { lat, lon } : undefined,
+          }),
         });
 
       if (error) throw error;

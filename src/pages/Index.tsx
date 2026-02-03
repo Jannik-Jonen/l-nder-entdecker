@@ -58,7 +58,7 @@ const Index = () => {
     } catch (e) {
       // ignore
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const fetchUserTrips = useCallback(async () => {
     if (!user) return;
@@ -199,28 +199,59 @@ const Index = () => {
   const handleToggleTodo = (todoId: string) => {
     if (!selectedCountry) return;
 
+    let updatedTodos: Country['todos'] | null = null;
     setTrip((prev) => ({
       ...prev,
       countries: prev.countries.map((country) => {
         if (country.id !== selectedCountry.id) return country;
-        return {
+        const next = {
           ...country,
           todos: country.todos.map((todo) =>
             todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
           ),
         };
+        updatedTodos = next.todos;
+        return next;
       }),
     }));
 
     setSelectedCountry((prev) => {
       if (!prev) return null;
-      return {
+      const next = {
         ...prev,
         todos: prev.todos.map((todo) =>
           todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
         ),
       };
+      updatedTodos = next.todos;
+      return next;
     });
+    
+    if (updatedTodos) {
+      (async () => {
+        try {
+          const { data } = await supabase
+            .from('saved_trips')
+            .select('notes')
+            .eq('id', selectedCountry!.id)
+            .limit(1)
+            .maybeSingle();
+          let notes: { [key: string]: unknown; todos?: Country['todos'] } = {};
+          try {
+            notes = data?.notes ? (JSON.parse(data.notes as string) as { [key: string]: unknown; todos?: Country['todos'] }) : {};
+          } catch {
+            notes = {};
+          }
+          notes.todos = updatedTodos;
+          await supabase
+            .from('saved_trips')
+            .update({ notes: JSON.stringify(notes) })
+            .eq('id', selectedCountry!.id);
+        } catch {
+          // ignore
+        }
+      })();
+    }
   };
 
   const handleSelectCountry = (country: Country) => {
