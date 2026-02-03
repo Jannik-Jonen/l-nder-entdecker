@@ -1,7 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup, Marker } from 'react-simple-maps';
-import { useNavigate } from 'react-router-dom';
-import { inspirationDestinations, guidePosts, defaultTodos } from '@/data/mockData';
+import { inspirationDestinations, defaultTodos } from '@/data/mockData';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,7 +14,6 @@ import { Badge } from '@/components/ui/badge';
 const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
 export const WorldMap = () => {
-  const navigate = useNavigate();
   const [zoom, setZoom] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { user } = useAuth();

@@ -93,15 +93,19 @@ const Inspiration = () => {
   };
 
   const startPlanningTrip = (destination: Destination) => {
-    if (!user) {
-      toast.error('Bitte melde dich an, um eine Reise zu planen.');
-      return;
-    }
     setPlanningDestination(destination);
   };
 
   const handlePlanConfirm = async (data: TripPlanData) => {
-    if (!user || !planningDestination) return;
+    if (!planningDestination) return;
+    if (!user) {
+      localStorage.setItem('pendingPlan', JSON.stringify({
+        destination: planningDestination,
+        planData: data
+      }));
+      window.location.href = '/?auth=1';
+      return;
+    }
     setIsAdding(true);
 
     try {
@@ -538,17 +542,15 @@ const Inspiration = () => {
                     Numbeo
                   </a>
 
-                  {user && (
-                    <Button 
-                      onClick={() => startPlanningTrip(selectedDestination)}
-                      disabled={isAdding}
-                      size="sm"
-                      className="gap-2"
-                    >
-                      <Plus className="h-4 w-4" />
-                      {isAdding ? '...' : 'Planen'}
-                    </Button>
-                  )}
+                  <Button 
+                    onClick={() => startPlanningTrip(selectedDestination)}
+                    disabled={isAdding}
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Plus className="h-4 w-4" />
+                    {isAdding ? '...' : 'Planen'}
+                  </Button>
                 </div>
               </div>
             </div>
