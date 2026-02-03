@@ -37,7 +37,7 @@ const priceLevelLabels = {
 };
 
 export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailProps) => {
-  const [packingItems, setPackingItems] = useState<PackingItem[]>([]);
+  const [packingItems, setPackingItems] = useState<PackingItem[]>(country.packingList || []);
   const [selectedCity, setSelectedCity] = useState<string>(() => {
     try { return localStorage.getItem(`tripCity::${country.id}`) || ''; } catch { return ''; }
   });
@@ -60,24 +60,64 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
 
   const WeatherIcon = country.weather ? weatherIcons[country.weather.condition] : Sun;
 
-  const handleTogglePacking = (id: string) => {
-    setPackingItems(packingItems.map((item) =>
-      item.id === id ? { ...item, packed: !item.packed } : item
-    ));
+  const persistPackingList = async (nextItems: PackingItem[]) => {
+    try {
+      const { data } = await supabase
+        .from('saved_trips')
+        .select('notes')
+        .eq('id', country.id)
+        .limit(1)
+        .maybeSingle();
+      let notes: { [key: string]: unknown; packingList?: PackingItem[] } = {};
+      try {
+        notes = data?.notes ? (JSON.parse(data.notes as string) as { [key: string]: unknown; packingList?: PackingItem[] }) : {};
+      } catch {
+        notes = {};
+      }
+      notes.packingList = nextItems;
+      const { error } = await supabase
+        .from('saved_trips')
+        .update({ notes: JSON.stringify(notes) })
+        .eq('id', country.id);
+      if (error) throw error;
+    } catch {
+      // ignore
+    }
   };
 
-  const handleAddPacking = (name: string, category: PackingItem['category']) => {
+  const handleTogglePacking = (id: string) => {
+    const next = packingItems.map((item) =>
+      item.id === id ? { ...item, packed: !item.packed } : item
+    );
+    setPackingItems(next);
+    persistPackingList(next);
+  };
+
+  const handleAddPacking = (name: string, category: PackingItem['category'], quantity?: number) => {
     const newItem: PackingItem = {
       id: `pack-${Date.now()}`,
       name,
       packed: false,
       category,
+      quantity: typeof quantity === 'number' ? quantity : 1,
     };
-    setPackingItems([...packingItems, newItem]);
+    const next = [...packingItems, newItem];
+    setPackingItems(next);
+    persistPackingList(next);
   };
 
   const handleDeletePacking = (id: string) => {
-    setPackingItems(packingItems.filter((item) => item.id !== id));
+    const next = packingItems.filter((item) => item.id !== id);
+    setPackingItems(next);
+    persistPackingList(next);
+  };
+
+  const handleChangePackingQuantity = (id: string, quantity: number) => {
+    const next = packingItems.map((item) =>
+      item.id === id ? { ...item, quantity } : item
+    );
+    setPackingItems(next);
+    persistPackingList(next);
   };
 
   const handleCitySelect = (loc: LocationResult) => {
@@ -141,6 +181,10 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
       toast.error('Speichern fehlgeschlagen');
     }
   };
+
+  useEffect(() => {
+    setPackingItems(country.packingList || []);
+  }, [country.id, country.packingList]);
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -453,6 +497,9 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
               onToggle={handleTogglePacking}
               onAdd={handleAddPacking}
               onDelete={handleDeletePacking}
+              onChangeQuantity={handleChangePackingQuantity}
+              peopleCount={country.peopleCount || 1}
+              tripDays={Math.max(1, differenceInDays(new Date(country.endDate), new Date(country.startDate)))}
             />
           </TabsContent>
           <TabsContent value="city">

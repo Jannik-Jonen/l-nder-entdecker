@@ -32,6 +32,7 @@ export interface PackingItem {
   name: string;
   packed: boolean;
   category: 'clothing' | 'toiletries' | 'electronics' | 'documents' | 'other';
+  quantity?: number;
 }
 
 

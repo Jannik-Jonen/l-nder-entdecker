@@ -10,8 +10,11 @@ import { cn } from '@/lib/utils';
 interface PackingListProps {
   items: PackingItem[];
   onToggle: (id: string) => void;
-  onAdd: (name: string, category: PackingItem['category']) => void;
+  onAdd: (name: string, category: PackingItem['category'], quantity?: number) => void;
   onDelete: (id: string) => void;
+  onChangeQuantity?: (id: string, quantity: number) => void;
+  peopleCount?: number;
+  tripDays?: number;
 }
 
 const defaultSuggestions: Record<PackingItem['category'], string[]> = {
@@ -22,7 +25,7 @@ const defaultSuggestions: Record<PackingItem['category'], string[]> = {
   other: ['Wasserflasche', 'Reisekissen', 'Snacks', 'Buch', 'Reiseführer'],
 };
 
-export const PackingList = ({ items, onToggle, onAdd, onDelete }: PackingListProps) => {
+export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity, peopleCount = 1, tripDays = 7 }: PackingListProps) => {
   const [newItemName, setNewItemName] = useState('');
   const [newItemCategory, setNewItemCategory] = useState<PackingItem['category']>('clothing');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -31,16 +34,28 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete }: PackingListPro
   const packedCount = items.filter((item) => item.packed).length;
   const totalCount = items.length;
 
+  const suggestQuantity = (name: string, category: PackingItem['category']) => {
+    if (category === 'clothing') {
+      if (/t[-\s]?shirts?|shirts?/i.test(name)) return Math.max(peopleCount, 1) * Math.max(tripDays, 1);
+      if (/socken/i.test(name)) return Math.max(peopleCount, 1) * Math.max(tripDays, 1);
+      if (/unterw(ä|ae)sche/i.test(name)) return Math.max(peopleCount, 1) * Math.max(tripDays, 1);
+      return Math.max(peopleCount, 1);
+    }
+    return 1;
+  };
+
   const handleAddItem = () => {
     if (newItemName.trim()) {
-      onAdd(newItemName.trim(), newItemCategory);
+      const qty = suggestQuantity(newItemName.trim(), newItemCategory);
+      onAdd(newItemName.trim(), newItemCategory, qty);
       setNewItemName('');
     }
   };
 
   const handleAddSuggestion = (name: string, category: PackingItem['category']) => {
     if (!items.some((item) => item.name.toLowerCase() === name.toLowerCase())) {
-      onAdd(name, category);
+      const qty = suggestQuantity(name, category);
+      onAdd(name, category, qty);
     }
   };
 
@@ -168,6 +183,18 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete }: PackingListPro
                         {item.name}
                       </span>
                     </button>
+                    <Input
+                      type="number"
+                      value={typeof item.quantity === 'number' ? String(item.quantity) : ''}
+                      placeholder="Anzahl"
+                      onChange={(e) => {
+                        const val = Number(e.target.value);
+                        if (!Number.isNaN(val) && onChangeQuantity) {
+                          onChangeQuantity(item.id, Math.max(val, 0));
+                        }
+                      }}
+                      className="w-20"
+                    />
                     <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => onDelete(item.id)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>

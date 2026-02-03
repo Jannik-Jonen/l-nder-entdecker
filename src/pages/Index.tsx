@@ -26,6 +26,7 @@ interface SavedTripRow {
   end_date: string | null;
   daily_budget: number | null;
   currency: string | null;
+  notes: string | null;
 }
 
 const Index = () => {
@@ -132,12 +133,66 @@ const Index = () => {
             endDate: row.end_date || new Date().toISOString(),
             dailyCost: Number(row.daily_budget) || 100,
             currency: row.currency || 'EUR',
-            todos: defaultTodos.map((t, i) => ({ ...t, id: `${row.id}-${i}` })),
+            todos: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return Array.isArray(notes.todos) ? notes.todos as Country['todos'] : defaultTodos.map((t, i) => ({ ...t, id: `${row.id}-${i}` }));
+              } catch {
+                return defaultTodos.map((t, i) => ({ ...t, id: `${row.id}-${i}` }));
+              }
+            })(),
+            packingList: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return Array.isArray(notes.packingList) ? notes.packingList as Country['packingList'] : [];
+              } catch {
+                return [];
+              }
+            })(),
+            peopleCount: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return typeof notes.peopleCount === 'number' ? notes.peopleCount as number : 1;
+              } catch {
+                return 1;
+              }
+            })(),
+            tips: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return Array.isArray(notes.tips) ? notes.tips as string[] : [];
+              } catch {
+                return [];
+              }
+            })(),
+            transportNotes: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return Array.isArray(notes.transportNotes) ? notes.transportNotes as string[] : [];
+              } catch {
+                return [];
+              }
+            })(),
+            itinerary: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return Array.isArray(notes.itinerary) ? notes.itinerary as string[] : [];
+              } catch {
+                return [];
+              }
+            })(),
             attractions: [],
             hotels: [],
             restaurants: [],
             flights: [],
-            weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: '', packingTips: [] },
+            weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                return typeof notes.bestTimeToVisit === 'string' ? notes.bestTimeToVisit as string : '';
+              } catch {
+                return '';
+              }
+            })(), packingTips: [] },
           }));
         const withCodes = await Promise.all(
           mappedCountries.map(async (c) => {
