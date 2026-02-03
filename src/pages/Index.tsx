@@ -9,7 +9,7 @@ import { mockTrip, defaultTodos } from '@/data/mockData';
 import { Country, Trip } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
 import { guidePosts } from '@/data/mockData';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles, Globe } from 'lucide-react';
 import { WorldMap } from '@/components/WorldMap';
 import { supabase } from '@/integrations/supabase/client';
@@ -30,6 +30,8 @@ interface SavedTripRow {
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [trip, setTrip] = useState<Trip>({
     id: 'my-trip',
     name: 'Meine Reiseplanung',
@@ -62,6 +64,54 @@ const Index = () => {
     if (!user) return;
     setIsLoadingTrips(true);
     try {
+      const pendingPlanRaw = localStorage.getItem('pendingPlan');
+      if (pendingPlanRaw) {
+        try {
+          const { destination, planData } = JSON.parse(pendingPlanRaw);
+          let code = destination.countryCode || 'XX';
+          try {
+            const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination.name)}&limit=1&addressdetails=1&accept-language=de`);
+            const arr = await resp.json();
+            const first = Array.isArray(arr) && arr[0];
+            const cc = first?.address?.country_code || first?.country_code || null;
+            if (cc && typeof cc === 'string') {
+              code = cc.toUpperCase();
+            }
+          } catch { /* ignore */ }
+          const startIso = new Date(planData.startDate).toISOString();
+          const endIso = new Date(planData.endDate).toISOString();
+          const { data: inserted, error: insertError } = await supabase
+            .from('saved_trips')
+            .insert({
+              user_id: user.id,
+              destination_name: destination.name,
+              destination_code: code,
+              image_url: destination.imageUrl,
+              daily_budget: planData.dailyBudget,
+              currency: destination.currency || 'EUR',
+              start_date: startIso,
+              end_date: endIso,
+              notes: JSON.stringify({
+                peopleCount: planData.peopleCount,
+                todos: defaultTodos,
+              }),
+            })
+            .select('id')
+            .limit(1);
+          if (insertError) {
+            toast.error('Fehler beim Hinzufügen der Reise');
+          } else if (inserted && inserted[0]?.id) {
+            const newId = inserted[0].id as string;
+            toast.success('Reise hinzugefügt');
+            localStorage.removeItem('pendingPlan');
+            navigate(`/?trip_id=${encodeURIComponent(newId)}`, { replace: true });
+          } else {
+            localStorage.removeItem('pendingPlan');
+          }
+        } catch {
+          localStorage.removeItem('pendingPlan');
+        }
+      }
       const { data, error } = await supabase
         .from('saved_trips')
         .select('*')
@@ -125,6 +175,20 @@ const Index = () => {
       setTrip((prev) => ({ ...prev, countries: [] }));
     }
   }, [user, fetchUserTrips, fetchProfile]);
+
+  useEffect(() => {
+    const tripId = searchParams.get('trip_id');
+    if (tripId && trip.countries.length > 0) {
+      const found = trip.countries.find((c) => c.id === tripId);
+      if (found) {
+        setSelectedCountry(found);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('trip_id');
+      window.history.replaceState({}, document.title, `${window.location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`);
+    }
+  }, [trip.countries, searchParams]);
 
   const totalTasks = trip.countries.reduce((acc, c) => acc + c.todos.length, 0);
   const completedTasks = trip.countries.reduce(
