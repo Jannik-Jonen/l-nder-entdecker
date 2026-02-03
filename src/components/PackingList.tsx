@@ -30,6 +30,46 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
   const [newItemCategory, setNewItemCategory] = useState<PackingItem['category']>('clothing');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  const replaceUmlauts = (s: string) =>
+    s
+      .replace(/ä/g, 'ae')
+      .replace(/ö/g, 'oe')
+      .replace(/ü/g, 'ue')
+      .replace(/ß/g, 'ss');
+  const baseNormalize = (raw: string) =>
+    replaceUmlauts(raw.toLowerCase().trim()).replace(/[-_]/g, ' ').replace(/\s+/g, ' ').replace(/\W+/g, '');
+  const levenshtein = (a: string, b: string) => {
+    const m = a.length;
+    const n = b.length;
+    const dp = Array.from({ length: m + 1 }, () => new Array<number>(n + 1).fill(0));
+    for (let i = 0; i <= m; i++) dp[i][0] = i;
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+      }
+    }
+    return dp[m][n];
+  };
+  const canonicalize = (name: string, category: PackingItem['category']) => {
+    const n = baseNormalize(name);
+    if (category === 'clothing') {
+      const candidates = ['tshirts', 'socken', 'unterwaesche', 'hosen', 'jacke', 'regenjacke', 'schuhe', 'badekleidung'];
+      let best = n;
+      let bestScore = Number.POSITIVE_INFINITY;
+      for (const c of candidates) {
+        const d = levenshtein(n, c);
+        if (d < bestScore) {
+          bestScore = d;
+          best = c;
+        }
+      }
+      if (bestScore <= 2) return best;
+    }
+    return n;
+  };
+
   const categories = Object.keys(packingCategoryLabels) as PackingItem['category'][];
   const packedCount = items.filter((item) => item.packed).length;
   const totalCount = items.length;
@@ -53,7 +93,7 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
   };
 
   const handleAddSuggestion = (name: string, category: PackingItem['category']) => {
-    if (!items.some((item) => item.name.toLowerCase() === name.toLowerCase())) {
+    if (!items.some((item) => canonicalize(item.name, item.category) === canonicalize(name, category))) {
       const qty = suggestQuantity(name, category);
       onAdd(name, category, qty);
     }
@@ -92,7 +132,7 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
               </p>
               <div className="flex flex-wrap gap-1">
                 {defaultSuggestions[cat].map((suggestion) => {
-                  const isAdded = items.some((item) => item.name.toLowerCase() === suggestion.toLowerCase());
+                  const isAdded = items.some((item) => canonicalize(item.name, item.category) === canonicalize(suggestion, cat));
                   return (
                     <button
                       key={suggestion}

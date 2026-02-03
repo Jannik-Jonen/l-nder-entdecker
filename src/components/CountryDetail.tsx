@@ -36,6 +36,71 @@ const priceLevelLabels = {
   high: '€€€',
 };
 
+const replaceUmlauts = (s: string) =>
+  s
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss');
+
+const baseNormalize = (raw: string) =>
+  replaceUmlauts(raw.toLowerCase().trim()).replace(/[-_]/g, ' ').replace(/\s+/g, ' ').replace(/\W+/g, '');
+
+const levenshtein = (a: string, b: string) => {
+  const m = a.length;
+  const n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array<number>(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+    }
+  }
+  return dp[m][n];
+};
+
+const canonicalize = (name: string, category: PackingItem['category']) => {
+  const n = baseNormalize(name);
+  if (category === 'clothing') {
+    const candidates = ['tshirts', 'socken', 'unterwaesche', 'hosen', 'jacke', 'regenjacke', 'schuhe', 'badekleidung'];
+    let best = n;
+    let bestScore = Number.POSITIVE_INFINITY;
+    for (const c of candidates) {
+      const d = levenshtein(n, c);
+      if (d < bestScore) {
+        bestScore = d;
+        best = c;
+      }
+    }
+    if (bestScore <= 2) return best;
+  }
+  return n;
+};
+
+const dedupePackingItems = (items: PackingItem[]) => {
+  const map = new Map<string, PackingItem>();
+  for (const item of items) {
+    const key = `${item.category}:${canonicalize(item.name, item.category)}`;
+    const existing = map.get(key);
+    if (!existing) {
+      map.set(key, item);
+    } else {
+      const merged: PackingItem = {
+        ...existing,
+        packed: existing.packed || item.packed,
+        quantity: Math.max(
+          typeof existing.quantity === 'number' ? existing.quantity : 1,
+          typeof item.quantity === 'number' ? item.quantity : 1
+        ),
+      };
+      map.set(key, merged);
+    }
+  }
+  return Array.from(map.values());
+};
+
 export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailProps) => {
   const [packingItems, setPackingItems] = useState<PackingItem[]>(country.packingList || []);
   const [selectedCity, setSelectedCity] = useState<string>(() => {
@@ -94,14 +159,29 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   };
 
   const handleAddPacking = (name: string, category: PackingItem['category'], quantity?: number) => {
-    const newItem: PackingItem = {
-      id: `pack-${Date.now()}`,
-      name,
-      packed: false,
-      category,
-      quantity: typeof quantity === 'number' ? quantity : 1,
-    };
-    const next = [...packingItems, newItem];
+    const qty = typeof quantity === 'number' ? quantity : 1;
+    const keyToAdd = `${category}:${canonicalize(name, category)}`;
+    const existingIndex = packingItems.findIndex(
+      (it) => `${it.category}:${canonicalize(it.name, it.category)}` === keyToAdd
+    );
+    let next: PackingItem[];
+    if (existingIndex >= 0) {
+      next = packingItems.map((it, idx) =>
+        idx === existingIndex
+          ? { ...it, quantity: Math.max(typeof it.quantity === 'number' ? it.quantity : 1, qty) }
+          : it
+      );
+    } else {
+      const newItem: PackingItem = {
+        id: `pack-${Date.now()}`,
+        name,
+        packed: false,
+        category,
+        quantity: qty,
+      };
+      next = [...packingItems, newItem];
+    }
+    next = dedupePackingItems(next);
     setPackingItems(next);
     persistPackingList(next);
   };
@@ -113,9 +193,10 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   };
 
   const handleChangePackingQuantity = (id: string, quantity: number) => {
-    const next = packingItems.map((item) =>
+    let next = packingItems.map((item) =>
       item.id === id ? { ...item, quantity } : item
     );
+    next = dedupePackingItems(next);
     setPackingItems(next);
     persistPackingList(next);
   };
@@ -183,7 +264,7 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   };
 
   useEffect(() => {
-    setPackingItems(country.packingList || []);
+    setPackingItems(dedupePackingItems(country.packingList || []));
   }, [country.id, country.packingList]);
 
   useEffect(() => {
