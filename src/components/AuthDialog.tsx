@@ -19,8 +19,10 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isReset, setIsReset] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [resendLoading, setResendLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [mfaRequired, setMfaRequired] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
   const [mfaFactorId, setMfaFactorId] = useState<string | null>(null);
@@ -128,6 +130,29 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ensureSupabaseConfig()) return;
+    if (!email) {
+      toast.error('Bitte zuerst eine E‑Mail eingeben.');
+      return;
+    }
+    setResetLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin,
+      });
+      if (error) {
+        toast.error('Passwort‑Reset fehlgeschlagen: ' + error.message);
+        return;
+      }
+      toast.success('Passwort‑Reset‑Mail gesendet');
+      setIsReset(false);
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   const handleMfaVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!mfaFactorId || !mfaChallengeId) return;
@@ -155,6 +180,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     setEmail('');
     setPassword('');
     setDisplayName('');
+    setIsReset(false);
     setAuthError(null);
     setMfaRequired(false);
     setMfaCode('');
@@ -167,7 +193,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center font-display text-2xl">
-            {isLogin ? 'Willkommen zurück!' : 'Konto erstellen'}
+            {isReset ? 'Passwort zurücksetzen' : isLogin ? 'Willkommen zurück!' : 'Konto erstellen'}
           </DialogTitle>
         </DialogHeader>
 
@@ -190,6 +216,36 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Bestätigen
+            </Button>
+          </form>
+        ) : isReset ? (
+          <form onSubmit={handlePasswordReset} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">E-Mail</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="deine@email.de"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Button type="submit" className="w-full" disabled={resetLoading}>
+              {resetLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Reset‑Mail senden
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsReset(false)}
+            >
+              Zurück zum Login
             </Button>
           </form>
         ) : (
@@ -243,6 +299,15 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
                 />
               </div>
             </div>
+            {isLogin ? (
+              <button
+                type="button"
+                onClick={() => setIsReset(true)}
+                className="text-xs text-primary hover:underline text-left"
+              >
+                Passwort vergessen?
+              </button>
+            ) : null}
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
