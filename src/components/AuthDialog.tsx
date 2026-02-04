@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,15 +20,33 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [isRecovery, setIsRecovery] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [resendLoading, setResendLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
+  const [recoveryLoading, setRecoveryLoading] = useState(false);
   const [mfaRequired, setMfaRequired] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
   const [mfaFactorId, setMfaFactorId] = useState<string | null>(null);
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const { signIn, signUp } = useAuth();
   const needsConfirmation = !!authError && /confirm/i.test(authError);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecovery(true);
+        setIsReset(false);
+        setIsLogin(true);
+        setAuthError(null);
+        onOpenChange(true);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [onOpenChange]);
 
   const ensureSupabaseConfig = () => {
     const url = import.meta.env.VITE_SUPABASE_URL;
@@ -153,6 +171,36 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     }
   };
 
+  const handleRecoverySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ensureSupabaseConfig()) return;
+    if (!newPassword || newPassword.length < 6) {
+      toast.error('Bitte ein Passwort mit mindestens 6 Zeichen eingeben.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwörter stimmen nicht überein.');
+      return;
+    }
+    setRecoveryLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        toast.error('Passwort konnte nicht geändert werden: ' + error.message);
+        return;
+      }
+      toast.success('Passwort wurde aktualisiert');
+      setIsRecovery(false);
+      onOpenChange(false);
+      resetForm();
+      if (window.location.hash) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } finally {
+      setRecoveryLoading(false);
+    }
+  };
+
   const handleMfaVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!mfaFactorId || !mfaChallengeId) return;
@@ -181,11 +229,14 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     setPassword('');
     setDisplayName('');
     setIsReset(false);
+    setIsRecovery(false);
     setAuthError(null);
     setMfaRequired(false);
     setMfaCode('');
     setMfaFactorId(null);
     setMfaChallengeId(null);
+    setNewPassword('');
+    setConfirmPassword('');
   };
 
   return (
@@ -193,7 +244,13 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center font-display text-2xl">
-            {isReset ? 'Passwort zurücksetzen' : isLogin ? 'Willkommen zurück!' : 'Konto erstellen'}
+            {isRecovery
+              ? 'Neues Passwort setzen'
+              : isReset
+                ? 'Passwort zurücksetzen'
+                : isLogin
+                  ? 'Willkommen zurück!'
+                  : 'Konto erstellen'}
           </DialogTitle>
         </DialogHeader>
 
@@ -216,6 +273,53 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Bestätigen
+            </Button>
+          </form>
+        ) : isRecovery ? (
+          <form onSubmit={handleRecoverySubmit} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">Neues Passwort</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="newPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Passwort bestätigen</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Button type="submit" className="w-full" disabled={recoveryLoading}>
+              {recoveryLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Passwort speichern
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsRecovery(false)}
+            >
+              Zurück zum Login
             </Button>
           </form>
         ) : isReset ? (
