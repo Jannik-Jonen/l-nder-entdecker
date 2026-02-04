@@ -31,6 +31,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const searchParams = new URLSearchParams(window.location.search);
+    const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
+    const type = hashParams.get('type') || searchParams.get('type');
+    const code = searchParams.get('code');
+    const recovery = type === 'recovery' || !!accessToken || !!code;
+
+    if (accessToken && refreshToken) {
+      supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+    } else if (code) {
+      supabase.auth.exchangeCodeForSession(code);
+    }
+
+    if (recovery) {
+      setAuthEvent('PASSWORD_RECOVERY');
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
