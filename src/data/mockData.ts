@@ -401,6 +401,7 @@ export const inspirationDestinations: Destination[] = [
     id: 'dest-1',
     name: 'Bali',
     country: 'Indonesien',
+    countryCode: 'ID',
     type: 'island',
     imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80',
     description: 'Tropisches Paradies mit Reisterrassen, Tempeln und atemberaubenden Stränden',
@@ -410,12 +411,14 @@ export const inspirationDestinations: Destination[] = [
     currency: 'IDR',
     visaInfo: 'Visa on Arrival (VoA) für 30 Tage erhältlich (ca. 30€). Reisepass muss noch 6 Monate gültig sein.',
     vaccinationInfo: 'Standardimpfungen. Hepatitis A empfohlen. Bei längeren Aufenthalten auch Typhus, Tollwut, Jap. Enzephalitis.',
-    healthSafetyInfo: 'Dengue-Fieber Risiko (Mückenschutz!). Kein Leitungswasser trinken. Gute medizinische Versorgung in Touristengebieten.'
+    healthSafetyInfo: 'Dengue-Fieber Risiko (Mückenschutz!). Kein Leitungswasser trinken. Gute medizinische Versorgung in Touristengebieten.',
+    parentId: 'country-indonesia'
   },
   {
     id: 'dest-2',
     name: 'Island',
     country: 'Island',
+    countryCode: 'IS',
     type: 'country',
     imageUrl: 'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800&q=80',
     description: 'Land aus Feuer und Eis mit Geysiren, Gletschern und Nordlichtern',
@@ -431,6 +434,7 @@ export const inspirationDestinations: Destination[] = [
     id: 'dest-3',
     name: 'Kyoto',
     country: 'Japan',
+    countryCode: 'JP',
     type: 'city',
     imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80',
     description: 'Historische Kaiserstadt mit tausenden Tempeln und traditioneller Kultur',
@@ -440,7 +444,8 @@ export const inspirationDestinations: Destination[] = [
     currency: 'JPY',
     visaInfo: 'Visumfrei für touristische Aufenthalte bis 90 Tage für EU-Bürger.',
     vaccinationInfo: 'Standardimpfungen. Japanische Enzephalitis bei Langzeitaufenthalten in ländlichen Gebieten.',
-    healthSafetyInfo: 'Extrem sicher. Erdbebenrisiko beachten. Exzellente Hygiene und Gesundheitsversorgung.'
+    healthSafetyInfo: 'Extrem sicher. Erdbebenrisiko beachten. Exzellente Hygiene und Gesundheitsversorgung.',
+    parentId: 'country-japan'
   },
   {
     id: 'dest-4',
@@ -461,6 +466,7 @@ export const inspirationDestinations: Destination[] = [
     id: 'dest-5',
     name: 'Malediven',
     country: 'Malediven',
+    countryCode: 'MV',
     type: 'island',
     imageUrl: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80',
     description: 'Ultimatives Inselparadies mit kristallklarem Wasser und Luxusresorts',
@@ -470,7 +476,8 @@ export const inspirationDestinations: Destination[] = [
     currency: 'MVR',
     visaInfo: 'Kostenloses Touristenvisum (30 Tage) bei Ankunft. Rückflugticket und Hotelbuchung notwendig.',
     vaccinationInfo: 'Hepatitis A, Typhus empfohlen. Keine Malaria, aber Dengue-Fieber Risiko.',
-    healthSafetyInfo: 'Strenge Einfuhrbestimmungen (kein Alkohol/Schweinefleisch im Gepäck). Mückenschutz wichtig. Resorts haben oft Inselärzte.'
+    healthSafetyInfo: 'Strenge Einfuhrbestimmungen (kein Alkohol/Schweinefleisch im Gepäck). Mückenschutz wichtig. Resorts haben oft Inselärzte.',
+    parentId: 'country-maldives'
   },
   {
     id: 'dest-6',
@@ -491,6 +498,7 @@ export const inspirationDestinations: Destination[] = [
     id: 'dest-7',
     name: 'Santorini',
     country: 'Griechenland',
+    countryCode: 'GR',
     type: 'island',
     imageUrl: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80',
     description: 'Ikonische Kykladen-Insel mit weißen Häusern und blauen Kuppeln',
@@ -500,12 +508,14 @@ export const inspirationDestinations: Destination[] = [
     currency: 'EUR',
     visaInfo: 'Kein Visum erforderlich (EU/Schengen).',
     vaccinationInfo: 'Keine speziellen Impfungen. Standardimpfungen auffrischen.',
-    healthSafetyInfo: 'Sicher. Im Sommer sehr heiß (Sonnenschutz!). Leitungswasser meist nicht trinkbar (Flaschenwasser nutzen).'
+    healthSafetyInfo: 'Sicher. Im Sommer sehr heiß (Sonnenschutz!). Leitungswasser meist nicht trinkbar (Flaschenwasser nutzen).',
+    parentId: 'country-greece'
   },
   {
     id: 'dest-8',
     name: 'Marrakesch',
     country: 'Marokko',
+    countryCode: 'MA',
     type: 'city',
     imageUrl: 'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=800&q=80',
     description: 'Magische Stadt mit lebhaften Souks, Palästen und Gärten',
@@ -515,12 +525,14 @@ export const inspirationDestinations: Destination[] = [
     currency: 'MAD',
     visaInfo: 'Visumfrei bis 90 Tage für EU-Bürger. Reisepass erforderlich (mind. 6 Monate gültig).',
     vaccinationInfo: 'Hepatitis A empfohlen. Ggf. Typhus bei einfachen Reisebedingungen.',
-    healthSafetyInfo: 'Kein Leitungswasser trinken! Vorsicht bei rohem Essen ("Cook it, peel it or leave it"). Magen-Darm-Medikamente mitnehmen.'
+    healthSafetyInfo: 'Kein Leitungswasser trinken! Vorsicht bei rohem Essen ("Cook it, peel it or leave it"). Magen-Darm-Medikamente mitnehmen.',
+    parentId: 'country-morocco'
   },
   {
     id: 'dest-9',
     name: 'San Francisco',
     country: 'USA',
+    countryCode: 'US',
     type: 'city',
     imageUrl: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&q=80',
     description: 'Vielfältige Stadt an der Westküste mit ikonischer Architektur und lebendiger Kultur',
@@ -530,12 +542,14 @@ export const inspirationDestinations: Destination[] = [
     currency: 'USD',
     visaInfo: 'ESTA-Genehmigung vorab online beantragen (21$, 2 Jahre gültig). Reisepass nötig.',
     vaccinationInfo: 'Standardimpfungen.',
-    healthSafetyInfo: 'Medizinische Versorgung exzellent aber extrem teuer -> Auslandskrankenversicherung essentiell! Obdachlosigkeit in Downtown sichtbar.'
+    healthSafetyInfo: 'Medizinische Versorgung exzellent aber extrem teuer -> Auslandskrankenversicherung essentiell! Obdachlosigkeit in Downtown sichtbar.',
+    parentId: 'country-usa'
   },
   {
     id: 'dest-10',
     name: 'Azoren',
     country: 'Portugal',
+    countryCode: 'PT',
     type: 'region',
     imageUrl: 'https://images.unsplash.com/photo-1581925865466-ffed044c0c64?q=80&w=1074',
     description: 'Vielfältige Region im Atlantik mit atemberaubenden Landschaften und Vulkanen',
@@ -545,12 +559,14 @@ export const inspirationDestinations: Destination[] = [
     currency: 'EUR',
     visaInfo: 'Kein Visum erforderlich (EU/Schengen).',
     vaccinationInfo: 'Keine speziellen Impfungen.',
-    healthSafetyInfo: 'Wetter wechselhaft. Sehr sicher. Baden im Meer: Strömungen beachten (nur bewachte Strände).'
+    healthSafetyInfo: 'Wetter wechselhaft. Sehr sicher. Baden im Meer: Strömungen beachten (nur bewachte Strände).',
+    parentId: 'country-portugal'
   },
   {
     id: 'dest-11',
     name: 'Vietnam',
     country: 'Vietnam',
+    countryCode: 'VN',
     type: 'country',
     imageUrl: 'https://images.unsplash.com/photo-1555921015-5532091f6026?q=80&w=1470',
     description: 'Vielfältige Landschaften, von Reisfeldern bis zu Bergen, und eine reiche Kultur.',
@@ -566,6 +582,7 @@ export const inspirationDestinations: Destination[] = [
     id: 'dest-12',
     name: 'Zakynthos',
     country: 'Griechenland',
+    countryCode: 'GR',
     type: 'island',
     imageUrl: 'https://images.unsplash.com/photo-1629286521433-dfa4637fbe9a?q=80&w=800',
     description: 'Wunderschöne Strände und kristallklares Wasser, berühmte Schiffswracks.',
@@ -575,7 +592,99 @@ export const inspirationDestinations: Destination[] = [
     currency: 'EUR',
     visaInfo: 'Kein Visum erforderlich (EU/Schengen).',
     vaccinationInfo: 'Standardimpfungen.',
-    healthSafetyInfo: 'Sonnenschutz wichtig. Vorsicht vor überteuerten Touristenfallen bei Restaurants.'
+    healthSafetyInfo: 'Sonnenschutz wichtig. Vorsicht vor überteuerten Touristenfallen bei Restaurants.',
+    parentId: 'country-greece'
+  },
+  {
+    id: 'country-japan',
+    name: 'Japan',
+    country: 'Japan',
+    countryCode: 'JP',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1549692520-acc6669e2f0c?w=800&q=80',
+    description: 'Inselstaat mit einzigartiger Kultur, modernen Städten und Natur.',
+    highlights: ['Tokyo', 'Kyoto', 'Fuji', 'Nara'],
+    bestSeason: 'März bis Mai, Oktober bis November',
+    averageDailyCost: 120,
+    currency: 'JPY'
+  },
+  {
+    id: 'country-greece',
+    name: 'Griechenland',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1506086679524-493c64fdfaa6?w=800&q=80',
+    description: 'Mittelmeerland mit Inseln, antiken Stätten und guter Küche.',
+    highlights: ['Athen', 'Santorini', 'Kreta', 'Delphi'],
+    bestSeason: 'April bis Oktober',
+    averageDailyCost: 100,
+    currency: 'EUR'
+  },
+  {
+    id: 'country-portugal',
+    name: 'Portugal',
+    country: 'Portugal',
+    countryCode: 'PT',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1534920531322-0f8a1ea1d9c1?w=800&q=80',
+    description: 'Atlantikland mit Küsten, Städten und Inseln wie den Azoren.',
+    highlights: ['Lissabon', 'Porto', 'Algarve', 'Azoren'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 85,
+    currency: 'EUR'
+  },
+  {
+    id: 'country-usa',
+    name: 'USA',
+    country: 'USA',
+    countryCode: 'US',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1493244040629-496f6d136cc3?w=800&q=80',
+    description: 'Großes Land mit vielfältigen Regionen und ikonischen Städten.',
+    highlights: ['New York', 'San Francisco', 'Grand Canyon', 'Yellowstone'],
+    bestSeason: 'Ganzjährig',
+    averageDailyCost: 150,
+    currency: 'USD'
+  },
+  {
+    id: 'country-morocco',
+    name: 'Marokko',
+    country: 'Marokko',
+    countryCode: 'MA',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1544989164-8f086a2eb08b?w=800&q=80',
+    description: 'Nordafrikanisches Land mit Wüste, Bergen und orientalischen Städten.',
+    highlights: ['Marrakesch', 'Fès', 'Atlas', 'Sahara'],
+    bestSeason: 'März bis Mai, September bis November',
+    averageDailyCost: 60,
+    currency: 'MAD'
+  },
+  {
+    id: 'country-indonesia',
+    name: 'Indonesien',
+    country: 'Indonesien',
+    countryCode: 'ID',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1536662825042-5c03d09af82d?w=800&q=80',
+    description: 'Archipel mit tausenden Inseln, u. a. Bali, Java und Sumatra.',
+    highlights: ['Bali', 'Jakarta', 'Yogyakarta', 'Komodo'],
+    bestSeason: 'April bis Oktober',
+    averageDailyCost: 40,
+    currency: 'IDR'
+  },
+  {
+    id: 'country-maldives',
+    name: 'Malediven',
+    country: 'Malediven',
+    countryCode: 'MV',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1536623975707-c8c8c1a3a9b7?w=800&q=80',
+    description: 'Inselstaat im Indischen Ozean mit Korallenriffen und Resorts.',
+    highlights: ['Male', 'Ari-Atolle', 'Tauchen', 'Schnorcheln'],
+    bestSeason: 'November bis April',
+    averageDailyCost: 250,
+    currency: 'MVR'
   },
 ];
 

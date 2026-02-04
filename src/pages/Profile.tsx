@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
-import { mockCountries, defaultTodos } from '@/data/mockData';
-import { Country, TodoItem, PackingItem } from '@/types/travel';
+import { defaultTodos } from '@/data/mockData';
+import { Country, TodoItem, PackingItem, PeopleBreakdown } from '@/types/travel';
 import { User, MapPin, Calendar, Settings, Plus, Trash2, Edit2, LogOut, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -34,10 +36,15 @@ interface SavedTripRow {
 }
 
 type NotesData = {
-  peopleCount: number;
-  packingList: PackingItem[];
-  todos: TodoItem[];
-  bestTimeToVisit: string;
+  peopleCount?: number;
+  packingList?: PackingItem[];
+  todos?: TodoItem[];
+  bestTimeToVisit?: string;
+  peopleBreakdown?: PeopleBreakdown;
+  tips?: string[];
+  transportNotes?: string[];
+  itinerary?: string[];
+  stops?: { id: string; name: string; type: 'city' | 'poi'; notes?: string; tips?: string[] }[];
 };
 
 const Profile = () => {
@@ -48,6 +55,12 @@ const Profile = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [profile, setProfile] = useState<{ display_name: string | null } | null>(null);
   const [loadingTrips, setLoadingTrips] = useState(false);
+  const [mfaLoading, setMfaLoading] = useState(false);
+  const [mfaEnabled, setMfaEnabled] = useState(false);
+  const [mfaFactorsLoaded, setMfaFactorsLoaded] = useState(false);
+  const [mfaEnroll, setMfaEnroll] = useState<{ factorId: string; qrCode: string; secret: string } | null>(null);
+  const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
+  const [mfaVerifyCode, setMfaVerifyCode] = useState('');
   const [homeAirport, setHomeAirport] = useState<string>(() => {
     try {
       return localStorage.getItem('homeAirport') || 'FRA';
@@ -96,18 +109,9 @@ const Profile = () => {
         let mappedTrips: Country[] = (data as SavedTripRow[])
           .filter((trip) => trip.user_id === user.id)
           .map((trip: SavedTripRow) => {
-            let parsed: {
-              todos?: TodoItem[];
-              peopleCount?: number;
-              packingList?: PackingItem[];
-              bestTimeToVisit?: string;
-              tips?: string[];
-              transportNotes?: string[];
-              itinerary?: string[];
-              stops?: { id: string; name: string; type: 'city' | 'poi'; notes?: string; tips?: string[] }[];
-            } = {};
+            let parsed: NotesData = {};
             try {
-              parsed = trip.notes ? JSON.parse(trip.notes) : {};
+              parsed = trip.notes ? (JSON.parse(trip.notes) as NotesData) : {};
             } catch {
               parsed = {};
             }
@@ -126,6 +130,18 @@ const Profile = () => {
               currency: trip.currency || 'EUR',
               todos: todosFromNotes,
               peopleCount: parsed.peopleCount || 1,
+              people: (() => {
+                const count = typeof parsed.peopleCount === 'number' ? parsed.peopleCount! : 1;
+                const pb = parsed.peopleBreakdown;
+                if (pb && typeof pb === 'object') {
+                  return {
+                    adults: typeof pb.adults === 'number' ? pb.adults : count,
+                    children: typeof pb.children === 'number' ? pb.children : 0,
+                    babies: typeof pb.babies === 'number' ? pb.babies : 0,
+                  };
+                }
+                return { adults: count, children: 0, babies: 0 };
+              })(),
               packingList: parsed.packingList || [],
               tips: parsed.tips || [],
               transportNotes: parsed.transportNotes || [],
@@ -168,53 +184,135 @@ const Profile = () => {
     }
   }, [user]);
 
+  const loadMfaFactors = useCallback(async () => {
+    if (!user) return;
+    setMfaFactorsLoaded(false);
+    try {
+      const { data, error } = await supabase.auth.mfa.listFactors();
+      if (error) {
+        setMfaEnabled(false);
+        return;
+      }
+      const verified = data?.totp?.some((factor) => factor.status === 'verified') || false;
+      setMfaEnabled(verified);
+    } finally {
+      setMfaFactorsLoaded(true);
+    }
+  }, [user]);
+
   useEffect(() => {
     if (user) {
       setCountries([]);
       fetchProfile();
       fetchTrips();
+      loadMfaFactors();
     } else {
       setProfile(null);
-      setCountries(mockCountries);
+      setCountries([]);
+      setMfaEnabled(false);
+      setMfaEnroll(null);
+      setMfaVerifyCode('');
+      setMfaChallengeId(null);
     }
-  }, [user, fetchProfile, fetchTrips]);
+  }, [user, fetchProfile, fetchTrips, loadMfaFactors]);
 
-  const handleAddCountry = async (newCountry: Country) => {
-    if (user) {
-      try {
-        const { data, error } = await supabase
-          .from('saved_trips')
-          .insert({
-            user_id: user.id,
-            destination_name: newCountry.name,
-            destination_code: newCountry.code,
-            image_url: newCountry.imageUrl,
-            start_date: newCountry.startDate,
-            end_date: newCountry.endDate,
-            daily_budget: newCountry.dailyCost,
-            currency: newCountry.currency,
-          })
-          .select()
-          .single();
+  const handleMfaEnroll = async () => {
+    if (!user) return;
+    setMfaLoading(true);
+    try {
+      const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
+      if (error || !data?.id || !data?.totp?.qr_code) {
+        toast.error('TOTP konnte nicht gestartet werden');
+        return;
+      }
+      setMfaEnroll({ factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret });
+      const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+        factorId: data.id,
+      });
+      if (challengeError || !challengeData?.id) {
+        toast.error('MFA-Challenge fehlgeschlagen');
+        return;
+      }
+      setMfaChallengeId(challengeData.id);
+    } finally {
+      setMfaLoading(false);
+    }
+  };
 
-        if (error) {
-          toast.error('Fehler beim Speichern: ' + error.message);
+  const handleMfaVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mfaEnroll?.factorId) return;
+    if (!mfaVerifyCode.trim()) return;
+    setMfaLoading(true);
+    try {
+      let challengeId = mfaChallengeId;
+      if (!challengeId) {
+        const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+          factorId: mfaEnroll.factorId,
+        });
+        if (challengeError || !challengeData?.id) {
+          toast.error('MFA-Challenge fehlgeschlagen');
           return;
         }
-
-        if (data) {
-          const savedCountry: Country = {
-            ...newCountry,
-            id: (data as SavedTripRow).id,
-          };
-          setCountries([savedCountry, ...countries]);
-          toast.success('Reise gespeichert!');
-        }
-      } catch {
-        toast.error('Fehler beim Speichern');
+        challengeId = challengeData.id;
+        setMfaChallengeId(challengeId);
       }
-    } else {
-      setCountries([...countries, newCountry]);
+      const { error } = await supabase.auth.mfa.verify({
+        factorId: mfaEnroll.factorId,
+        challengeId,
+        code: mfaVerifyCode,
+      });
+      if (error) {
+        toast.error('MFA-Code ungültig');
+        return;
+      }
+      toast.success('2FA aktiviert');
+      setMfaEnroll(null);
+      setMfaVerifyCode('');
+      setMfaChallengeId(null);
+      await loadMfaFactors();
+    } finally {
+      setMfaLoading(false);
+    }
+  };
+
+  const handleAddCountry = async (newCountry: Country) => {
+    if (!user) {
+      setAuthDialogOpen(true);
+      toast.info('Bitte anmelden, um eine Reise zu planen.');
+      return;
+    }
+    try {
+      const { data, error } = await supabase
+        .from('saved_trips')
+        .insert({
+          user_id: user.id,
+          destination_name: newCountry.name,
+          destination_code: newCountry.code,
+          image_url: newCountry.imageUrl,
+          start_date: newCountry.startDate,
+          end_date: newCountry.endDate,
+          daily_budget: newCountry.dailyCost,
+          currency: newCountry.currency,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        toast.error('Fehler beim Speichern: ' + error.message);
+        return;
+      }
+
+      if (data) {
+        const savedCountry: Country = {
+          ...newCountry,
+          id: (data as SavedTripRow).id,
+        };
+        setCountries([savedCountry, ...countries]);
+        toast.success('Reise gespeichert!');
+      }
+    } catch {
+      toast.error('Fehler beim Speichern');
     }
   };
 
@@ -242,7 +340,7 @@ const Profile = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    setCountries(mockCountries);
+    setCountries([]);
     toast.success('Erfolgreich abgemeldet');
   };
 
@@ -512,7 +610,17 @@ const Profile = () => {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-display text-2xl font-semibold">Meine Destinationen</h2>
-            <Button variant="outline" onClick={() => setAddDialogOpen(true)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (user) {
+                  setAddDialogOpen(true);
+                } else {
+                  setAuthDialogOpen(true);
+                  toast.info('Bitte anmelden, um eine Reise hinzuzufügen.');
+                }
+              }}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Reise hinzufügen
             </Button>
@@ -832,6 +940,72 @@ const Profile = () => {
                   <span>EUR (€)</span>
                 </div>
               </div>
+            </div>
+            <div className="rounded-xl bg-card p-6 shadow-card">
+              <h3 className="font-medium mb-4">Sicherheit</h3>
+              {user ? (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">TOTP‑2FA</span>
+                    {mfaFactorsLoaded ? (
+                      <Badge variant={mfaEnabled ? "default" : "secondary"}>
+                        {mfaEnabled ? "Aktiv" : "Nicht aktiv"}
+                      </Badge>
+                    ) : (
+                      <span className="text-muted-foreground">Lädt…</span>
+                    )}
+                  </div>
+                  {mfaEnabled ? (
+                    <p className="text-sm text-muted-foreground">
+                      2FA ist aktiv. Beim Login wird ein Code aus der Authenticator‑App abgefragt.
+                    </p>
+                  ) : (
+                    <>
+                      <p className="text-sm text-muted-foreground">
+                        Aktiviere 2FA, um den Admin‑Bereich zusätzlich abzusichern.
+                      </p>
+                      {mfaEnroll ? (
+                        <div className="space-y-3">
+                          <div className="rounded-lg border bg-background p-3">
+                            <div
+                              className="flex items-center justify-center"
+                              dangerouslySetInnerHTML={{ __html: mfaEnroll.qrCode }}
+                            />
+                          </div>
+                          <div className="text-xs text-muted-foreground break-all">
+                            Secret: {mfaEnroll.secret}
+                          </div>
+                          <form onSubmit={handleMfaVerify} className="space-y-2">
+                            <Label htmlFor="mfaVerify">Bestätigungscode</Label>
+                            <Input
+                              id="mfaVerify"
+                              type="text"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              placeholder="123456"
+                              value={mfaVerifyCode}
+                              onChange={(e) => setMfaVerifyCode(e.target.value)}
+                            />
+                            <Button type="submit" variant="outline" disabled={mfaLoading}>
+                              {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                              Bestätigen
+                            </Button>
+                          </form>
+                        </div>
+                      ) : (
+                        <Button variant="outline" onClick={handleMfaEnroll} disabled={mfaLoading}>
+                          {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                          2FA aktivieren
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Melde dich an, um 2FA in deinem Konto zu aktivieren.
+                </p>
+              )}
             </div>
             <div className="rounded-xl bg-card p-6 shadow-card">
               <h3 className="font-medium mb-4">Konto</h3>

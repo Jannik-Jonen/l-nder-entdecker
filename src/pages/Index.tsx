@@ -157,6 +157,23 @@ const Index = () => {
                 return 1;
               }
             })(),
+            people: (() => {
+              try {
+                const notes = row.notes ? JSON.parse(row.notes as string) : {};
+                if (notes.peopleBreakdown && typeof notes.peopleBreakdown === 'object') {
+                  const p = notes.peopleBreakdown as { adults?: number; children?: number; babies?: number };
+                  return {
+                    adults: typeof p.adults === 'number' ? p.adults : (typeof notes.peopleCount === 'number' ? notes.peopleCount : 1),
+                    children: typeof p.children === 'number' ? p.children : 0,
+                    babies: typeof p.babies === 'number' ? p.babies : 0,
+                  };
+                }
+                const count = typeof notes.peopleCount === 'number' ? notes.peopleCount : 1;
+                return { adults: count, children: 0, babies: 0 };
+              } catch {
+                return { adults: 1, children: 0, babies: 0 };
+              }
+            })(),
             tips: (() => {
               try {
                 const notes = row.notes ? JSON.parse(row.notes as string) : {};

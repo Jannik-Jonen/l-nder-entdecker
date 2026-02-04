@@ -81,6 +81,12 @@ export interface WeatherInfo {
   packingTips: string[];
 }
 
+export interface PeopleBreakdown {
+  adults: number;
+  children: number;
+  babies: number;
+}
+
 export interface Country {
   id: string;
   name: string;
@@ -97,6 +103,7 @@ export interface Country {
   flights?: FlightConnection[];
   weather?: WeatherInfo;
   peopleCount?: number;
+  people?: PeopleBreakdown;
   packingList?: PackingItem[];
   tips?: string[];
   transportNotes?: string[];
@@ -127,6 +134,20 @@ export interface Destination {
   vaccinationInfo?: string;
   healthSafetyInfo?: string;
   source?: string;
+  parentId?: string;
+  coords?: { lat: number; lon: number };
+  childrenCount?: number;
+}
+
+export interface TripLeg {
+  id: string;
+  fromId: string;
+  toId: string;
+  transport: 'flight' | 'train' | 'car' | 'boat' | 'bus';
+  distanceKm?: number;
+  durationHours?: number;
+  priceRange?: string;
+  notes?: string;
 }
 
 export interface TravelTip {

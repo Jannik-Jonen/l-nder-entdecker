@@ -19,6 +19,8 @@ export const Header = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
+  const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
 
   const navItems = [
     { path: '/', label: 'Dashboard' },
@@ -27,6 +29,7 @@ export const Header = () => {
     { path: '/blog', label: 'Blog' },
     { path: '/tipps', label: 'Reisetipps' },
     { path: '/profile', label: 'Profil' },
+    ...(isAdmin ? [{ path: '/admin/review', label: 'Admin' }] : []),
   ];
 
   return (

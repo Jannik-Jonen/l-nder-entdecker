@@ -1,5 +1,7 @@
 
 import { Destination } from '@/types/travel';
+import { supabaseUntyped } from '@/lib/supabase-untyped';
+import { inspirationDestinations } from '@/data/mockData';
 
 interface WikiSection {
   toclevel: number;
@@ -153,5 +155,142 @@ export const fetchRichDestinationData = async (query: string): Promise<Partial<D
   } catch (error) {
     console.error('Error building aggregated travel data:', error);
     return null;
+  }
+};
+
+type DestinationRow = {
+  id: string;
+  name: string;
+  country: string;
+  country_code: string | null;
+  type: 'country' | 'island' | 'city' | 'region';
+  image_url: string | null;
+  description: string | null;
+  highlights: string[] | null;
+  best_season: string | null;
+  average_daily_cost: number | null;
+  currency: string | null;
+  visa_info: string | null;
+  vaccination_info: string | null;
+  health_safety_info: string | null;
+  source: string | null;
+  parent_id: string | null;
+  coords_lat: number | null;
+  coords_lon: number | null;
+  children_count: number | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+const toDestination = (row: DestinationRow): Destination => ({
+  id: row.id,
+  name: row.name,
+  country: row.country,
+  countryCode: row.country_code || undefined,
+  type: row.type,
+  imageUrl: row.image_url || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop',
+  description: row.description || '',
+  highlights: Array.isArray(row.highlights) ? row.highlights : [],
+  bestSeason: row.best_season || '',
+  averageDailyCost: typeof row.average_daily_cost === 'number' ? row.average_daily_cost : 0,
+  currency: row.currency || 'EUR',
+  visaInfo: row.visa_info || undefined,
+  vaccinationInfo: row.vaccination_info || undefined,
+  healthSafetyInfo: row.health_safety_info || undefined,
+  source: row.source || undefined,
+  parentId: row.parent_id || undefined,
+  coords: typeof row.coords_lat === 'number' && typeof row.coords_lon === 'number' ? { lat: row.coords_lat, lon: row.coords_lon } : undefined,
+  childrenCount: typeof row.children_count === 'number' ? row.children_count : undefined,
+});
+
+export const fetchDestinationsCatalog = async (_opts?: {
+  type?: Destination['type'];
+  countryCode?: string;
+  search?: string;
+}): Promise<Destination[]> => {
+  try {
+    let query = supabaseUntyped
+      .from('destinations')
+      .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+      .order('name', { ascending: true });
+    if (_opts?.type) query = query.eq('type', _opts.type);
+    if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
+    if (_opts?.search) query = query.ilike('name', `%${_opts.search}%`);
+    const { data, error } = await query;
+    if (error) throw error;
+    const rows = (data || []) as DestinationRow[];
+    return rows.map(toDestination);
+  } catch {
+    let list = inspirationDestinations.slice();
+    if (_opts?.type) list = list.filter((d) => d.type === _opts.type);
+    if (_opts?.countryCode) list = list.filter((d) => (d.countryCode || '').toUpperCase() === _opts.countryCode?.toUpperCase());
+    if (_opts?.search) {
+      const s = _opts.search.toLowerCase();
+      list = list.filter((d) => d.name.toLowerCase().includes(s));
+    }
+    return list.sort((a, b) => a.name.localeCompare(b.name));
+  }
+};
+
+export const getDestinationById = async (_id: string): Promise<Destination | null> => {
+  try {
+    const { data, error } = await supabaseUntyped
+      .from('destinations')
+      .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+      .eq('id', _id)
+      .single();
+    if (error) throw error;
+    if (!data) return null;
+    return toDestination(data as DestinationRow);
+  } catch {
+    const found = inspirationDestinations.find((d) => d.id === _id);
+    return found || null;
+  }
+};
+
+export const getChildren = async (_id: string, _type?: Destination['type']): Promise<Destination[]> => {
+  try {
+    let query = supabaseUntyped
+      .from('destinations')
+      .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+      .eq('parent_id', _id)
+      .order('name', { ascending: true });
+    if (_type) query = query.eq('type', _type);
+    const { data, error } = await query;
+    if (error) throw error;
+    const rows = (data || []) as DestinationRow[];
+    return rows.map(toDestination);
+  } catch {
+    let list = inspirationDestinations.filter((d) => d.parentId === _id);
+    if (_type) list = list.filter((d) => d.type === _type);
+    return list.sort((a, b) => a.name.localeCompare(b.name));
+  }
+};
+
+export const getAncestors = async (_id: string): Promise<Destination[]> => {
+  const result: Destination[] = [];
+  try {
+    let currentId: string | null = _id;
+    for (let i = 0; i < 10; i++) {
+      if (!currentId) break;
+      const { data } = await supabaseUntyped
+        .from('destinations')
+        .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+        .eq('id', currentId)
+        .single();
+      if (!data) break;
+      const dest = toDestination(data as DestinationRow);
+      result.push(dest);
+      currentId = dest.parentId || null;
+    }
+    return result;
+  } catch {
+    let current = inspirationDestinations.find((d) => d.id === _id) || null;
+    for (let i = 0; i < 10; i++) {
+      if (!current) break;
+      result.push(current);
+      current = current.parentId ? inspirationDestinations.find((d) => d.id === current?.parentId) || null : null;
+    }
+    return result;
   }
 };

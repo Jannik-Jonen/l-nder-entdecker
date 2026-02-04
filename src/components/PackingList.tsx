@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PackingItem, packingCategoryLabels, packingCategoryIcons } from '@/types/travel';
+import { PackingItem, packingCategoryLabels, packingCategoryIcons, PeopleBreakdown } from '@/types/travel';
 import { Plus, Trash2, Check, Luggage } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,8 +12,7 @@ interface PackingListProps {
   onToggle: (id: string) => void;
   onAdd: (name: string, category: PackingItem['category'], quantity?: number) => void;
   onDelete: (id: string) => void;
-  onChangeQuantity?: (id: string, quantity: number) => void;
-  peopleCount?: number;
+  peopleBreakdown?: PeopleBreakdown;
   tripDays?: number;
 }
 
@@ -25,10 +24,11 @@ const defaultSuggestions: Record<PackingItem['category'], string[]> = {
   other: ['Wasserflasche', 'Reisekissen', 'Snacks', 'Buch', 'Reiseführer'],
 };
 
-export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity, peopleCount = 1, tripDays = 7 }: PackingListProps) => {
+export const PackingList = ({ items, onToggle, onAdd, onDelete, peopleBreakdown = { adults: 1, children: 0, babies: 0 }, tripDays = 7 }: PackingListProps) => {
   const [newItemName, setNewItemName] = useState('');
   const [newItemCategory, setNewItemCategory] = useState<PackingItem['category']>('clothing');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [newItemQty, setNewItemQty] = useState<number>(1);
 
   const replaceUmlauts = (s: string) =>
     s
@@ -67,6 +67,10 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
       }
       if (bestScore <= 2) return best;
     }
+    if (category === 'documents') {
+      if (/^dokumente/.test(n) || /^documents/.test(n)) return 'dokumente';
+      if (/^dokumente(fuer|fur)\d+personen?$/.test(n)) return 'dokumente';
+    }
     return n;
   };
 
@@ -74,21 +78,30 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
   const packedCount = items.filter((item) => item.packed).length;
   const totalCount = items.length;
 
+  const effectivePeople = Math.max(peopleBreakdown.adults + peopleBreakdown.children + peopleBreakdown.babies, 1);
   const suggestQuantity = (name: string, category: PackingItem['category']) => {
     if (category === 'clothing') {
-      if (/t[-\s]?shirts?|shirts?/i.test(name)) return Math.max(peopleCount, 1) * Math.max(tripDays, 1);
-      if (/socken/i.test(name)) return Math.max(peopleCount, 1) * Math.max(tripDays, 1);
-      if (/unterw(ä|ae)sche/i.test(name)) return Math.max(peopleCount, 1) * Math.max(tripDays, 1);
-      return Math.max(peopleCount, 1);
+      if (/t[-\s]?shirts?|shirts?/i.test(name)) return effectivePeople * Math.max(tripDays, 1);
+      if (/socken/i.test(name)) return effectivePeople * Math.max(tripDays, 1);
+      if (/unterw(ä|ae)sche/i.test(name)) return effectivePeople * Math.max(tripDays, 1);
+      return effectivePeople;
     }
     return 1;
   };
 
+  const getSuggestionsForCategory = (cat: PackingItem['category']) => {
+    if (cat === 'documents') {
+      return [`Dokumente für ${effectivePeople} Person(en)`];
+    }
+    return defaultSuggestions[cat];
+  };
+
   const handleAddItem = () => {
     if (newItemName.trim()) {
-      const qty = suggestQuantity(newItemName.trim(), newItemCategory);
+      const qty = newItemQty > 0 ? newItemQty : suggestQuantity(newItemName.trim(), newItemCategory);
       onAdd(newItemName.trim(), newItemCategory, qty);
       setNewItemName('');
+      setNewItemQty(1);
     }
   };
 
@@ -131,7 +144,7 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
                 {packingCategoryIcons[cat]} {packingCategoryLabels[cat]}
               </p>
               <div className="flex flex-wrap gap-1">
-                {defaultSuggestions[cat].map((suggestion) => {
+                {getSuggestionsForCategory(cat).map((suggestion) => {
                   const isAdded = items.some((item) => canonicalize(item.name, item.category) === canonicalize(suggestion, cat));
                   return (
                     <button
@@ -157,7 +170,7 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
       )}
 
       {/* Add new item */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <Input
           placeholder="Neuer Gegenstand..."
           value={newItemName}
@@ -177,6 +190,16 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
             ))}
           </SelectContent>
         </Select>
+        <Input
+          type="number"
+          value={String(newItemQty)}
+          onChange={(e) => {
+            const val = Number(e.target.value);
+            setNewItemQty(Number.isNaN(val) ? 1 : Math.max(val, 1));
+          }}
+          className="w-20"
+          placeholder="Anzahl"
+        />
         <Button onClick={handleAddItem} disabled={!newItemName.trim()}>
           <Plus className="h-4 w-4" />
         </Button>
@@ -192,9 +215,9 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
               <p className="text-sm font-medium mb-2 flex items-center gap-2">
                 <span>{packingCategoryIcons[cat]}</span>
                 {packingCategoryLabels[cat]}
-                <Badge variant="secondary" className="text-xs">
-                  {catItems.filter((i) => i.packed).length}/{catItems.length}
-                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  Vorschläge auf Basis der Personenanzahl
+                </span>
               </p>
               <div className="space-y-1">
                 {catItems.map((item) => (
@@ -223,18 +246,6 @@ export const PackingList = ({ items, onToggle, onAdd, onDelete, onChangeQuantity
                         {item.name}
                       </span>
                     </button>
-                    <Input
-                      type="number"
-                      value={typeof item.quantity === 'number' ? String(item.quantity) : ''}
-                      placeholder="Anzahl"
-                      onChange={(e) => {
-                        const val = Number(e.target.value);
-                        if (!Number.isNaN(val) && onChangeQuantity) {
-                          onChangeQuantity(item.id, Math.max(val, 0));
-                        }
-                      }}
-                      className="w-20"
-                    />
                     <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => onDelete(item.id)}>
                       <Trash2 className="h-3 w-3" />
                     </Button>

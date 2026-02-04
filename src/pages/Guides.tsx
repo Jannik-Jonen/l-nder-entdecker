@@ -1,5 +1,8 @@
 import { Header } from '@/components/Header';
 import { inspirationDestinations } from '@/data/mockData';
+import { useEffect, useState } from 'react';
+import { Destination } from '@/types/travel';
+import { fetchDestinationsCatalog } from '@/services/travelData';
 import { Link } from 'react-router-dom';
 import { MapPin, BookOpen, ArrowRight, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,6 +12,19 @@ const Guides = () => {
   const { user } = useAuth();
   const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
+  const [catalog, setCatalog] = useState<Destination[]>([]);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await fetchDestinationsCatalog();
+        setCatalog(Array.isArray(data) ? data : []);
+      } catch {
+        setCatalog([]);
+      }
+    };
+    load();
+  }, []);
+  const sourceList = catalog.length > 0 ? catalog : inspirationDestinations;
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -48,7 +64,7 @@ const Guides = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {inspirationDestinations.map((d) => (
+            {sourceList.map((d) => (
               <div key={d.id} className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all">
                 <div className="relative h-40">
                   <img src={d.imageUrl} alt={d.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"

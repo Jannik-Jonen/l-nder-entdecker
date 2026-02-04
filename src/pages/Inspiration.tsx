@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { inspirationDestinations, defaultTodos } from '@/data/mockData';
@@ -30,7 +30,7 @@ const typeLabels: Record<Destination['type'], string> = {
   region: 'Region',
 };
 
-import { fetchRichDestinationData } from '@/services/travelData';
+import { fetchRichDestinationData, fetchDestinationsCatalog } from '@/services/travelData';
 
 const Inspiration = () => {
   const { user } = useAuth();
@@ -39,6 +39,23 @@ const Inspiration = () => {
   const [planningDestination, setPlanningDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+  const [catalog, setCatalog] = useState<Destination[]>([]);
+  const [catalogLoading, setCatalogLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const load = async () => {
+      setCatalogLoading(true);
+      try {
+        const data = await fetchDestinationsCatalog();
+        setCatalog(Array.isArray(data) ? data : []);
+      } catch {
+        setCatalog([]);
+      } finally {
+        setCatalogLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const handleLocationSelect = async (location: LocationResult) => {
     setIsLoadingDetails(true);
@@ -270,9 +287,10 @@ const Inspiration = () => {
 
  
 
+  const sourceList = catalog.length > 0 ? catalog : inspirationDestinations;
   const filteredDestinations = selectedType === 'all'
-    ? inspirationDestinations
-    : inspirationDestinations.filter((d) => d.type === selectedType);
+    ? sourceList
+    : sourceList.filter((d) => d.type === selectedType);
 
   const types: Array<Destination['type'] | 'all'> = ['all', 'country', 'island', 'city', 'region'];
 
@@ -296,6 +314,17 @@ const Inspiration = () => {
             <p className="text-primary-foreground/80 text-lg max-w-2xl">
               Lass dich von atemberaubenden Destinationen inspirieren und finde dein nächstes Abenteuer
             </p>
+            {catalogLoading && (
+              <div className="mt-2 text-xs text-primary flex items-center gap-2">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                Katalog wird geladen...
+              </div>
+            )}
+            {!catalogLoading && catalog.length === 0 && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Zeige kuratierte Beispiele. Der globale Katalog lädt, sobald verfügbar.
+              </p>
+            )}
           </div>
         </section>
 

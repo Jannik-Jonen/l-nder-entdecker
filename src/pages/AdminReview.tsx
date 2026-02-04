@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { supabaseUntyped } from "@/lib/supabase-untyped";
 import { inspirationDestinations } from "@/data/mockData";
 import { MapPin, Check, X, Sparkles } from "lucide-react";
@@ -31,6 +32,28 @@ const AdminReview = () => {
   const [posts, setPosts] = useState<GuidePostRow[]>([]);
   const [generalPosts, setGeneralPosts] = useState<BlogPostRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [mfaLevel, setMfaLevel] = useState<"aal1" | "aal2" | null>(null);
+  const [mfaChecked, setMfaChecked] = useState(false);
+
+  useEffect(() => {
+    const checkMfa = async () => {
+      if (!isAdmin) return;
+      setMfaChecked(false);
+      try {
+        const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (error || !data?.currentLevel) {
+          setMfaLevel("aal1");
+          return;
+        }
+        setMfaLevel(data.currentLevel === "aal2" ? "aal2" : "aal1");
+      } catch {
+        setMfaLevel("aal1");
+      } finally {
+        setMfaChecked(true);
+      }
+    };
+    checkMfa();
+  }, [isAdmin]);
 
   useEffect(() => {
     const load = async () => {
@@ -60,8 +83,8 @@ const AdminReview = () => {
         setLoading(false);
       }
     };
-    if (isAdmin) load();
-  }, [isAdmin]);
+    if (isAdmin && mfaLevel === "aal2") load();
+  }, [isAdmin, mfaLevel]);
 
   const updateStatus = async (id: string, status: GuidePostRow["status"]) => {
     try {
@@ -106,6 +129,22 @@ const AdminReview = () => {
       </div>
     );
   }
+  if (mfaChecked && mfaLevel !== "aal2") {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container py-20 text-center">
+          <div className="text-xl font-semibold mb-2">Zwei‑Faktor‑Anmeldung erforderlich</div>
+          <div className="text-muted-foreground mb-4">
+            Bitte aktiviere 2FA (TOTP) in deinem Profil und melde dich danach erneut an.
+          </div>
+          <Link to="/profile">
+            <Button variant="secondary">2FA aktivieren</Button>
+          </Link>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -113,6 +152,43 @@ const AdminReview = () => {
       <main className="container py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="font-display text-3xl md:text-4xl font-bold">Beiträge prüfen</h1>
+          <Button variant="secondary" className="gap-2" onClick={async () => {
+            try {
+              const rows = inspirationDestinations.map((d) => ({
+                id: d.id,
+                name: d.name,
+                country: d.country,
+                country_code: d.countryCode || null,
+                type: d.type,
+                image_url: d.imageUrl,
+                description: d.description,
+                highlights: d.highlights,
+                best_season: d.bestSeason,
+                average_daily_cost: d.averageDailyCost,
+                currency: d.currency,
+                visa_info: d.visaInfo || null,
+                vaccination_info: d.vaccinationInfo || null,
+                health_safety_info: d.healthSafetyInfo || null,
+                source: d.source || null,
+                parent_id: d.parentId || null,
+                coords_lat: d.coords?.lat ?? null,
+                coords_lon: d.coords?.lon ?? null,
+                children_count: d.childrenCount ?? null,
+              }));
+              const { error } = await supabaseUntyped
+                .from("destinations")
+                .upsert(rows, { onConflict: "id" });
+              if (error) {
+                toast.error("Destination-Seeding fehlgeschlagen");
+                return;
+              }
+              toast.success("Destinations erfolgreich importiert");
+            } catch {
+              toast.error("Destination-Seeding fehlgeschlagen");
+            }
+          }}>
+            <Sparkles className="h-4 w-4" /> Destinations seeden
+          </Button>
           <Button variant="secondary" className="gap-2" onClick={async () => {
             try {
               const samples = inspirationDestinations.slice(0, 3).map((d, i) => ({

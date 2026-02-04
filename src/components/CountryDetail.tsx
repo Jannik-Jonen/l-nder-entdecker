@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Country, PackingItem, TripStop } from '@/types/travel';
+import { Country, PackingItem, PeopleBreakdown, TripStop } from '@/types/travel';
 import { TodoItemComponent } from './TodoItem';
 import { PackingList } from './PackingList';
 import { Progress } from '@/components/ui/progress';
@@ -76,6 +76,10 @@ const canonicalize = (name: string, category: PackingItem['category']) => {
     }
     if (bestScore <= 2) return best;
   }
+  if (category === 'documents') {
+    if (/^dokumente/.test(n) || /^documents/.test(n)) return 'dokumente';
+    if (/^dokumente(fuer|fur)\d+personen?$/.test(n)) return 'dokumente';
+  }
   return n;
 };
 
@@ -111,6 +115,11 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
   const [eurAmount, setEurAmount] = useState<string>('100');
   const [rate, setRate] = useState<number | null>(null);
   const [converted, setConverted] = useState<number | null>(null);
+  const [people, setPeople] = useState<{ adults: number; children: number; babies: number }>({
+    adults: typeof country.people?.adults === 'number' ? country.people!.adults : (typeof country.peopleCount === 'number' ? country.peopleCount! : 1),
+    children: typeof country.people?.children === 'number' ? country.people!.children : 0,
+    babies: typeof country.people?.babies === 'number' ? country.people!.babies : 0,
+  });
 
   const completedTodos = country.todos.filter((t) => t.completed).length;
   const totalTodos = country.todos.length;
@@ -148,6 +157,43 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
     } catch {
       // ignore
     }
+  };
+
+  const persistPeople = async (next: PeopleBreakdown) => {
+    try {
+      const { data } = await supabase
+        .from('saved_trips')
+        .select('notes')
+        .eq('id', country.id)
+        .limit(1)
+        .maybeSingle();
+      let notes: { [key: string]: unknown; peopleBreakdown?: PeopleBreakdown; peopleCount?: number } = {};
+      try {
+        notes = data?.notes ? (JSON.parse(data.notes as string) as typeof notes) : {};
+      } catch {
+        notes = {};
+      }
+      notes.peopleBreakdown = next;
+      notes.peopleCount = Math.max(1, (next.adults || 0) + (next.children || 0) + (next.babies || 0));
+      const { error } = await supabase
+        .from('saved_trips')
+        .update({ notes: JSON.stringify(notes) })
+        .eq('id', country.id);
+      if (error) throw error;
+    } catch {
+      // ignore
+    }
+  };
+
+  const normalizeDocumentItems = (count: number) => {
+    const next = (packingItems || []).map((item) =>
+      item.category === 'documents'
+        ? { ...item, name: `Dokumente für ${Math.max(1, count)} Person(en)` }
+        : item
+    );
+    const deduped = dedupePackingItems(next);
+    setPackingItems(deduped);
+    persistPackingList(deduped);
   };
 
   const handleTogglePacking = (id: string) => {
@@ -323,7 +369,7 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
       </div>
 
       {/* Countdown & Info cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         {daysUntilTrip > 0 && (
           <div className="rounded-xl gradient-hero p-5 text-primary-foreground">
             <div className="flex items-center gap-3 mb-2">
@@ -365,13 +411,60 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">{rate ? `Kurs: 1 EUR ≈ ${rate} ${country.currency}` : 'Kurs nicht verfügbar'}</p>
               </div>
-              <div>
-                <Label className="text-xs">Flugkosten‑Spanne</Label>
-                <p className="mt-1 text-sm">{flightRange}</p>
-              </div>
+              
             </div>
           </div>
         )}
+        <div className="rounded-xl bg-card p-5 shadow-card">
+          <div className="flex items-center gap-3 mb-2">
+            <Calendar className="h-5 w-5 text-primary" />
+            <h3 className="font-medium">Reisegruppe</h3>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <Label className="text-xs">Erwachsene</Label>
+              <Input
+                type="number"
+                value={String(people.adults)}
+                onChange={(e) => {
+                  const v = Math.max(0, Number(e.target.value) || 0);
+                  const next = { ...people, adults: v };
+                  setPeople(next);
+                  persistPeople(next);
+                  normalizeDocumentItems(Math.max(1, (next.adults || 0) + (next.children || 0) + (next.babies || 0)));
+                }}
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Kinder</Label>
+              <Input
+                type="number"
+                value={String(people.children)}
+                onChange={(e) => {
+                  const v = Math.max(0, Number(e.target.value) || 0);
+                  const next = { ...people, children: v };
+                  setPeople(next);
+                  persistPeople(next);
+                  normalizeDocumentItems(Math.max(1, (next.adults || 0) + (next.children || 0) + (next.babies || 0)));
+                }}
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Babys</Label>
+              <Input
+                type="number"
+                value={String(people.babies)}
+                onChange={(e) => {
+                  const v = Math.max(0, Number(e.target.value) || 0);
+                  const next = { ...people, babies: v };
+                  setPeople(next);
+                  persistPeople(next);
+                  normalizeDocumentItems(Math.max(1, (next.adults || 0) + (next.children || 0) + (next.babies || 0)));
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Progress */}
@@ -578,8 +671,7 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
               onToggle={handleTogglePacking}
               onAdd={handleAddPacking}
               onDelete={handleDeletePacking}
-              onChangeQuantity={handleChangePackingQuantity}
-              peopleCount={country.peopleCount || 1}
+              peopleBreakdown={people}
               tripDays={Math.max(1, differenceInDays(new Date(country.endDate), new Date(country.startDate)))}
             />
           </TabsContent>
