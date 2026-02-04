@@ -35,6 +35,24 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const needsConfirmation = !!authError && /confirm/i.test(authError);
 
   useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const searchParams = new URLSearchParams(window.location.search);
+    const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
+    const type = hashParams.get('type') || searchParams.get('type');
+    const recovery = type === 'recovery' || !!accessToken;
+
+    if (recovery) {
+      if (accessToken && refreshToken) {
+        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+      }
+      setIsRecovery(true);
+      setIsReset(false);
+      setIsLogin(true);
+      setAuthError(null);
+      onOpenChange(true);
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
         setIsRecovery(true);
@@ -158,7 +176,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     setResetLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin,
+        redirectTo: `${window.location.origin}/?type=recovery`,
       });
       if (error) {
         toast.error('Passwort‑Reset fehlgeschlagen: ' + error.message);
