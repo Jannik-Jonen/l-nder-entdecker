@@ -58,6 +58,7 @@ const Profile = () => {
   const [mfaLoading, setMfaLoading] = useState(false);
   const [mfaEnabled, setMfaEnabled] = useState(false);
   const [mfaFactorsLoaded, setMfaFactorsLoaded] = useState(false);
+  const [mfaFactors, setMfaFactors] = useState<{ id: string; status: string }[]>([]);
   const [mfaEnroll, setMfaEnroll] = useState<{ factorId: string; qrCode: string; secret: string } | null>(null);
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const [mfaVerifyCode, setMfaVerifyCode] = useState('');
@@ -68,6 +69,7 @@ const Profile = () => {
       return 'FRA';
     }
   });
+  const hasPendingFactor = mfaFactors.some((factor) => factor.status !== 'verified');
 
   // Fetch profile and trips when user logs in
   
@@ -191,8 +193,10 @@ const Profile = () => {
       const { data, error } = await supabase.auth.mfa.listFactors();
       if (error) {
         setMfaEnabled(false);
+        setMfaFactors([]);
         return;
       }
+      setMfaFactors(data?.totp || []);
       const verified = data?.totp?.some((factor) => factor.status === 'verified') || false;
       setMfaEnabled(verified);
     } finally {
@@ -210,6 +214,7 @@ const Profile = () => {
       setProfile(null);
       setCountries([]);
       setMfaEnabled(false);
+      setMfaFactors([]);
       setMfaEnroll(null);
       setMfaVerifyCode('');
       setMfaChallengeId(null);
@@ -218,11 +223,16 @@ const Profile = () => {
 
   const handleMfaEnroll = async () => {
     if (!user) return;
+    const hasPending = mfaFactors.some((factor) => factor.status !== 'verified');
+    if (hasPending) {
+      toast.error('Es gibt bereits einen unbestätigten TOTP‑Faktor. Bitte zurücksetzen.');
+      return;
+    }
     setMfaLoading(true);
     try {
       const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
       if (error || !data?.id || !data?.totp?.qr_code) {
-        toast.error('TOTP konnte nicht gestartet werden');
+        toast.error('TOTP konnte nicht gestartet werden: ' + (error?.message || 'Unbekannter Fehler'));
         return;
       }
       setMfaEnroll({ factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret });
@@ -230,10 +240,36 @@ const Profile = () => {
         factorId: data.id,
       });
       if (challengeError || !challengeData?.id) {
-        toast.error('MFA-Challenge fehlgeschlagen');
+        toast.error('MFA-Challenge fehlgeschlagen: ' + (challengeError?.message || 'Unbekannter Fehler'));
         return;
       }
       setMfaChallengeId(challengeData.id);
+    } finally {
+      setMfaLoading(false);
+    }
+  };
+
+  const handleMfaReset = async () => {
+    if (!user) return;
+    const pendingFactors = mfaFactors.filter((factor) => factor.status !== 'verified');
+    if (pendingFactors.length === 0) {
+      toast.error('Kein zurücksetzbarer TOTP‑Faktor gefunden.');
+      return;
+    }
+    setMfaLoading(true);
+    try {
+      for (const factor of pendingFactors) {
+        const { error } = await supabase.auth.mfa.unenroll({ factorId: factor.id });
+        if (error) {
+          toast.error('TOTP‑Reset fehlgeschlagen: ' + error.message);
+          return;
+        }
+      }
+      setMfaEnroll(null);
+      setMfaVerifyCode('');
+      setMfaChallengeId(null);
+      await loadMfaFactors();
+      toast.success('TOTP wurde zurückgesetzt.');
     } finally {
       setMfaLoading(false);
     }
@@ -263,7 +299,7 @@ const Profile = () => {
         code: mfaVerifyCode,
       });
       if (error) {
-        toast.error('MFA-Code ungültig');
+        toast.error('MFA-Code ungültig: ' + error.message);
         return;
       }
       toast.success('2FA aktiviert');
@@ -967,10 +1003,18 @@ const Profile = () => {
                       {mfaEnroll ? (
                         <div className="space-y-3">
                           <div className="rounded-lg border bg-background p-3">
-                            <div
-                              className="flex items-center justify-center"
-                              dangerouslySetInnerHTML={{ __html: mfaEnroll.qrCode }}
-                            />
+                            {mfaEnroll.qrCode.trim().startsWith('<svg') ? (
+                              <div
+                                className="flex items-center justify-center"
+                                dangerouslySetInnerHTML={{ __html: mfaEnroll.qrCode }}
+                              />
+                            ) : (
+                              <img
+                                src={mfaEnroll.qrCode}
+                                alt="TOTP QR Code"
+                                className="mx-auto h-48 w-48"
+                              />
+                            )}
                           </div>
                           <div className="text-xs text-muted-foreground break-all">
                             Secret: {mfaEnroll.secret}
@@ -993,10 +1037,29 @@ const Profile = () => {
                           </form>
                         </div>
                       ) : (
-                        <Button variant="outline" onClick={handleMfaEnroll} disabled={mfaLoading}>
-                          {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                          2FA aktivieren
-                        </Button>
+                        <div className="space-y-2">
+                          {hasPendingFactor ? (
+                            <p className="text-sm text-muted-foreground">
+                              Es gibt bereits einen unbestätigten TOTP‑Faktor.
+                            </p>
+                          ) : null}
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              variant="outline"
+                              onClick={handleMfaEnroll}
+                              disabled={mfaLoading || hasPendingFactor}
+                            >
+                              {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                              2FA aktivieren
+                            </Button>
+                            {hasPendingFactor ? (
+                              <Button variant="outline" onClick={handleMfaReset} disabled={mfaLoading}>
+                                {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                TOTP zurücksetzen
+                              </Button>
+                            ) : null}
+                          </div>
+                        </div>
                       )}
                     </>
                   )}

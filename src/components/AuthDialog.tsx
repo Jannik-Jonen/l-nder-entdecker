@@ -25,16 +25,29 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const { signIn, signUp } = useAuth();
 
+  const ensureSupabaseConfig = () => {
+    const url = import.meta.env.VITE_SUPABASE_URL;
+    const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!url || !key) {
+      toast.error('Supabase Konfiguration fehlt. Bitte .env prüfen.');
+      return false;
+    }
+    return true;
+  };
+
   const maybePromptMfa = async () => {
     const { data, error } = await supabase.auth.mfa.listFactors();
-    if (error) return false;
+    if (error) {
+      toast.error('MFA-Status konnte nicht geprüft werden: ' + error.message);
+      return false;
+    }
     const factor = data?.totp?.find((f) => f.status === 'verified') || data?.totp?.[0];
     if (!factor?.id) return false;
     const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
       factorId: factor.id,
     });
     if (challengeError || !challengeData?.id) {
-      toast.error('MFA-Challenge fehlgeschlagen');
+      toast.error('MFA-Challenge fehlgeschlagen: ' + (challengeError?.message || 'Unbekannter Fehler'));
       return false;
     }
     setMfaFactorId(factor.id);
@@ -45,13 +58,17 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!ensureSupabaseConfig()) return;
     setLoading(true);
 
     try {
       if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
-          toast.error('Anmeldung fehlgeschlagen: ' + error.message);
+          const hint = error.message.toLowerCase().includes('invalid login')
+            ? 'E-Mail/Passwort falsch oder E-Mail nicht bestätigt.'
+            : error.message;
+          toast.error('Anmeldung fehlgeschlagen: ' + hint);
         } else {
           const needsMfa = await maybePromptMfa();
           if (!needsMfa) {
@@ -96,7 +113,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
         code: mfaCode,
       });
       if (error) {
-        toast.error('MFA-Code ungültig');
+        toast.error('MFA-Code ungültig: ' + error.message);
         return;
       }
       toast.success('MFA bestätigt');
