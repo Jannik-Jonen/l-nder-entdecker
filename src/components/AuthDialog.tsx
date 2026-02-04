@@ -19,11 +19,14 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
   const [mfaRequired, setMfaRequired] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
   const [mfaFactorId, setMfaFactorId] = useState<string | null>(null);
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const { signIn, signUp } = useAuth();
+  const needsConfirmation = !!authError && /confirm/i.test(authError);
 
   const ensureSupabaseConfig = () => {
     const url = import.meta.env.VITE_SUPABASE_URL;
@@ -59,6 +62,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ensureSupabaseConfig()) return;
+    setAuthError(null);
     setLoading(true);
 
     try {
@@ -68,6 +72,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
           const hint = error.message.toLowerCase().includes('invalid login')
             ? 'E-Mail/Passwort falsch oder E-Mail nicht bestätigt.'
             : error.message;
+          setAuthError(error.message);
           toast.error('Anmeldung fehlgeschlagen: ' + hint);
         } else {
           const needsMfa = await maybePromptMfa();
@@ -81,8 +86,10 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       } else {
         const { error } = await signUp(email, password, displayName);
         if (error) {
+          setAuthError(error.message);
           toast.error('Registrierung fehlgeschlagen: ' + error.message);
         } else {
+          setAuthError(null);
           toast.success('Konto erfolgreich erstellt!');
           const { error: loginError } = await signIn(email, password);
           if (loginError) {
@@ -99,6 +106,25 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendConfirmation = async () => {
+    if (!ensureSupabaseConfig()) return;
+    if (!email) {
+      toast.error('Bitte zuerst eine E‑Mail eingeben.');
+      return;
+    }
+    setResendLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({ type: 'signup', email });
+      if (error) {
+        toast.error('Bestätigungs‑Mail fehlgeschlagen: ' + error.message);
+        return;
+      }
+      toast.success('Bestätigungs‑Mail gesendet');
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -129,6 +155,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     setEmail('');
     setPassword('');
     setDisplayName('');
+    setAuthError(null);
     setMfaRequired(false);
     setMfaCode('');
     setMfaFactorId(null);
@@ -221,6 +248,27 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLogin ? 'Anmelden' : 'Registrieren'}
             </Button>
+            {authError ? (
+              <div className="text-xs text-muted-foreground text-center">
+                {needsConfirmation ? (
+                  <div className="space-y-2">
+                    <div>E‑Mail ist nicht bestätigt. Bestätigungs‑Mail erneut senden?</div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleResendConfirmation}
+                      disabled={resendLoading}
+                    >
+                      {resendLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      Bestätigungs‑Mail senden
+                    </Button>
+                  </div>
+                ) : (
+                  <div>Bitte E‑Mail und Passwort prüfen.</div>
+                )}
+              </div>
+            ) : null}
           </form>
         )}
 
