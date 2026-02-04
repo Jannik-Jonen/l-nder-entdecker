@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,8 +31,15 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, authEvent, clearAuthEvent } = useAuth();
   const needsConfirmation = !!authError && /confirm/i.test(authError);
+  const openRecovery = useCallback(() => {
+    setIsRecovery(true);
+    setIsReset(false);
+    setIsLogin(true);
+    setAuthError(null);
+    onOpenChange(true);
+  }, [onOpenChange]);
 
   useEffect(() => {
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
@@ -42,14 +49,6 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     const type = hashParams.get('type') || searchParams.get('type');
     const code = searchParams.get('code');
     const recovery = type === 'recovery' || !!accessToken || !!code;
-
-    const openRecovery = () => {
-      setIsRecovery(true);
-      setIsReset(false);
-      setIsLogin(true);
-      setAuthError(null);
-      onOpenChange(true);
-    };
 
     if (recovery) {
       if (accessToken && refreshToken) {
@@ -67,15 +66,14 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       }
       openRecovery();
     }
+  }, [openRecovery]);
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        openRecovery();
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [onOpenChange]);
+  useEffect(() => {
+    if (authEvent === 'PASSWORD_RECOVERY') {
+      openRecovery();
+      clearAuthEvent();
+    }
+  }, [authEvent, clearAuthEvent, openRecovery]);
 
   const ensureSupabaseConfig = () => {
     const url = import.meta.env.VITE_SUPABASE_URL;
