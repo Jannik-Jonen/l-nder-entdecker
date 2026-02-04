@@ -40,26 +40,37 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
     const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
     const type = hashParams.get('type') || searchParams.get('type');
-    const recovery = type === 'recovery' || !!accessToken;
+    const code = searchParams.get('code');
+    const recovery = type === 'recovery' || !!accessToken || !!code;
 
-    if (recovery) {
-      if (accessToken && refreshToken) {
-        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
-      }
+    const openRecovery = () => {
       setIsRecovery(true);
       setIsReset(false);
       setIsLogin(true);
       setAuthError(null);
       onOpenChange(true);
+    };
+
+    if (recovery) {
+      if (accessToken && refreshToken) {
+        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken }).then(({ error }) => {
+          if (error) {
+            toast.error('Recovery-Session fehlgeschlagen: ' + error.message);
+          }
+        });
+      } else if (code) {
+        supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+          if (error) {
+            toast.error('Recovery-Code ungültig: ' + error.message);
+          }
+        });
+      }
+      openRecovery();
     }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
-        setIsRecovery(true);
-        setIsReset(false);
-        setIsLogin(true);
-        setAuthError(null);
-        onOpenChange(true);
+        openRecovery();
       }
     });
 
