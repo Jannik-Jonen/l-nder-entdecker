@@ -14,6 +14,181 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          author_id: string
+          content: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          sources: string[] | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          sources?: string[] | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          sources?: string[] | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      destinations: {
+        Row: {
+          average_daily_cost: number | null
+          best_season: string | null
+          children_count: number | null
+          coords_lat: number | null
+          coords_lon: number | null
+          country: string
+          country_code: string | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          health_safety_info: string | null
+          highlights: string[] | null
+          id: string
+          image_url: string | null
+          name: string
+          parent_id: string | null
+          source: string | null
+          type: string
+          updated_at: string
+          vaccination_info: string | null
+          visa_info: string | null
+        }
+        Insert: {
+          average_daily_cost?: number | null
+          best_season?: string | null
+          children_count?: number | null
+          coords_lat?: number | null
+          coords_lon?: number | null
+          country: string
+          country_code?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          health_safety_info?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_url?: string | null
+          name: string
+          parent_id?: string | null
+          source?: string | null
+          type?: string
+          updated_at?: string
+          vaccination_info?: string | null
+          visa_info?: string | null
+        }
+        Update: {
+          average_daily_cost?: number | null
+          best_season?: string | null
+          children_count?: number | null
+          coords_lat?: number | null
+          coords_lon?: number | null
+          country?: string
+          country_code?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          health_safety_info?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          parent_id?: string | null
+          source?: string | null
+          type?: string
+          updated_at?: string
+          vaccination_info?: string | null
+          visa_info?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "destinations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_posts: {
+        Row: {
+          author_id: string
+          content: string | null
+          created_at: string
+          destination_id: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          sources: string[] | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content?: string | null
+          created_at?: string
+          destination_id?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          sources?: string[] | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string | null
+          created_at?: string
+          destination_id?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          sources?: string[] | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_posts_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
