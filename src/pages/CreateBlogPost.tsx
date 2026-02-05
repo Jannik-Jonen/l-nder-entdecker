@@ -47,7 +47,7 @@ const CreateBlogPost = () => {
         image_url: imageUrl,
         tags,
         sources,
-        status: "pending_review",
+        status: "pending",
       });
       if (error) throw error;
       toast.success("Blogartikel erstellt");

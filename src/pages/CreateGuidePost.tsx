@@ -66,7 +66,7 @@ const CreateGuidePost = () => {
         image_url: imageUrl,
         tags,
         sources,
-        status: "pending_review",
+        status: "pending",
       });
       if (error) throw error;
       toast.success("Beitrag erstellt");

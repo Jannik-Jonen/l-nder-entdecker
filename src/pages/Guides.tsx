@@ -79,9 +79,14 @@ const Guides = () => {
                 </Button>
               )}
               {isAdmin && (
-                <Button asChild variant="outline">
-                  <Link to="/admin/review" className="gap-2">Beiträge prüfen</Link>
-                </Button>
+                <>
+                  <Button asChild variant="outline">
+                    <Link to="/admin/destinations" className="gap-2">Destinationen</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link to="/admin/review" className="gap-2">Beiträge prüfen</Link>
+                  </Button>
+                </>
               )}
               <Button asChild variant="ghost">
                 <Link to="/inspiration" className="gap-2">Zur Inspiration <ArrowRight className="h-4 w-4" /></Link>

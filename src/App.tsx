@@ -18,6 +18,7 @@ import CreateBlogPost from "./pages/CreateBlogPost";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import AdminReview from "./pages/AdminReview";
+import AdminDestinations from "./pages/AdminDestinations";
 import AuthCallback from "./pages/AuthCallback";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/guides/posts/:id" element={<GuidePostDetail />} />
               <Route path="/guides/create" element={<CreateGuidePost />} />
               <Route path="/admin/review" element={<AdminReview />} />
+              <Route path="/admin/destinations" element={<AdminDestinations />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/create" element={<CreateBlogPost />} />
               <Route path="/tipps" element={<Tipps />} />
