@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { inspirationDestinations, defaultTodos } from '@/data/mockData';
+import { defaultTodos } from '@/data/mockData';
 import type { PackingItem, TodoItem } from '@/types/travel';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
@@ -287,10 +287,10 @@ const Inspiration = () => {
 
  
 
-  const sourceList = catalog.length > 0 ? catalog : inspirationDestinations;
+  const sourceList = catalog;
   const filteredDestinations = selectedType === 'all'
     ? sourceList
-    : sourceList.filter((d) => d.type === selectedType);
+    : sourceList.filter((d) => d.type === selectedType || (Array.isArray(d.types) && d.types.includes(selectedType)));
 
   const types: Array<Destination['type'] | 'all'> = ['all', 'country', 'island', 'city', 'region'];
 
@@ -322,7 +322,7 @@ const Inspiration = () => {
             )}
             {!catalogLoading && catalog.length === 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
-                Zeige kuratierte Beispiele. Der globale Katalog lädt, sobald verfügbar.
+                Aktuell sind keine Destinationen im Katalog verfügbar.
               </p>
             )}
           </div>
@@ -369,7 +369,9 @@ const Inspiration = () => {
         {/* Destination Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredDestinations.map((destination, index) => {
-            const TypeIcon = typeIcons[destination.type];
+            const typeList = Array.isArray(destination.types) && destination.types.length > 0
+              ? Array.from(new Set([destination.type, ...destination.types]))
+              : [destination.type];
             return (
               <div
                 key={destination.id}
@@ -396,14 +398,20 @@ const Inspiration = () => {
                   {/* stärkerer, dunkler Overlay für bessere Lesbarkeit */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-transparent" />
 
-                <div className="absolute top-3 left-3">
-                  <Badge
-                    variant="secondary"
-                    className="bg-black/75 text-white backdrop-blur-sm ring-1 ring-white/30 shadow-xl px-3 py-1 flex items-center"
-                  >
-                    <TypeIcon className="h-3 w-3 mr-1 text-white" />
-                    {typeLabels[destination.type]}
-                  </Badge>
+                <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+                  {typeList.slice(0, 2).map((type) => {
+                    const TypeIcon = typeIcons[type];
+                    return (
+                      <Badge
+                        key={`${destination.id}-${type}`}
+                        variant="secondary"
+                        className="bg-black/75 text-white backdrop-blur-sm ring-1 ring-white/30 shadow-xl px-3 py-1 flex items-center"
+                      >
+                        <TypeIcon className="h-3 w-3 mr-1 text-white" />
+                        {typeLabels[type]}
+                      </Badge>
+                    );
+                  })}
                 </div>
 
                   <div className="absolute bottom-4 left-4 right-4 text-white drop-shadow-xl">
@@ -424,7 +432,7 @@ const Inspiration = () => {
                     </div>
                     <div className="flex items-center gap-1 font-medium text-primary">
                       <DollarSign className="h-4 w-4" />
-                      <span>~{destination.averageDailyCost}€/Tag</span>
+                      <span>~{destination.averageDailyCost} {destination.currency || 'EUR'}/Tag</span>
                     </div>
                   </div>
                   
@@ -434,6 +442,11 @@ const Inspiration = () => {
             );
           })}
         </div>
+        {!catalogLoading && filteredDestinations.length === 0 && (
+          <div className="mt-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+            Keine passenden Destinationen gefunden.
+          </div>
+        )}
 
         
 

@@ -1,12 +1,16 @@
 import { Header } from '@/components/Header';
-import { inspirationDestinations, travelTips, guidePosts as guidePostsFallback } from '@/data/mockData';
+import { travelTips, guidePosts as guidePostsFallback } from '@/data/mockData';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BookOpen, MapPin, ArrowRight, ListChecks, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
+import { useAuth } from '@/hooks/useAuth';
+import { Destination } from '@/types/travel';
+import { fetchDestinationsCatalog } from '@/services/travelData';
 
 const Blog = () => {
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const destinationId = searchParams.get('destination');
   const postId = searchParams.get('post');
@@ -44,6 +48,7 @@ const Blog = () => {
   const [loading, setLoading] = useState(false);
   const [activeDetail, setActiveDetail] = useState<CombinedPost | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
+  const [catalog, setCatalog] = useState<Destination[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -99,7 +104,21 @@ const Blog = () => {
     load();
   }, []);
 
-  const destination = inspirationDestinations.find((d) => d.id === destinationId || undefined);
+  useEffect(() => {
+    const loadCatalog = async () => {
+      try {
+        const data = await fetchDestinationsCatalog();
+        setCatalog(Array.isArray(data) ? data : []);
+      } catch {
+        setCatalog([]);
+      }
+    };
+    loadCatalog();
+  }, []);
+
+  const destinationCatalog = catalog;
+  const destinationById = useMemo(() => new Map(destinationCatalog.map((d) => [d.id, d])), [destinationCatalog]);
+  const destination = destinationId ? destinationById.get(destinationId) : undefined;
   const filteredPosts = destinationId
     ? posts.filter((p) => p.destination_id === destinationId)
     : posts;
@@ -213,9 +232,7 @@ const Blog = () => {
                   {!!activePost.destination_id && (
                     <div className="flex items-center gap-2 mb-2 text-white/80">
                       <MapPin className="h-4 w-4" />
-                      <span>
-                        {(inspirationDestinations.find((d) => d.id === activePost.destination_id)?.name) || 'Destination'}
-                      </span>
+                      <span>{destinationById.get(activePost.destination_id)?.name || 'Destination'}</span>
                     </div>
                   )}
                   <h2 className="font-display text-2xl font-semibold">{activePost.title}</h2>
@@ -236,7 +253,7 @@ const Blog = () => {
                 <article className="prose prose-slate dark:prose-invert max-w-none">
                   {activeDetail.destination_id && (
                     <p className="text-sm text-muted-foreground">
-                      Verknüpft mit: {(inspirationDestinations.find((d) => d.id === activeDetail.destination_id)?.name) || 'Destination'}
+                      Verknüpft mit: {destinationById.get(activeDetail.destination_id)?.name || 'Destination'}
                     </p>
                   )}
                   <p className="text-muted-foreground">{activeDetail.excerpt}</p>
@@ -268,13 +285,29 @@ const Blog = () => {
         <section className="mb-10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-2xl font-semibold">Guides mit Destination</h2>
-            {destinationId && (
-              <Button variant="ghost" asChild>
-                <Link to="/blog">
-                  Filter zurücksetzen
-                </Link>
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {destinationId && (
+                <Button variant="ghost" asChild>
+                  <Link to="/blog">
+                    Filter zurücksetzen
+                  </Link>
+                </Button>
+              )}
+              {user && (
+                <Button variant="outline" asChild>
+                  <Link to="/guides/create">
+                    Guide-Beitrag erstellen
+                  </Link>
+                </Button>
+              )}
+              {!user && (
+                <Button variant="outline" asChild>
+                  <Link to="/?login=1">
+                    Anmelden zum Schreiben
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPosts.map((p) => (
@@ -298,7 +331,7 @@ const Blog = () => {
                 <div className="p-4">
                   <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     <MapPin className="h-4 w-4" />
-                    <span>{(inspirationDestinations.find((d) => d.id === p.destination_id)?.name) || 'Destination'}</span>
+                    <span>{destinationById.get(p.destination_id)?.name || 'Destination'}</span>
                   </div>
                   <div className="mt-3 flex justify-end">
                     <Button variant="outline" size="sm" className="gap-2" asChild>
@@ -316,9 +349,14 @@ const Blog = () => {
         <section className="mb-10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-2xl font-semibold">Allgemeine Blogartikel</h2>
-            {!destinationId && (
+            {!destinationId && user && (
               <Button variant="ghost" asChild>
                 <Link to="/blog/create">Artikel erstellen</Link>
+              </Button>
+            )}
+            {!destinationId && !user && (
+              <Button variant="ghost" asChild>
+                <Link to="/?login=1">Anmelden zum Schreiben</Link>
               </Button>
             )}
           </div>

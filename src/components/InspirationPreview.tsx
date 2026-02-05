@@ -1,11 +1,24 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { inspirationDestinations } from '@/data/mockData';
+import { useEffect, useState } from 'react';
+import { Destination } from '@/types/travel';
+import { fetchDestinationsCatalog } from '@/services/travelData';
 
 export const InspirationPreview = () => {
-  // Show first 3 destinations as preview
-  const previewDestinations = inspirationDestinations.slice(0, 3);
+  const [catalog, setCatalog] = useState<Destination[]>([]);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await fetchDestinationsCatalog();
+        setCatalog(Array.isArray(data) ? data : []);
+      } catch {
+        setCatalog([]);
+      }
+    };
+    load();
+  }, []);
+  const previewDestinations = catalog.slice(0, 3);
 
   return (
     <section className="py-16 bg-muted/30">
@@ -50,6 +63,11 @@ export const InspirationPreview = () => {
             </Link>
           ))}
         </div>
+        {previewDestinations.length === 0 && (
+          <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+            Aktuell sind keine Inspirationen verfügbar.
+          </div>
+        )}
 
         <div className="mt-8 text-center sm:hidden">
           <Button variant="outline" asChild>

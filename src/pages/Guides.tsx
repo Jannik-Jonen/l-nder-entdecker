@@ -1,5 +1,4 @@
 import { Header } from '@/components/Header';
-import { inspirationDestinations } from '@/data/mockData';
 import { useEffect, useMemo, useState } from 'react';
 import { Destination } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
@@ -14,19 +13,23 @@ const Guides = () => {
   const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   const [catalog, setCatalog] = useState<Destination[]>([]);
+  const [catalogLoading, setCatalogLoading] = useState(false);
   const [currentParentId, setCurrentParentId] = useState<string | null>(null);
   useEffect(() => {
     const load = async () => {
+      setCatalogLoading(true);
       try {
         const data = await fetchDestinationsCatalog();
         setCatalog(Array.isArray(data) ? data : []);
       } catch {
         setCatalog([]);
+      } finally {
+        setCatalogLoading(false);
       }
     };
     load();
   }, []);
-  const sourceList = catalog.length > 0 ? catalog : inspirationDestinations;
+  const sourceList = catalog;
   const [currentPath, setCurrentPath] = useState<Destination[]>([]);
   useEffect(() => {
     if (!currentParentId) {
@@ -87,7 +90,9 @@ const Guides = () => {
           </div>
           <div className="rounded-xl bg-card border border-border p-4 mb-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="text-sm text-muted-foreground">Hierarchisch stöbern</div>
+              <div className="text-sm text-muted-foreground">
+                {catalogLoading ? 'Katalog wird geladen…' : 'Hierarchisch stöbern'}
+              </div>
               {currentParentId && (
                 <Button variant="outline" size="sm" onClick={() => setCurrentParentId(null)}>
                   Zur obersten Ebene
@@ -123,7 +128,7 @@ const Guides = () => {
                   {d.name}
                 </Button>
               ))}
-              {(currentParentId ? visibleList : rootList).length === 0 && (
+              {!catalogLoading && (currentParentId ? visibleList : rootList).length === 0 && (
                 <div className="text-sm text-muted-foreground">Keine Unterziele gefunden</div>
               )}
             </div>
@@ -184,6 +189,11 @@ const Guides = () => {
               </div>
             ))}
           </div>
+          {!catalogLoading && visibleList.length === 0 && (
+            <div className="mt-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+              Keine Ziele im Katalog gefunden.
+            </div>
+          )}
         </section>
 
         <section>
