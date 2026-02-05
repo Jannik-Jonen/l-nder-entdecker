@@ -9,12 +9,22 @@ const SUPABASE_URL = (() => {
   return `https://${raw}`;
 })();
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const isValidHttpUrl = (value: string | undefined) => {
+  if (!value) return false;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
 const FORCE_LOCAL_DB =
   import.meta.env.VITE_LOCAL_DB === 'true' ||
   import.meta.env.VITE_DISABLE_SUPABASE === 'true' ||
   SUPABASE_URL === 'local' ||
   SUPABASE_PUBLISHABLE_KEY === 'local' ||
   !SUPABASE_URL ||
+  !isValidHttpUrl(SUPABASE_URL) ||
   !SUPABASE_PUBLISHABLE_KEY;
 const IS_LOVABLE_HOST = typeof window !== 'undefined' && window.location.hostname.endsWith('lovableproject.com');
 export const isLocalSupabase = FORCE_LOCAL_DB || IS_LOVABLE_HOST;
