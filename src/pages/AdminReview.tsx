@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { isLocalSupabase, supabase } from "@/integrations/supabase/client";
 import { supabaseUntyped } from "@/lib/supabase-untyped";
 import { inspirationDestinations } from "@/data/mockData";
 import { MapPin, Check, X, Sparkles } from "lucide-react";
@@ -34,26 +35,92 @@ const AdminReview = () => {
   const [loading, setLoading] = useState(false);
   const [mfaLevel, setMfaLevel] = useState<"aal1" | "aal2" | null>(null);
   const [mfaChecked, setMfaChecked] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
+  const [mfaRequesting, setMfaRequesting] = useState(false);
+  const [mfaVerifying, setMfaVerifying] = useState(false);
+  const [localCodeHint, setLocalCodeHint] = useState<string | null>(null);
+
+  const refreshMfa = useCallback(async () => {
+    if (!isAdmin) return;
+    setMfaChecked(false);
+    try {
+      const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (error || !data?.currentLevel) {
+        setMfaLevel("aal1");
+        return;
+      }
+      setMfaLevel(data.currentLevel === "aal2" ? "aal2" : "aal1");
+    } catch {
+      setMfaLevel("aal1");
+    } finally {
+      setMfaChecked(true);
+    }
+  }, [isAdmin]);
 
   useEffect(() => {
-    const checkMfa = async () => {
-      if (!isAdmin) return;
-      setMfaChecked(false);
-      try {
-        const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-        if (error || !data?.currentLevel) {
-          setMfaLevel("aal1");
-          return;
-        }
-        setMfaLevel(data.currentLevel === "aal2" ? "aal2" : "aal1");
-      } catch {
-        setMfaLevel("aal1");
-      } finally {
-        setMfaChecked(true);
+    refreshMfa();
+  }, [refreshMfa]);
+
+  const extractLocalCode = (value: unknown) => {
+    if (!value || typeof value !== "object") return null;
+    if (!("code" in value)) return null;
+    const code = (value as Record<string, unknown>).code;
+    return typeof code === "string" ? code : null;
+  };
+
+  const requestLocalMfa = async () => {
+    setMfaRequesting(true);
+    setLocalCodeHint(null);
+    try {
+      const { data, error } = await supabase.auth.mfa.challenge({ factorId: "local" });
+      if (error) {
+        toast.error("2FA‑Code konnte nicht erstellt werden");
+        return;
       }
-    };
-    checkMfa();
-  }, [isAdmin]);
+      if (data && typeof data === "object" && "id" in data) {
+        const id = (data as Record<string, unknown>).id;
+        if (typeof id === "string") setMfaChallengeId(id);
+      }
+      const code = extractLocalCode(data);
+      if (code) {
+        setLocalCodeHint(code);
+        toast.success(`Lokaler 2FA‑Code: ${code}`);
+      }
+    } finally {
+      setMfaRequesting(false);
+    }
+  };
+
+  const verifyLocalMfa = async () => {
+    if (!mfaChallengeId) {
+      toast.error("Bitte zuerst einen Code anfordern");
+      return;
+    }
+    if (!mfaCode.trim()) {
+      toast.error("Bitte den 2FA‑Code eingeben");
+      return;
+    }
+    setMfaVerifying(true);
+    try {
+      const { error } = await supabase.auth.mfa.verify({
+        factorId: "local",
+        challengeId: mfaChallengeId,
+        code: mfaCode.trim(),
+      });
+      if (error) {
+        toast.error("2FA‑Code ungültig");
+        return;
+      }
+      await refreshMfa();
+      setMfaCode("");
+      setMfaChallengeId(null);
+      setLocalCodeHint(null);
+      toast.success("2FA bestätigt");
+    } finally {
+      setMfaVerifying(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -130,6 +197,37 @@ const AdminReview = () => {
     );
   }
   if (mfaChecked && mfaLevel !== "aal2") {
+    if (isLocalSupabase) {
+      return (
+        <div className="min-h-screen bg-background">
+          <Header />
+          <main className="container py-20 text-center">
+            <div className="text-xl font-semibold mb-2">Admin‑2FA erforderlich</div>
+            <div className="text-muted-foreground mb-6">
+              Erstelle einen lokalen 2FA‑Code und bestätige ihn, um fortzufahren.
+            </div>
+            <div className="max-w-sm mx-auto space-y-3">
+              <Input
+                placeholder="6‑stelliger Code"
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value)}
+              />
+              {localCodeHint ? (
+                <div className="text-sm text-muted-foreground">Code: {localCodeHint}</div>
+              ) : null}
+              <div className="flex flex-col gap-2">
+                <Button variant="secondary" onClick={requestLocalMfa} disabled={mfaRequesting}>
+                  Code anfordern
+                </Button>
+                <Button onClick={verifyLocalMfa} disabled={mfaVerifying}>
+                  Code bestätigen
+                </Button>
+              </div>
+            </div>
+          </main>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-background">
         <Header />
