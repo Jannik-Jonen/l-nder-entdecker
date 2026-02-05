@@ -1,18 +1,46 @@
 import { Header } from '@/components/Header';
-import { inspirationDestinations, guidePosts, travelTips } from '@/data/mockData';
+import { guidePosts, travelTips } from '@/data/mockData';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Destination } from '@/types/travel';
+import { getAncestors, getChildren, getDestinationById } from '@/services/travelData';
 import { ArrowLeft, MapPin, Info, ShieldCheck, Syringe, ListChecks, Star, BookOpen, ListChecks as ListIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 const GuideDetail = () => {
   const { id } = useParams();
-  const dest: Destination | undefined = inspirationDestinations.find((d) => d.id === id);
+  const [dest, setDest] = useState<Destination | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [ancestors, setAncestors] = useState<Destination[]>([]);
+  const [children, setChildren] = useState<Destination[]>([]);
   const [searchParams] = useSearchParams();
   const postsRef = useRef<HTMLDivElement | null>(null);
   const tipsRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      if (!id) {
+        setDest(null);
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      const data = await getDestinationById(id);
+      setDest(data);
+      if (data?.id) {
+        const [parentPath, kids] = await Promise.all([getAncestors(data.id), getChildren(data.id)]);
+        setAncestors(parentPath.slice().reverse());
+        setChildren(kids);
+      } else {
+        setAncestors([]);
+        setChildren([]);
+      }
+      setLoading(false);
+    };
+    load();
+  }, [id]);
 
   useEffect(() => {
     const section = searchParams.get('section');
@@ -23,6 +51,17 @@ const GuideDetail = () => {
       tipsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [searchParams]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container py-20 text-center">
+          <div className="text-muted-foreground">Laden…</div>
+        </main>
+      </div>
+    );
+  }
 
   if (!dest) {
     return (
@@ -48,6 +87,30 @@ const GuideDetail = () => {
             Zurück zu den Guides
           </Link>
         </Button>
+
+        {ancestors.length > 1 && (
+          <Breadcrumb className="mb-4">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/guides">Guides</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              {ancestors.map((entry, index) => (
+                <BreadcrumbItem key={entry.id}>
+                  <BreadcrumbSeparator />
+                  {index === ancestors.length - 1 ? (
+                    <BreadcrumbPage>{entry.name}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink asChild>
+                      <Link to={`/guides/${entry.id}`}>{entry.name}</Link>
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
+        )}
 
         <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
           <img
@@ -119,6 +182,22 @@ const GuideDetail = () => {
               Impfungen
             </h2>
             <p className="text-sm text-muted-foreground">{dest.vaccinationInfo}</p>
+          </div>
+        )}
+
+        {children.length > 0 && (
+          <div className="rounded-xl bg-card p-6 shadow-card mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-xl font-semibold">Untergeordnete Ziele</h2>
+              <span className="text-sm text-muted-foreground">{children.length} Orte</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {children.map((child) => (
+                <Button key={child.id} variant="outline" size="sm" asChild>
+                  <Link to={`/guides/${child.id}`}>{child.name}</Link>
+                </Button>
+              ))}
+            </div>
           </div>
         )}
 

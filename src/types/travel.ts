@@ -124,6 +124,7 @@ export interface Destination {
   country: string;
   countryCode?: string;
   type: 'country' | 'island' | 'city' | 'region';
+  types?: Array<'country' | 'island' | 'city' | 'region'>;
   imageUrl: string;
   description: string;
   highlights: string[];

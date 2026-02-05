@@ -1,7 +1,9 @@
 
 import { Destination } from '@/types/travel';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
+import { isLocalSupabase } from '@/integrations/supabase/client';
 import { inspirationDestinations } from '@/data/mockData';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 interface WikiSection {
   toclevel: number;
@@ -164,6 +166,7 @@ type DestinationRow = {
   country: string;
   country_code: string | null;
   type: 'country' | 'island' | 'city' | 'region';
+  types?: Array<'country' | 'island' | 'city' | 'region'> | null;
   image_url: string | null;
   description: string | null;
   highlights: string[] | null;
@@ -182,12 +185,15 @@ type DestinationRow = {
   updated_at?: string;
 };
 
+const fromDestinations = () => supabaseUntyped.from('destinations') as SupabaseClient<DestinationRow>;
+
 const toDestination = (row: DestinationRow): Destination => ({
   id: row.id,
   name: row.name,
   country: row.country,
   countryCode: row.country_code || undefined,
   type: row.type,
+  types: Array.isArray(row.types) ? row.types : undefined,
   imageUrl: row.image_url || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop',
   description: row.description || '',
   highlights: Array.isArray(row.highlights) ? row.highlights : [],
@@ -209,9 +215,30 @@ export const fetchDestinationsCatalog = async (_opts?: {
   search?: string;
 }): Promise<Destination[]> => {
   try {
-    let query = supabaseUntyped
-      .from('destinations')
-      .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+    const columns = isLocalSupabase
+      ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
+      : 'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    if (isLocalSupabase) {
+      const { data, error } = await fromDestinations()
+        .select(columns)
+        .order('name', { ascending: true });
+      if (error) throw error;
+      let rows = (data || []) as DestinationRow[];
+      if (_opts?.type) {
+        rows = rows.filter((row) => row.type === _opts.type || (Array.isArray(row.types) && row.types.includes(_opts.type)));
+      }
+      if (_opts?.countryCode) {
+        const code = _opts.countryCode.toUpperCase();
+        rows = rows.filter((row) => (row.country_code || '').toUpperCase() === code);
+      }
+      if (_opts?.search) {
+        const s = _opts.search.toLowerCase();
+        rows = rows.filter((row) => row.name.toLowerCase().includes(s));
+      }
+      return rows.map(toDestination);
+    }
+    let query = fromDestinations()
+      .select(columns)
       .order('name', { ascending: true });
     if (_opts?.type) query = query.eq('type', _opts.type);
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
@@ -222,7 +249,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
     return rows.map(toDestination);
   } catch {
     let list = inspirationDestinations.slice();
-    if (_opts?.type) list = list.filter((d) => d.type === _opts.type);
+    if (_opts?.type) list = list.filter((d) => d.type === _opts.type || (Array.isArray(d.types) && d.types.includes(_opts.type)));
     if (_opts?.countryCode) list = list.filter((d) => (d.countryCode || '').toUpperCase() === _opts.countryCode?.toUpperCase());
     if (_opts?.search) {
       const s = _opts.search.toLowerCase();
@@ -234,9 +261,11 @@ export const fetchDestinationsCatalog = async (_opts?: {
 
 export const getDestinationById = async (_id: string): Promise<Destination | null> => {
   try {
-    const { data, error } = await supabaseUntyped
-      .from('destinations')
-      .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+    const columns = isLocalSupabase
+      ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
+      : 'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    const { data, error } = await fromDestinations()
+      .select(columns)
       .eq('id', _id)
       .single();
     if (error) throw error;
@@ -250,9 +279,21 @@ export const getDestinationById = async (_id: string): Promise<Destination | nul
 
 export const getChildren = async (_id: string, _type?: Destination['type']): Promise<Destination[]> => {
   try {
-    let query = supabaseUntyped
-      .from('destinations')
-      .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
+    const columns = isLocalSupabase
+      ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
+      : 'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    if (isLocalSupabase) {
+      const { data, error } = await fromDestinations()
+        .select(columns)
+        .eq('parent_id', _id)
+        .order('name', { ascending: true });
+      if (error) throw error;
+      let rows = (data || []) as DestinationRow[];
+      if (_type) rows = rows.filter((row) => row.type === _type || (Array.isArray(row.types) && row.types.includes(_type)));
+      return rows.map(toDestination);
+    }
+    let query = fromDestinations()
+      .select(columns)
       .eq('parent_id', _id)
       .order('name', { ascending: true });
     if (_type) query = query.eq('type', _type);
@@ -262,7 +303,7 @@ export const getChildren = async (_id: string, _type?: Destination['type']): Pro
     return rows.map(toDestination);
   } catch {
     let list = inspirationDestinations.filter((d) => d.parentId === _id);
-    if (_type) list = list.filter((d) => d.type === _type);
+    if (_type) list = list.filter((d) => d.type === _type || (Array.isArray(d.types) && d.types.includes(_type)));
     return list.sort((a, b) => a.name.localeCompare(b.name));
   }
 };
@@ -273,8 +314,7 @@ export const getAncestors = async (_id: string): Promise<Destination[]> => {
     let currentId: string | null = _id;
     for (let i = 0; i < 10; i++) {
       if (!currentId) break;
-      const { data } = await supabaseUntyped
-        .from('destinations')
+      const { data } = await fromDestinations()
         .select('id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count')
         .eq('id', currentId)
         .single();

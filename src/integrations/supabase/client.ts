@@ -169,33 +169,326 @@ const ensureTable = (db: LocalDb, table: string) => {
 
 const allowedTables = new Set(['saved_trips', 'profiles', 'guide_posts', 'blog_posts', 'destinations']);
 
-const seedDestinations = (db: LocalDb) => {
+type RestCountry = {
+  name?: { common?: string };
+  cca2?: string;
+  cca3?: string;
+  region?: string;
+  subregion?: string;
+  capital?: string[];
+  latlng?: number[];
+  capitalInfo?: { latlng?: number[] };
+  flags?: { png?: string; svg?: string };
+  currencies?: Record<string, { name?: string; symbol?: string }>;
+  landlocked?: boolean;
+};
+
+const toSlug = (value: string) => {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+const toKey = (value: string) => toSlug(value || '');
+
+const islandNameSet = new Set([
+  'bahamas',
+  'barbados',
+  'cabo-verde',
+  'cape-verde',
+  'comoros',
+  'cuba',
+  'dominican-republic',
+  'east-timor',
+  'fiji',
+  'grenada',
+  'haiti',
+  'iceland',
+  'indonesia',
+  'ireland',
+  'jamaica',
+  'japan',
+  'kiribati',
+  'maldives',
+  'marshall-islands',
+  'mauritius',
+  'micronesia',
+  'new-zealand',
+  'palau',
+  'papua-new-guinea',
+  'philippines',
+  'saint-kitts-and-nevis',
+  'saint-lucia',
+  'saint-vincent-and-the-grenadines',
+  'samoa',
+  'seychelles',
+  'singapore',
+  'solomon-islands',
+  'sri-lanka',
+  'taiwan',
+  'tonga',
+  'trinidad-and-tobago',
+  'tuvalu',
+  'united-kingdom',
+  'vanuatu',
+]);
+
+const isIslandCountry = (country: RestCountry, name: string) => {
+  const key = toKey(name);
+  if (key.includes('island') || key.includes('islands')) return true;
+  if (country.region && country.region.toLowerCase() === 'oceania') return true;
+  if (islandNameSet.has(key)) return true;
+  return false;
+};
+
+const seedDestinations = async (db: LocalDb) => {
   const rows = ensureTable(db, 'destinations');
-  if (rows.length) return;
+  if (rows.length > 200) return;
   const now = new Date().toISOString();
-  const mapped = inspirationDestinations.map((d) => ({
-    id: d.id,
-    name: d.name,
-    country: d.country,
-    country_code: d.countryCode || null,
-    type: d.type,
-    image_url: d.imageUrl,
-    description: d.description,
-    highlights: d.highlights,
-    best_season: d.bestSeason || null,
-    average_daily_cost: d.averageDailyCost ?? null,
-    currency: d.currency || null,
-    visa_info: d.visaInfo || null,
-    vaccination_info: d.vaccinationInfo || null,
-    health_safety_info: d.healthSafetyInfo || null,
-    source: d.source || null,
-    parent_id: d.parentId || null,
-    coords_lat: d.coords?.lat ?? null,
-    coords_lon: d.coords?.lon ?? null,
-    children_count: d.childrenCount ?? null,
-    created_at: now,
-  }));
-  rows.push(...mapped);
+  const entries: LocalRow[] = [];
+  const entryById = new Map<string, LocalRow>();
+  const regionByName = new Map<string, LocalRow>();
+  const subregionByName = new Map<string, LocalRow>();
+  const countryByName = new Map<string, LocalRow>();
+  const countryByCode = new Map<string, LocalRow>();
+
+  const addEntry = (entry: LocalRow) => {
+    entries.push(entry);
+    entryById.set(entry.id as string, entry);
+    return entry;
+  };
+
+  const ensureRegion = (name: string) => {
+    const key = toKey(name);
+    const existing = regionByName.get(key);
+    if (existing) return existing;
+    const entry = addEntry({
+      id: `region-${key}`,
+      name,
+      country: name,
+      country_code: null,
+      type: 'region',
+      types: ['region'],
+      image_url: null,
+      description: null,
+      highlights: [],
+      best_season: null,
+      average_daily_cost: null,
+      currency: null,
+      visa_info: null,
+      vaccination_info: null,
+      health_safety_info: null,
+      source: 'restcountries',
+      parent_id: null,
+      coords_lat: null,
+      coords_lon: null,
+      children_count: null,
+      created_at: now,
+    });
+    regionByName.set(key, entry);
+    return entry;
+  };
+
+  const ensureSubregion = (region: LocalRow, name: string) => {
+    const key = `${toKey(region.name as string)}-${toKey(name)}`;
+    const existing = subregionByName.get(key);
+    if (existing) return existing;
+    const entry = addEntry({
+      id: `region-${key}`,
+      name,
+      country: region.name,
+      country_code: null,
+      type: 'region',
+      types: ['region'],
+      image_url: null,
+      description: null,
+      highlights: [],
+      best_season: null,
+      average_daily_cost: null,
+      currency: null,
+      visa_info: null,
+      vaccination_info: null,
+      health_safety_info: null,
+      source: 'restcountries',
+      parent_id: region.id,
+      coords_lat: null,
+      coords_lon: null,
+      children_count: null,
+      created_at: now,
+    });
+    subregionByName.set(key, entry);
+    return entry;
+  };
+
+  const ensureUniqueId = (base: string) => {
+    let id = base;
+    let idx = 1;
+    while (entryById.has(id)) {
+      id = `${base}-${idx}`;
+      idx += 1;
+    }
+    return id;
+  };
+
+  try {
+    const resp = await fetch('https://restcountries.com/v3.1/all?fields=name,cca2,cca3,region,subregion,capital,latlng,capitalInfo,currencies,flags,landlocked');
+    if (!resp.ok) throw new Error('restcountries');
+    const list = (await resp.json()) as RestCountry[];
+    list.forEach((country) => {
+      const name = country.name?.common;
+      const cca3 = country.cca3;
+      if (!name || !cca3) return;
+      const regionName = country.region || 'Other';
+      const region = ensureRegion(regionName);
+      const subregion = country.subregion ? ensureSubregion(region, country.subregion) : null;
+      const types = ['country'];
+      if (isIslandCountry(country, name)) types.push('island');
+      const currencyCode = country.currencies ? Object.keys(country.currencies)[0] : null;
+      const countryEntry = addEntry({
+        id: `country-${cca3.toLowerCase()}`,
+        name,
+        country: name,
+        country_code: country.cca2 || null,
+        type: 'country',
+        types,
+        image_url: null,
+        description: null,
+        highlights: [],
+        best_season: null,
+        average_daily_cost: null,
+        currency: currencyCode,
+        visa_info: null,
+        vaccination_info: null,
+        health_safety_info: null,
+        source: 'restcountries',
+        parent_id: (subregion?.id as string) || (region.id as string),
+        coords_lat: country.latlng?.[0] ?? null,
+        coords_lon: country.latlng?.[1] ?? null,
+        children_count: null,
+        created_at: now,
+      });
+      countryByName.set(toKey(name), countryEntry);
+      if (country.cca2) countryByCode.set(country.cca2.toUpperCase(), countryEntry);
+      (country.capital || []).forEach((capital) => {
+        if (!capital) return;
+        const capitalId = ensureUniqueId(`city-${cca3.toLowerCase()}-${toSlug(capital)}`);
+        addEntry({
+          id: capitalId,
+          name: capital,
+          country: name,
+          country_code: country.cca2 || null,
+          type: 'city',
+          types: ['city'],
+          image_url: null,
+          description: null,
+          highlights: [],
+          best_season: null,
+          average_daily_cost: null,
+          currency: currencyCode,
+          visa_info: null,
+          vaccination_info: null,
+          health_safety_info: null,
+          source: 'restcountries',
+          parent_id: countryEntry.id,
+          coords_lat: country.capitalInfo?.latlng?.[0] ?? null,
+          coords_lon: country.capitalInfo?.latlng?.[1] ?? null,
+          children_count: null,
+          created_at: now,
+        });
+      });
+    });
+  } catch {
+    inspirationDestinations.forEach((d) => {
+      addEntry({
+        id: d.id,
+        name: d.name,
+        country: d.country,
+        country_code: d.countryCode || null,
+        type: d.type,
+        types: [d.type],
+        image_url: d.imageUrl,
+        description: d.description,
+        highlights: d.highlights,
+        best_season: d.bestSeason || null,
+        average_daily_cost: d.averageDailyCost ?? null,
+        currency: d.currency || null,
+        visa_info: d.visaInfo || null,
+        vaccination_info: d.vaccinationInfo || null,
+        health_safety_info: d.healthSafetyInfo || null,
+        source: d.source || null,
+        parent_id: d.parentId || null,
+        coords_lat: d.coords?.lat ?? null,
+        coords_lon: d.coords?.lon ?? null,
+        children_count: d.childrenCount ?? null,
+        created_at: now,
+      });
+    });
+  }
+
+  inspirationDestinations.forEach((d) => {
+    const nameKey = toKey(d.name);
+    const isCountryLevel = toKey(d.name) === toKey(d.country);
+    const byName = countryByName.get(nameKey);
+    const byCode = isCountryLevel && d.countryCode ? countryByCode.get(d.countryCode.toUpperCase()) : null;
+    const target = byName || byCode;
+    if (target) {
+      const existingTypes = Array.isArray(target.types) ? target.types.slice() : [];
+      if (!existingTypes.includes(d.type)) existingTypes.push(d.type);
+      target.types = existingTypes;
+      target.image_url = d.imageUrl || target.image_url;
+      target.description = d.description || target.description;
+      target.highlights = d.highlights || target.highlights;
+      target.best_season = d.bestSeason || target.best_season;
+      target.average_daily_cost = d.averageDailyCost ?? target.average_daily_cost;
+      target.currency = d.currency || target.currency;
+      target.visa_info = d.visaInfo || target.visa_info;
+      target.vaccination_info = d.vaccinationInfo || target.vaccination_info;
+      target.health_safety_info = d.healthSafetyInfo || target.health_safety_info;
+      target.source = d.source || target.source;
+      return;
+    }
+    const parentFromCode = d.countryCode ? countryByCode.get(d.countryCode.toUpperCase()) : null;
+    const id = ensureUniqueId(`dest-${toSlug(d.name)}`);
+    addEntry({
+      id,
+      name: d.name,
+      country: d.country,
+      country_code: d.countryCode || null,
+      type: d.type,
+      types: [d.type],
+      image_url: d.imageUrl,
+      description: d.description,
+      highlights: d.highlights,
+      best_season: d.bestSeason || null,
+      average_daily_cost: d.averageDailyCost ?? null,
+      currency: d.currency || null,
+      visa_info: d.visaInfo || null,
+      vaccination_info: d.vaccinationInfo || null,
+      health_safety_info: d.healthSafetyInfo || null,
+      source: d.source || null,
+      parent_id: (parentFromCode?.id as string) || d.parentId || null,
+      coords_lat: d.coords?.lat ?? null,
+      coords_lon: d.coords?.lon ?? null,
+      children_count: d.childrenCount ?? null,
+      created_at: now,
+    });
+  });
+
+  const childCounts = new Map<string, number>();
+  entries.forEach((entry) => {
+    if (!entry.parent_id) return;
+    const count = childCounts.get(entry.parent_id as string) || 0;
+    childCounts.set(entry.parent_id as string, count + 1);
+  });
+  entries.forEach((entry) => {
+    const count = childCounts.get(entry.id as string);
+    if (typeof count === 'number') entry.children_count = count;
+  });
+
+  rows.splice(0, rows.length, ...entries);
   setLocalDb(db);
 };
 
@@ -382,7 +675,7 @@ const localSupabase = {
         return { data: null, error: new Error('Local table not available') };
       }
       const db = getLocalDb();
-      if (table === 'destinations') seedDestinations(db);
+      if (table === 'destinations') await seedDestinations(db);
       const rows = ensureTable(db, table);
       let result: LocalRow[] = rows.slice();
       if (filters.length) result = applyFilters(result);

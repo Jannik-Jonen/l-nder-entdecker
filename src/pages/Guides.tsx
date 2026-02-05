@@ -1,18 +1,20 @@
 import { Header } from '@/components/Header';
 import { inspirationDestinations } from '@/data/mockData';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Destination } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
 import { Link } from 'react-router-dom';
 import { MapPin, BookOpen, ArrowRight, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 const Guides = () => {
   const { user } = useAuth();
   const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
   const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
   const [catalog, setCatalog] = useState<Destination[]>([]);
+  const [currentParentId, setCurrentParentId] = useState<string | null>(null);
   useEffect(() => {
     const load = async () => {
       try {
@@ -25,6 +27,26 @@ const Guides = () => {
     load();
   }, []);
   const sourceList = catalog.length > 0 ? catalog : inspirationDestinations;
+  const [currentPath, setCurrentPath] = useState<Destination[]>([]);
+  useEffect(() => {
+    if (!currentParentId) {
+      setCurrentPath([]);
+      return;
+    }
+    const map = new Map(sourceList.map((d) => [d.id, d]));
+    const path: Destination[] = [];
+    let current = map.get(currentParentId);
+    while (current) {
+      path.unshift(current);
+      current = current.parentId ? map.get(current.parentId) : undefined;
+    }
+    setCurrentPath(path);
+  }, [currentParentId, sourceList]);
+  const rootList = useMemo(() => sourceList.filter((d) => !d.parentId), [sourceList]);
+  const visibleList = useMemo(() => {
+    if (!currentParentId) return rootList;
+    return sourceList.filter((d) => d.parentId === currentParentId);
+  }, [currentParentId, rootList, sourceList]);
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -63,8 +85,51 @@ const Guides = () => {
               </Button>
             </div>
           </div>
+          <div className="rounded-xl bg-card border border-border p-4 mb-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="text-sm text-muted-foreground">Hierarchisch stöbern</div>
+              {currentParentId && (
+                <Button variant="outline" size="sm" onClick={() => setCurrentParentId(null)}>
+                  Zur obersten Ebene
+                </Button>
+              )}
+            </div>
+            {currentPath.length > 0 && (
+              <Breadcrumb className="mt-3">
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <button type="button" onClick={() => setCurrentParentId(null)}>Alle Ziele</button>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  {currentPath.map((entry, index) => (
+                    <BreadcrumbItem key={entry.id}>
+                      <BreadcrumbSeparator />
+                      {index === currentPath.length - 1 ? (
+                        <BreadcrumbPage>{entry.name}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink asChild>
+                          <button type="button" onClick={() => setCurrentParentId(entry.id)}>{entry.name}</button>
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
+            )}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {(currentParentId ? visibleList : rootList).slice(0, 16).map((d) => (
+                <Button key={d.id} variant="outline" size="sm" onClick={() => setCurrentParentId(d.id)}>
+                  {d.name}
+                </Button>
+              ))}
+              {(currentParentId ? visibleList : rootList).length === 0 && (
+                <div className="text-sm text-muted-foreground">Keine Unterziele gefunden</div>
+              )}
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sourceList.map((d) => (
+            {visibleList.map((d) => (
               <div key={d.id} className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all">
                 <div className="relative h-40">
                   <img src={d.imageUrl} alt={d.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"

@@ -1,11 +1,12 @@
 import { Header } from '@/components/Header';
-import { guidePosts, inspirationDestinations } from '@/data/mockData';
+import { guidePosts } from '@/data/mockData';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { useAuth } from '@/hooks/useAuth';
+import { getDestinationById } from '@/services/travelData';
 
 const GuidePostDetail = () => {
   const { id } = useParams();
@@ -34,6 +35,7 @@ const GuidePostDetail = () => {
     sources: [],
   } : null);
   const [loading, setLoading] = useState(!fallback);
+  const [destination, setDestination] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -56,6 +58,17 @@ const GuidePostDetail = () => {
     if (!fallback) load();
   }, [id, fallback]);
 
+  useEffect(() => {
+    const loadDestination = async () => {
+      if (!post?.destination_id) {
+        setDestination(null);
+        return;
+      }
+      const dest = await getDestinationById(post.destination_id);
+      setDestination(dest ? { id: dest.id, name: dest.name } : null);
+    };
+    loadDestination();
+  }, [post?.destination_id]);
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -80,8 +93,6 @@ const GuidePostDetail = () => {
       </div>
     );
   }
-
-  const destination = inspirationDestinations.find((d) => d.id === post.destination_id);
 
   if (post.status && post.status !== 'published' && !isAdmin) {
     return (

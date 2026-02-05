@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useAuth } from "@/hooks/useAuth";
 import { supabaseUntyped } from "@/lib/supabase-untyped";
 import { inspirationDestinations } from "@/data/mockData";
+import { fetchDestinationsCatalog, getDestinationById } from "@/services/travelData";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
@@ -21,8 +22,19 @@ const CreateGuidePost = () => {
   const [sourcesInput, setSourcesInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [templating, setTemplating] = useState(false);
+  const [destOptions, setDestOptions] = useState<{ id: string; name: string }[]>([]);
 
-  const destOptions = inspirationDestinations.map((d) => ({ id: d.id, name: d.name }));
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const catalog = await fetchDestinationsCatalog();
+        setDestOptions(catalog.map((d) => ({ id: d.id, name: d.name })));
+      } catch {
+        setDestOptions(inspirationDestinations.map((d) => ({ id: d.id, name: d.name })));
+      }
+    };
+    load();
+  }, []);
 
   const onSubmit = async () => {
     if (!user) {
@@ -66,14 +78,14 @@ const CreateGuidePost = () => {
     }
   };
 
-  const insertTemplate = () => {
+  const insertTemplate = async () => {
     if (!destinationId) {
       toast.error("Bitte zuerst eine Destination auswählen");
       return;
     }
     setTemplating(true);
     try {
-      const dest = inspirationDestinations.find((d) => d.id === destinationId);
+      const dest = (await getDestinationById(destinationId)) || inspirationDestinations.find((d) => d.id === destinationId);
       const template = [
         `Einleitung`,
         ``,
