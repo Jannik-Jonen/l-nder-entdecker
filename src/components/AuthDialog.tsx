@@ -40,6 +40,20 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     setAuthError(null);
     onOpenChange(true);
   }, [onOpenChange]);
+  const openLogin = useCallback(() => {
+    setIsLogin(true);
+    setIsReset(false);
+    setIsRecovery(false);
+    setAuthError(null);
+    onOpenChange(true);
+  }, [onOpenChange]);
+  const openReset = useCallback(() => {
+    setIsReset(true);
+    setIsRecovery(false);
+    setIsLogin(true);
+    setAuthError(null);
+    onOpenChange(true);
+  }, [onOpenChange]);
 
   useEffect(() => {
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
@@ -47,8 +61,11 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     const accessToken = hashParams.get('access_token') || searchParams.get('access_token');
     const refreshToken = hashParams.get('refresh_token') || searchParams.get('refresh_token');
     const type = hashParams.get('type') || searchParams.get('type');
+    const mode = searchParams.get('mode');
     const code = searchParams.get('code');
     const recovery = type === 'recovery' || !!accessToken || !!code;
+    const reset = searchParams.get('reset') === '1' || mode === 'reset';
+    const login = searchParams.get('login') === '1' || type === 'signup' || type === 'magiclink';
 
     if (recovery) {
       if (accessToken && refreshToken) {
@@ -65,8 +82,12 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
         });
       }
       openRecovery();
+    } else if (reset) {
+      openReset();
+    } else if (login) {
+      openLogin();
     }
-  }, [openRecovery]);
+  }, [openLogin, openRecovery, openReset]);
 
   useEffect(() => {
     if (authEvent === 'PASSWORD_RECOVERY') {
@@ -86,6 +107,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   };
 
   const maybePromptMfa = async () => {
+    return false;
     const { data, error } = await supabase.auth.mfa.listFactors();
     if (error) {
       toast.error('MFA-Status konnte nicht geprüft werden: ' + error.message);
@@ -185,7 +207,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     setResetLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/?type=recovery`,
+        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
       });
       if (error) {
         toast.error('Passwort‑Reset fehlgeschlagen: ' + error.message);

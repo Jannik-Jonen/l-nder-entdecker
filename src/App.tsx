@@ -18,6 +18,7 @@ import CreateBlogPost from "./pages/CreateBlogPost";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import AdminReview from "./pages/AdminReview";
+import AuthCallback from "./pages/AuthCallback";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/blog/create" element={<CreateBlogPost />} />
               <Route path="/tipps" element={<Tipps />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
