@@ -1,32 +1,7 @@
-
 import { Destination } from '@/types/travel';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { isLocalSupabase } from '@/integrations/supabase/client';
 import { inspirationDestinations } from '@/data/mockData';
-import { SupabaseClient } from '@supabase/supabase-js';
-
-interface WikiSection {
-  toclevel: number;
-  level: string;
-  line: string;
-  number: string;
-  index: string;
-  fromtitle: string;
-  byteoffset: number;
-  anchor: string;
-}
-
-interface WikiParseResult {
-  parse: {
-    title: string;
-    pageid: number;
-    text: {
-      '*': string;
-    };
-    sections: WikiSection[];
-    images: string[];
-  };
-}
 
 // Fallback data for costs and currencies if not found in text
 const COUNTRY_DATA: Record<string, { currency: string; cost: number; region: string }> = {
@@ -68,70 +43,6 @@ const cleanWikiText = (html: string): string => {
     .replace(/\[\d+\]/g, '') // Remove citations like [1]
     .replace(/\s+/g, ' ')    // Normalize whitespace
     .trim();
-};
-
-const extractHighlights = (html: string, sections: WikiSection[]): string[] => {
-  // Find "Sehenswürdigkeiten" or "See" section
-  const section = sections.find(s => 
-    s.line.toLowerCase().includes('sehenswürdigkeiten') || 
-    s.line.toLowerCase().includes('see')
-  );
-
-  if (!section) return [];
-
-  // In a real implementation, we would parse the HTML of that specific section.
-  // Since the API returns the full text, we need to find the content between this header and the next.
-  // However, simpler is to just look for list items <li> in the full HTML if we could isolate the section.
-  // But strictly parsing HTML with Regex is fragile. 
-  // Let's try to find the section index and fetch just that section content if needed, 
-  // but for now, let's extract generic bold items or list items from the *whole* text if strictly sectioned?
-  // No, that's too messy.
-  
-  // Better approach: The 'parse' API returns the whole text in `text['*']`. 
-  // We can try to split by the section headers (h2/h3).
-  // But parsing the raw HTML structure is best done by a DOMParser if we were in browser context.
-  // We are in browser context!
-  
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    // Find the header for highlights
-    const headers = Array.from(doc.querySelectorAll('h2, h3'));
-    const targetHeader = headers.find(h => {
-      const text = h.textContent?.toLowerCase() || '';
-      return text.includes('sehenswürdigkeiten') || text.includes('see');
-    });
-
-    if (!targetHeader) return [];
-
-    const highlights: string[] = [];
-    let nextNode = targetHeader.nextElementSibling;
-    
-    // Collect up to 5 highlights from the immediate following list or paragraphs
-    while (nextNode && highlights.length < 5) {
-      if (['H2', 'H3'].includes(nextNode.tagName)) break; // Stop at next section
-      
-      if (nextNode.tagName === 'UL') {
-        const items = Array.from(nextNode.querySelectorAll('li'));
-        for (const item of items) {
-          // Extract the name (usually in bold) or just the first sentence
-          const bold = item.querySelector('b, strong');
-          const text = bold ? bold.textContent : item.textContent?.split('.')[0];
-          if (text && text.length > 3 && text.length < 100) {
-            highlights.push(text.trim());
-            if (highlights.length >= 5) break;
-          }
-        }
-      }
-      nextNode = nextNode.nextElementSibling;
-    }
-    
-    return highlights;
-  } catch (e) {
-    console.error('Error parsing highlights:', e);
-    return [];
-  }
 };
 
 export const fetchRichDestinationData = async (query: string): Promise<Partial<Destination> | null> => {
@@ -185,7 +96,8 @@ type DestinationRow = {
   updated_at?: string;
 };
 
-const fromDestinations = () => supabaseUntyped.from('destinations') as SupabaseClient<DestinationRow>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fromDestinations = (): any => supabaseUntyped.from('destinations');
 
 const toDestination = (row: DestinationRow): Destination => ({
   id: row.id,
