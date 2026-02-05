@@ -106,6 +106,23 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     return true;
   };
 
+  const attemptAutoCreate = async () => {
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        return { ok: false, message: data?.error || 'Registrierung fehlgeschlagen' };
+      }
+      return { ok: true };
+    } catch {
+      return { ok: false, message: 'Registrierung fehlgeschlagen' };
+    }
+  };
+
   const maybePromptMfa = async () => {
     return false;
     const { data, error } = await supabase.auth.mfa.listFactors();
@@ -138,11 +155,32 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
       if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
-          const hint = error.message.toLowerCase().includes('invalid login')
-            ? 'E-Mail/Passwort falsch oder E-Mail nicht bestätigt.'
-            : error.message;
+          const lowered = error.message.toLowerCase();
+          const invalidLogin = lowered.includes('invalid login');
+          if (invalidLogin) {
+            const autoCreate = await attemptAutoCreate();
+            if (autoCreate.ok) {
+              const { error: retryError } = await signIn(email, password);
+              if (!retryError) {
+                const needsMfa = await maybePromptMfa();
+                if (!needsMfa) {
+                  toast.success('Erfolgreich angemeldet!');
+                  onOpenChange(false);
+                  resetForm();
+                  window.location.href = '/';
+                }
+                return;
+              }
+              setAuthError(retryError.message);
+              toast.error('Anmeldung fehlgeschlagen: ' + retryError.message);
+              return;
+            }
+            setAuthError(error.message);
+            toast.error('Anmeldung fehlgeschlagen: ' + autoCreate.message);
+            return;
+          }
           setAuthError(error.message);
-          toast.error('Anmeldung fehlgeschlagen: ' + hint);
+          toast.error('Anmeldung fehlgeschlagen: ' + error.message);
         } else {
           const needsMfa = await maybePromptMfa();
           if (!needsMfa) {
