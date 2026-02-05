@@ -9,14 +9,405 @@ const SUPABASE_URL = (() => {
   return `https://${raw}`;
 })();
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const FORCE_LOCAL_DB =
+  import.meta.env.VITE_LOCAL_DB === 'true' ||
+  import.meta.env.VITE_DISABLE_SUPABASE === 'true' ||
+  SUPABASE_URL === 'local' ||
+  SUPABASE_PUBLISHABLE_KEY === 'local' ||
+  !SUPABASE_URL ||
+  !SUPABASE_PUBLISHABLE_KEY;
+const IS_LOVABLE_HOST = typeof window !== 'undefined' && window.location.hostname.endsWith('lovableproject.com');
+export const isLocalSupabase = FORCE_LOCAL_DB || IS_LOVABLE_HOST;
+
+const LOCAL_DB_KEY = 'local-db';
+const LOCAL_AUTH_USERS_KEY = 'local-auth-users';
+const LOCAL_AUTH_SESSION_KEY = 'local-auth-session';
+
+type LocalDb = Record<string, Record<string, unknown>[]>;
+type LocalUser = {
+  id: string;
+  email: string;
+  password: string;
+  user_metadata?: Record<string, unknown>;
+};
+type LocalSession = {
+  user: {
+    id: string;
+    email: string;
+    user_metadata?: Record<string, unknown>;
+  };
+  access_token: string;
+  refresh_token: string;
+};
+type LocalRow = Record<string, unknown>;
+type LocalQueryResult = { data: unknown; error: Error | null };
+type LocalQueryBuilder = {
+  select: (columns?: string) => LocalQueryBuilder;
+  insert: (data: LocalRow | LocalRow[]) => LocalQueryBuilder;
+  upsert: (data: LocalRow | LocalRow[]) => LocalQueryBuilder;
+  update: (data: LocalRow) => LocalQueryBuilder;
+  delete: () => LocalQueryBuilder;
+  eq: (key: string, value: unknown) => LocalQueryBuilder;
+  ilike: (key: string, value: unknown) => LocalQueryBuilder;
+  order: (key: string, opts?: { ascending?: boolean }) => LocalQueryBuilder;
+  single: () => LocalQueryBuilder;
+  then: (resolve?: (value: LocalQueryResult) => unknown, reject?: (reason: unknown) => unknown) => Promise<unknown>;
+};
+
+const getLocalDb = (): LocalDb => {
+  const raw = localStorage.getItem(LOCAL_DB_KEY);
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw) as LocalDb;
+  } catch {
+    return {};
+  }
+};
+
+const setLocalDb = (db: LocalDb) => {
+  localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(db));
+};
+
+const getUsers = (): LocalUser[] => {
+  const raw = localStorage.getItem(LOCAL_AUTH_USERS_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as LocalUser[];
+  } catch {
+    return [];
+  }
+};
+
+const setUsers = (users: LocalUser[]) => {
+  localStorage.setItem(LOCAL_AUTH_USERS_KEY, JSON.stringify(users));
+};
+
+const getSession = (): LocalSession | null => {
+  const raw = localStorage.getItem(LOCAL_AUTH_SESSION_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as LocalSession;
+  } catch {
+    return null;
+  }
+};
+
+const setSession = (session: LocalSession | null) => {
+  if (!session) {
+    localStorage.removeItem(LOCAL_AUTH_SESSION_KEY);
+    return;
+  }
+  localStorage.setItem(LOCAL_AUTH_SESSION_KEY, JSON.stringify(session));
+};
+
+const createId = () => {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
+const createToken = () => createId();
+
+const authListeners = new Set<(event: string, session: LocalSession | null) => void>();
+
+const emitAuth = (event: string, session: LocalSession | null) => {
+  authListeners.forEach((listener) => listener(event, session));
+};
+
+const ensureTable = (db: LocalDb, table: string) => {
+  if (!db[table]) db[table] = [];
+  return db[table] as Record<string, unknown>[];
+};
+
+const allowedTables = new Set(['saved_trips', 'profiles', 'guide_posts', 'blog_posts']);
+
+const localSupabase = {
+  auth: {
+    onAuthStateChange: (callback: (event: string, session: LocalSession | null) => void) => {
+      authListeners.add(callback);
+      setTimeout(() => {
+        callback('INITIAL_SESSION', getSession());
+      }, 0);
+      return {
+        data: {
+          subscription: {
+            unsubscribe: () => authListeners.delete(callback),
+          },
+        },
+      };
+    },
+    getSession: async () => ({ data: { session: getSession() }, error: null }),
+    signUp: async ({ email, password, options }: { email: string; password: string; options?: { data?: Record<string, unknown> } }) => {
+      const users = getUsers();
+      if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
+        return { data: null, error: new Error('User already registered') };
+      }
+      const user = {
+        id: createId(),
+        email,
+        user_metadata: options?.data || {},
+      };
+      const stored: LocalUser = {
+        id: user.id,
+        email,
+        password,
+        user_metadata: user.user_metadata,
+      };
+      users.push(stored);
+      setUsers(users);
+      if (stored.user_metadata?.display_name) {
+        const db = getLocalDb();
+        const profiles = ensureTable(db, 'profiles');
+        profiles.push({ user_id: stored.id, display_name: stored.user_metadata.display_name });
+        setLocalDb(db);
+      }
+      const session: LocalSession = {
+        user,
+        access_token: createToken(),
+        refresh_token: createToken(),
+      };
+      setSession(session);
+      emitAuth('SIGNED_IN', session);
+      return { data: { user, session }, error: null };
+    },
+    signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
+      const users = getUsers();
+      const found = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+      if (!found || found.password !== password) {
+        return { data: null, error: new Error('Invalid login credentials') };
+      }
+      const user = {
+        id: found.id,
+        email: found.email,
+        user_metadata: found.user_metadata || {},
+      };
+      const session: LocalSession = {
+        user,
+        access_token: createToken(),
+        refresh_token: createToken(),
+      };
+      setSession(session);
+      emitAuth('SIGNED_IN', session);
+      return { data: { user, session }, error: null };
+    },
+    signOut: async () => {
+      setSession(null);
+      emitAuth('SIGNED_OUT', null);
+      return { error: null };
+    },
+    setSession: async (_tokens: { access_token: string; refresh_token: string }) => {
+      return { data: { session: getSession() }, error: null };
+    },
+    exchangeCodeForSession: async (_code: string) => {
+      return { data: { session: getSession() }, error: null };
+    },
+    updateUser: async ({ password, data }: { password?: string; data?: Record<string, unknown> }) => {
+      const session = getSession();
+      if (!session?.user?.id) {
+        return { data: null, error: new Error('No active session') };
+      }
+      const users = getUsers();
+      const idx = users.findIndex((u) => u.id === session.user.id);
+      if (idx === -1) {
+        return { data: null, error: new Error('User not found') };
+      }
+      const updated: LocalUser = {
+        ...users[idx],
+        password: password || users[idx].password,
+        user_metadata: { ...(users[idx].user_metadata || {}), ...(data || {}) },
+      };
+      users[idx] = updated;
+      setUsers(users);
+      const nextSession: LocalSession = {
+        ...session,
+        user: {
+          id: updated.id,
+          email: updated.email,
+          user_metadata: updated.user_metadata || {},
+        },
+      };
+      setSession(nextSession);
+      emitAuth('USER_UPDATED', nextSession);
+      return { data: { user: nextSession.user }, error: null };
+    },
+    resetPasswordForEmail: async (_email: string) => ({ data: {}, error: null }),
+    resend: async (_payload: { type: string; email: string }) => ({ data: {}, error: null }),
+    mfa: {
+      listFactors: async () => ({ data: { totp: [] }, error: null }),
+      challenge: async (_payload: { factorId: string }) => ({ data: null, error: new Error('MFA not supported') }),
+      verify: async (_payload: { factorId: string; challengeId: string; code: string }) => ({ data: null, error: new Error('MFA not supported') }),
+      getAuthenticatorAssuranceLevel: async () => ({ data: { currentLevel: 'aal1' }, error: null }),
+    },
+  },
+  from: (table: string): LocalQueryBuilder => {
+    let action: 'select' | 'insert' | 'update' | 'delete' | 'upsert' = 'select';
+    let payload: LocalRow | LocalRow[] | null = null;
+    let selectColumns: string | null = null;
+    const filters: { key: string; value: unknown; type: 'eq' | 'ilike' }[] = [];
+    let orderBy: { key: string; ascending: boolean } | null = null;
+    let single = false;
+
+    const applyFilters = (rows: Record<string, unknown>[]) => {
+      return rows.filter((row) => {
+        return filters.every((f) => {
+          const value = row[f.key];
+          if (f.type === 'ilike') {
+            const search = String(f.value || '').toLowerCase().replace(/%/g, '');
+            return String(value || '').toLowerCase().includes(search);
+          }
+          return value === f.value;
+        });
+      });
+    };
+
+    const execute = async (): Promise<LocalQueryResult> => {
+      if (!allowedTables.has(table)) {
+        return { data: null, error: new Error('Local table not available') };
+      }
+      const db = getLocalDb();
+      const rows = ensureTable(db, table);
+      let result: LocalRow[] = rows.slice();
+      if (filters.length) result = applyFilters(result);
+
+      if (action === 'select') {
+        if (orderBy) {
+          result.sort((a, b) => {
+            const av = a[orderBy.key];
+            const bv = b[orderBy.key];
+            if (av === bv) return 0;
+            if (av === undefined || av === null) return orderBy.ascending ? 1 : -1;
+            if (bv === undefined || bv === null) return orderBy.ascending ? -1 : 1;
+            return (av > bv ? 1 : -1) * (orderBy.ascending ? 1 : -1);
+          });
+        }
+        if (selectColumns && selectColumns !== '*') {
+          const cols = selectColumns.split(',').map((c) => c.trim());
+          result = result.map((row) => {
+            const picked: Record<string, unknown> = {};
+            cols.forEach((c) => {
+              picked[c] = row[c];
+            });
+            return picked;
+          });
+        }
+        if (single) {
+          return { data: result[0] ?? null, error: null };
+        }
+        return { data: result, error: null };
+      }
+
+      if (action === 'insert') {
+        const toInsert = Array.isArray(payload) ? payload : [payload];
+        const inserted = toInsert.map((row) => ({
+          ...row,
+          id: (row as LocalRow)?.id || createId(),
+          created_at: (row as LocalRow)?.created_at || new Date().toISOString(),
+        }));
+        rows.unshift(...inserted);
+        setLocalDb(db);
+        return { data: inserted, error: null };
+      }
+
+      if (action === 'upsert') {
+        const toUpsert = Array.isArray(payload) ? payload : [payload];
+        const updated: LocalRow[] = [];
+        toUpsert.forEach((row) => {
+          const id = (row as LocalRow)?.id || createId();
+          const idx = rows.findIndex((r) => r.id === id);
+          const next: LocalRow = { ...(rows[idx] || {}), ...(row as LocalRow), id };
+          if (idx === -1) {
+            rows.unshift({ ...next, created_at: next.created_at || new Date().toISOString() });
+          } else {
+            rows[idx] = next;
+          }
+          updated.push(next);
+        });
+        setLocalDb(db);
+        return { data: updated, error: null };
+      }
+
+      if (action === 'update') {
+        const updated: Record<string, unknown>[] = [];
+        rows.forEach((row, idx) => {
+          if (applyFilters([row]).length) {
+            const next = { ...row, ...(payload as LocalRow) };
+            rows[idx] = next;
+            updated.push(next);
+          }
+        });
+        setLocalDb(db);
+        return { data: updated, error: null };
+      }
+
+      if (action === 'delete') {
+        const remaining = rows.filter((row) => !applyFilters([row]).length);
+        const deleted = rows.filter((row) => applyFilters([row]).length);
+        db[table] = remaining;
+        setLocalDb(db);
+        return { data: deleted, error: null };
+      }
+
+      return { data: null, error: null };
+    };
+
+    const builder: LocalQueryBuilder = {
+      select: (columns?: string) => {
+        action = 'select';
+        selectColumns = columns || '*';
+        return builder;
+      },
+      insert: (data: LocalRow | LocalRow[]) => {
+        action = 'insert';
+        payload = data;
+        return builder;
+      },
+      upsert: (data: LocalRow | LocalRow[]) => {
+        action = 'upsert';
+        payload = data;
+        return builder;
+      },
+      update: (data: LocalRow) => {
+        action = 'update';
+        payload = data;
+        return builder;
+      },
+      delete: () => {
+        action = 'delete';
+        return builder;
+      },
+      eq: (key: string, value: unknown) => {
+        filters.push({ key, value, type: 'eq' });
+        return builder;
+      },
+      ilike: (key: string, value: unknown) => {
+        filters.push({ key, value, type: 'ilike' });
+        return builder;
+      },
+      order: (key: string, opts?: { ascending?: boolean }) => {
+        orderBy = { key, ascending: opts?.ascending !== false };
+        return builder;
+      },
+      single: () => {
+        single = true;
+        return builder;
+      },
+      then: (resolve, reject) => execute().then(resolve, reject),
+    };
+
+    return builder;
+  },
+};
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+export const supabase = (isLocalSupabase
+  ? (localSupabase as unknown as ReturnType<typeof createClient<Database>>)
+  : createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: {
+        storage: localStorage,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    })) as ReturnType<typeof createClient<Database>>;

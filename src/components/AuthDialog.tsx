@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { isLocalSupabase, supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, Mail, Lock, User } from 'lucide-react';
 
@@ -97,6 +97,7 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   }, [authEvent, clearAuthEvent, openRecovery]);
 
   const ensureSupabaseConfig = () => {
+    if (isLocalSupabase) return true;
     const url = import.meta.env.VITE_SUPABASE_URL;
     const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     if (!url || !key) {
@@ -107,6 +108,13 @@ export const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   };
 
   const attemptAutoCreate = async () => {
+    if (isLocalSupabase) {
+      const { error } = await signUp(email, password, displayName || undefined);
+      if (error) {
+        return { ok: false, message: error.message };
+      }
+      return { ok: true };
+    }
     try {
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
