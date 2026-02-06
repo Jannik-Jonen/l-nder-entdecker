@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit2, Trash2, MapPin, Globe, Palmtree, Building2, Mountain, Save, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, MapPin, Globe, Palmtree, Building2, Mountain, Save, X, Loader2 } from 'lucide-react';
 import { Destination } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
 
@@ -42,6 +44,8 @@ type DestinationFormData = {
   vaccination_info: string;
   health_safety_info: string;
   parent_id: string;
+  coords_lat: string;
+  coords_lon: string;
 };
 
 const emptyForm: DestinationFormData = {
@@ -59,13 +63,15 @@ const emptyForm: DestinationFormData = {
   vaccination_info: '',
   health_safety_info: '',
   parent_id: '',
+  coords_lat: '',
+  coords_lon: '',
 };
 
 const AdminDestinations = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'jannik.jonen@gmail.com';
-  const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingRole, setCheckingRole] = useState(true);
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,6 +79,31 @@ const AdminDestinations = () => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<DestinationFormData>(emptyForm);
   const [saving, setSaving] = useState(false);
+
+  // Check admin role from database
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        setCheckingRole(false);
+        return;
+      }
+      try {
+        const { data, error } = await supabase.rpc('has_role', {
+          _user_id: user.id,
+          _role: 'admin'
+        });
+        if (error) throw error;
+        setIsAdmin(data === true);
+      } catch (e) {
+        console.error('Error checking admin role:', e);
+        setIsAdmin(false);
+      } finally {
+        setCheckingRole(false);
+      }
+    };
+    checkAdminRole();
+  }, [user]);
 
   useEffect(() => {
     loadDestinations();
@@ -106,6 +137,8 @@ const AdminDestinations = () => {
       vaccination_info: dest.vaccinationInfo || '',
       health_safety_info: dest.healthSafetyInfo || '',
       parent_id: dest.parentId || '',
+      coords_lat: dest.coords?.lat?.toString() || '',
+      coords_lon: dest.coords?.lon?.toString() || '',
     });
     setEditingId(dest.id);
     setShowForm(true);
@@ -151,6 +184,8 @@ const AdminDestinations = () => {
         vaccination_info: form.vaccination_info.trim() || null,
         health_safety_info: form.health_safety_info.trim() || null,
         parent_id: form.parent_id || null,
+        coords_lat: form.coords_lat ? parseFloat(form.coords_lat) : null,
+        coords_lon: form.coords_lon ? parseFloat(form.coords_lon) : null,
       };
 
       if (editingId) {
@@ -188,6 +223,20 @@ const AdminDestinations = () => {
       toast.error('Löschen fehlgeschlagen');
     }
   };
+
+  if (checkingRole) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container py-8 flex items-center justify-center">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Loader2 className="h-5 w-5 animate-spin" />
+            <span>Berechtigungen werden geprüft...</span>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return (
@@ -381,6 +430,26 @@ const AdminDestinations = () => {
                     value={form.health_safety_info}
                     onChange={(e) => setForm((f) => ({ ...f, health_safety_info: e.target.value }))}
                     placeholder="z.B. Leitungswasser nicht trinkbar"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Breitengrad (Lat)</label>
+                  <Input
+                    type="number"
+                    step="any"
+                    value={form.coords_lat}
+                    onChange={(e) => setForm((f) => ({ ...f, coords_lat: e.target.value }))}
+                    placeholder="z.B. 13.7563"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Längengrad (Lon)</label>
+                  <Input
+                    type="number"
+                    step="any"
+                    value={form.coords_lon}
+                    onChange={(e) => setForm((f) => ({ ...f, coords_lon: e.target.value }))}
+                    placeholder="z.B. 100.5018"
                   />
                 </div>
               </div>
