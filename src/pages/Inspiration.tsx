@@ -11,9 +11,9 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { LocationSearch, LocationResult } from '@/components/LocationSearch';
 import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 
 const typeIcons: Record<Destination['type'], React.ElementType> = {
@@ -30,7 +30,7 @@ const typeLabels: Record<Destination['type'], string> = {
   region: 'Region',
 };
 
-import { fetchRichDestinationData, fetchDestinationsCatalog } from '@/services/travelData';
+import { fetchDestinationsCatalog } from '@/services/travelData';
 
 const Inspiration = () => {
   const { user } = useAuth();
@@ -38,9 +38,9 @@ const Inspiration = () => {
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [planningDestination, setPlanningDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [catalog, setCatalog] = useState<Destination[]>([]);
   const [catalogLoading, setCatalogLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -57,57 +57,16 @@ const Inspiration = () => {
     load();
   }, []);
 
-  const handleLocationSelect = async (location: LocationResult) => {
-    setIsLoadingDetails(true);
-    
-    // Map Nominatim type to our type
-    let destType: Destination['type'] = 'city';
-    const typeMap: Record<string, Destination['type']> = {
-      'city': 'city',
-      'town': 'city',
-      'village': 'city',
-      'administrative': 'region',
-      'country': 'country',
-      'island': 'island',
-      'archipelago': 'island'
-    };
-
-    if (typeMap[location.type]) {
-      destType = typeMap[location.type];
-    } else if (location.type === 'administrative') {
-      destType = 'region';
-    }
-
-    try {
-      // Fetch rich data from Wikivoyage (LP alternative) and other sources
-      const richData = await fetchRichDestinationData(location.name + (location.countryCode ? ` ${location.displayName.split(',').pop()}` : ''));
-      
-      const customDestination: Destination = {
-        id: `custom-${Date.now()}`,
-        name: location.name,
-        country: location.displayName.split(',').slice(1).join(',').trim() || location.countryCode,
-        countryCode: location.countryCode,
-        description: richData?.description || `Keine Beschreibung verfügbar.`,
-        imageUrl: richData?.imageUrl || 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80',
-        averageDailyCost: richData?.averageDailyCost || 100,
-        bestSeason: richData?.bestSeason || 'Ganzjährig',
-        type: destType,
-        currency: richData?.currency || 'EUR',
-        highlights: richData?.highlights || [],
-        visaInfo: richData?.visaInfo,
-        vaccinationInfo: richData?.vaccinationInfo,
-        healthSafetyInfo: richData?.healthSafetyInfo,
-        source: 'Lonely Planet • TripAdvisor • Numbeo'
-      };
-
-      setSelectedDestination(customDestination);
-    } catch (error) {
-      console.error('Failed to fetch destination details:', error);
-      toast.error('Fehler beim Laden der Details.');
-    } finally {
-      setIsLoadingDetails(false);
-    }
-  };
+  // Filter destinations based on search query from the database
+  const searchFilteredDestinations = React.useMemo(() => {
+    if (!searchQuery.trim()) return catalog;
+    const query = searchQuery.toLowerCase();
+    return catalog.filter((d) => 
+      d.name.toLowerCase().includes(query) || 
+      d.country.toLowerCase().includes(query) ||
+      (d.description && d.description.toLowerCase().includes(query))
+    );
+  }, [catalog, searchQuery]);
 
   const startPlanningTrip = (destination: Destination) => {
     setPlanningDestination(destination);
@@ -287,10 +246,9 @@ const Inspiration = () => {
 
  
 
-  const sourceList = catalog;
   const filteredDestinations = selectedType === 'all'
-    ? sourceList
-    : sourceList.filter((d) => d.type === selectedType || (Array.isArray(d.types) && d.types.includes(selectedType)));
+    ? searchFilteredDestinations
+    : searchFilteredDestinations.filter((d) => d.type === selectedType || (Array.isArray(d.types) && d.types.includes(selectedType)));
 
   const types: Array<Destination['type'] | 'all'> = ['all', 'country', 'island', 'city', 'region'];
 
@@ -332,15 +290,23 @@ const Inspiration = () => {
         <div className="mb-8 max-w-2xl mx-auto">
           <div className="bg-card p-4 rounded-xl shadow-sm border border-border">
              <div className="flex items-center justify-between mb-2">
-               <h3 className="text-sm font-medium text-muted-foreground">Wunschziel nicht dabei? Suche weltweit:</h3>
-               {isLoadingDetails && (
-                  <div className="flex items-center gap-2 text-xs text-primary animate-pulse">
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                    Lade Infos & Bilder...
-                  </div>
-               )}
+               <h3 className="text-sm font-medium text-muted-foreground">Suche nach Destinationen in der Datenbank:</h3>
              </div>
-             <LocationSearch onSelect={handleLocationSelect} />
+             <div className="relative">
+               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+               <Input
+                 type="text"
+                 placeholder="Land, Stadt, Insel oder Region eingeben..."
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="pl-10 h-12"
+               />
+             </div>
+             {searchQuery && searchFilteredDestinations.length === 0 && !catalogLoading && (
+               <p className="mt-2 text-sm text-muted-foreground">
+                 Keine Treffer gefunden. <Link to="/admin/destinations" className="text-primary underline">Neue Destination anlegen?</Link>
+               </p>
+             )}
           </div>
         </div>
 
