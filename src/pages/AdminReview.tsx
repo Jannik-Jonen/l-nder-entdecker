@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { isLocalSupabase, supabase } from "@/integrations/supabase/client";
 import { supabaseUntyped } from "@/lib/supabase-untyped";
 import { inspirationDestinations } from "@/data/mockData";
+import { Destination } from "@/types/travel";
 import { MapPin, Check, X, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -24,6 +25,571 @@ type BlogPostRow = {
   excerpt: string;
   image_url: string;
   status: "draft" | "pending_review" | "published" | "rejected";
+};
+
+type RestCountry = {
+  name?: { common?: string };
+  cca2?: string;
+  cca3?: string;
+  region?: string;
+  subregion?: string;
+  capital?: string[];
+  latlng?: number[];
+  capitalInfo?: { latlng?: number[] };
+  currencies?: Record<string, { name?: string; symbol?: string }>;
+  landlocked?: boolean;
+};
+
+const toSlug = (value: string) => {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
+
+const toKey = (value: string) => toSlug(value || "");
+
+const islandNameSet = new Set([
+  "bahamas",
+  "barbados",
+  "cabo-verde",
+  "cape-verde",
+  "comoros",
+  "cuba",
+  "dominican-republic",
+  "east-timor",
+  "fiji",
+  "grenada",
+  "haiti",
+  "iceland",
+  "indonesia",
+  "ireland",
+  "jamaica",
+  "japan",
+  "kiribati",
+  "maldives",
+  "marshall-islands",
+  "mauritius",
+  "micronesia",
+  "new-zealand",
+  "palau",
+  "papua-new-guinea",
+  "philippines",
+  "saint-kitts-and-nevis",
+  "saint-lucia",
+  "saint-vincent-and-the-grenadines",
+  "samoa",
+  "seychelles",
+  "singapore",
+  "solomon-islands",
+  "sri-lanka",
+  "taiwan",
+  "tonga",
+  "trinidad-and-tobago",
+  "tuvalu",
+  "united-kingdom",
+  "vanuatu",
+]);
+
+const isIslandCountry = (country: RestCountry, name: string) => {
+  const key = toKey(name);
+  if (key.includes("island") || key.includes("islands")) return true;
+  if (country.region && country.region.toLowerCase() === "oceania") return true;
+  if (islandNameSet.has(key)) return true;
+  return false;
+};
+
+const defaultDestinationImage = "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop";
+
+const extraDestinations: Destination[] = [
+  {
+    id: "island-zakynthos",
+    name: "Zakynthos",
+    country: "Griechenland",
+    countryCode: "GR",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Navagio Beach", "Blaue Grotten", "Buchten"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 110,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-grc",
+    coords: { lat: 37.787, lon: 20.899 },
+  },
+  {
+    id: "island-santorini",
+    name: "Santorin",
+    country: "Griechenland",
+    countryCode: "GR",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Caldera", "Sonnenuntergänge", "Strände"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 140,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-grc",
+    coords: { lat: 36.393, lon: 25.461 },
+  },
+  {
+    id: "island-mykonos",
+    name: "Mykonos",
+    country: "Griechenland",
+    countryCode: "GR",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Windmühlen", "Strände", "Altstadt"],
+    bestSeason: "Mai bis September",
+    averageDailyCost: 160,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-grc",
+    coords: { lat: 37.446, lon: 25.328 },
+  },
+  {
+    id: "island-crete",
+    name: "Kreta",
+    country: "Griechenland",
+    countryCode: "GR",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Schluchten", "Strände", "Paläste"],
+    bestSeason: "April bis Oktober",
+    averageDailyCost: 120,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-grc",
+    coords: { lat: 35.24, lon: 24.809 },
+  },
+  {
+    id: "island-rhodes",
+    name: "Rhodos",
+    country: "Griechenland",
+    countryCode: "GR",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Altstadt", "Strände", "Buchten"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 115,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-grc",
+    coords: { lat: 36.434, lon: 28.217 },
+  },
+  {
+    id: "island-corfu",
+    name: "Korfu",
+    country: "Griechenland",
+    countryCode: "GR",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Buchten", "Altstadt", "Olivenhaine"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 110,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-grc",
+    coords: { lat: 39.624, lon: 19.922 },
+  },
+  {
+    id: "island-mallorca",
+    name: "Mallorca",
+    country: "Spanien",
+    countryCode: "ES",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Serra de Tramuntana", "Strände", "Palma"],
+    bestSeason: "April bis Oktober",
+    averageDailyCost: 130,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-esp",
+    coords: { lat: 39.613, lon: 2.882 },
+  },
+  {
+    id: "island-meno",
+    name: "Mallorca",
+    country: "Spanien",
+    countryCode: "ES",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Serra de Tramuntana", "Strände", "Palma"],
+    bestSeason: "April bis Oktober",
+    averageDailyCost: 130,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-esp",
+    coords: { lat: 39.613, lon: 2.882 },
+  },
+  {
+    id: "island-ibiza",
+    name: "Ibiza",
+    country: "Spanien",
+    countryCode: "ES",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Cala-Strände", "Altstadt", "Sonnenuntergänge"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 150,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-esp",
+    coords: { lat: 38.906, lon: 1.42 },
+  },
+  {
+    id: "island-sicily",
+    name: "Sizilien",
+    country: "Italien",
+    countryCode: "IT",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Ätna", "Küsten", "Barockstädte"],
+    bestSeason: "April bis Oktober",
+    averageDailyCost: 125,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-ita",
+    coords: { lat: 37.599, lon: 14.015 },
+  },
+  {
+    id: "island-sardinia",
+    name: "Sardinien",
+    country: "Italien",
+    countryCode: "IT",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Costa Smeralda", "Strände", "Buchten"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 130,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-ita",
+    coords: { lat: 40.12, lon: 9.012 },
+  },
+  {
+    id: "island-madeira",
+    name: "Madeira",
+    country: "Portugal",
+    countryCode: "PT",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Levadas", "Klifflandschaften", "Gärten"],
+    bestSeason: "Ganzjährig",
+    averageDailyCost: 110,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-prt",
+    coords: { lat: 32.76, lon: -16.959 },
+  },
+  {
+    id: "island-azores",
+    name: "Azoren",
+    country: "Portugal",
+    countryCode: "PT",
+    type: "island",
+    types: ["island"],
+    imageUrl: defaultDestinationImage,
+    description: "",
+    highlights: ["Kraterseen", "Wale", "Wandern"],
+    bestSeason: "Mai bis Oktober",
+    averageDailyCost: 105,
+    currency: "EUR",
+    source: "curated",
+    parentId: "country-prt",
+    coords: { lat: 37.742, lon: -25.675 },
+  },
+];
+
+const curatedDestinations = [...inspirationDestinations, ...extraDestinations];
+
+type SeedDestinationRow = {
+  id: string;
+  name: string;
+  country: string;
+  country_code: string | null;
+  type: "country" | "island" | "city" | "region";
+  types: Array<"country" | "island" | "city" | "region">;
+  image_url: string | null;
+  description: string | null;
+  highlights: string[] | null;
+  best_season: string | null;
+  average_daily_cost: number | null;
+  currency: string | null;
+  visa_info: string | null;
+  vaccination_info: string | null;
+  health_safety_info: string | null;
+  source: string | null;
+  parent_id: string | null;
+  coords_lat: number | null;
+  coords_lon: number | null;
+  children_count: number | null;
+};
+
+const buildDestinationSeedRows = async () => {
+  const entries: SeedDestinationRow[] = [];
+  const entryById = new Map<string, SeedDestinationRow>();
+  const regionByName = new Map<string, SeedDestinationRow>();
+  const subregionByName = new Map<string, SeedDestinationRow>();
+  const countryByName = new Map<string, SeedDestinationRow>();
+  const countryByCode = new Map<string, SeedDestinationRow>();
+
+  const addEntry = (entry: SeedDestinationRow) => {
+    entries.push(entry);
+    entryById.set(entry.id, entry);
+    return entry;
+  };
+
+  const ensureRegion = (name: string) => {
+    const key = toKey(name);
+    const existing = regionByName.get(key);
+    if (existing) return existing;
+    const entry = addEntry({
+      id: `region-${key}`,
+      name,
+      country: name,
+      country_code: null,
+      type: "region",
+      types: ["region"],
+      image_url: null,
+      description: null,
+      highlights: [],
+      best_season: null,
+      average_daily_cost: null,
+      currency: null,
+      visa_info: null,
+      vaccination_info: null,
+      health_safety_info: null,
+      source: "restcountries",
+      parent_id: null,
+      coords_lat: null,
+      coords_lon: null,
+      children_count: null,
+    });
+    regionByName.set(key, entry);
+    return entry;
+  };
+
+  const ensureSubregion = (region: SeedDestinationRow, name: string) => {
+    const key = `${toKey(region.name)}-${toKey(name)}`;
+    const existing = subregionByName.get(key);
+    if (existing) return existing;
+    const entry = addEntry({
+      id: `region-${key}`,
+      name,
+      country: region.name,
+      country_code: null,
+      type: "region",
+      types: ["region"],
+      image_url: null,
+      description: null,
+      highlights: [],
+      best_season: null,
+      average_daily_cost: null,
+      currency: null,
+      visa_info: null,
+      vaccination_info: null,
+      health_safety_info: null,
+      source: "restcountries",
+      parent_id: region.id,
+      coords_lat: null,
+      coords_lon: null,
+      children_count: null,
+    });
+    subregionByName.set(key, entry);
+    return entry;
+  };
+
+  const ensureUniqueId = (base: string) => {
+    let id = base;
+    let idx = 1;
+    while (entryById.has(id)) {
+      id = `${base}-${idx}`;
+      idx += 1;
+    }
+    return id;
+  };
+
+  try {
+    const resp = await fetch("https://restcountries.com/v3.1/all?fields=name,cca2,cca3,region,subregion,capital,latlng,capitalInfo,currencies,landlocked");
+    if (!resp.ok) throw new Error("restcountries");
+    const list = (await resp.json()) as RestCountry[];
+    list.forEach((country) => {
+      const name = country.name?.common;
+      const cca3 = country.cca3;
+      if (!name || !cca3) return;
+      const regionName = country.region || "Other";
+      const region = ensureRegion(regionName);
+      const subregion = country.subregion ? ensureSubregion(region, country.subregion) : null;
+      const types: Array<"country" | "island" | "city" | "region"> = ["country"];
+      if (isIslandCountry(country, name)) types.push("island");
+      const currencyCode = country.currencies ? Object.keys(country.currencies)[0] : null;
+      const countryEntry = addEntry({
+        id: `country-${cca3.toLowerCase()}`,
+        name,
+        country: name,
+        country_code: country.cca2 || null,
+        type: "country",
+        types,
+        image_url: null,
+        description: null,
+        highlights: [],
+        best_season: null,
+        average_daily_cost: null,
+        currency: currencyCode,
+        visa_info: null,
+        vaccination_info: null,
+        health_safety_info: null,
+        source: "restcountries",
+        parent_id: subregion?.id || region.id,
+        coords_lat: country.latlng?.[0] ?? null,
+        coords_lon: country.latlng?.[1] ?? null,
+        children_count: null,
+      });
+      countryByName.set(toKey(name), countryEntry);
+      if (country.cca2) countryByCode.set(country.cca2.toUpperCase(), countryEntry);
+      (country.capital || []).forEach((capital) => {
+        if (!capital) return;
+        const capitalId = ensureUniqueId(`city-${cca3.toLowerCase()}-${toSlug(capital)}`);
+        addEntry({
+          id: capitalId,
+          name: capital,
+          country: name,
+          country_code: country.cca2 || null,
+          type: "city",
+          types: ["city"],
+          image_url: null,
+          description: null,
+          highlights: [],
+          best_season: null,
+          average_daily_cost: null,
+          currency: currencyCode,
+          visa_info: null,
+          vaccination_info: null,
+          health_safety_info: null,
+          source: "restcountries",
+          parent_id: countryEntry.id,
+          coords_lat: country.capitalInfo?.latlng?.[0] ?? null,
+          coords_lon: country.capitalInfo?.latlng?.[1] ?? null,
+          children_count: null,
+        });
+      });
+    });
+  } catch {
+    curatedDestinations.forEach((d) => {
+      addEntry({
+        id: d.id,
+        name: d.name,
+        country: d.country,
+        country_code: d.countryCode || null,
+        type: d.type,
+        types: d.types && d.types.length > 0 ? d.types : [d.type],
+        image_url: d.imageUrl,
+        description: d.description,
+        highlights: d.highlights,
+        best_season: d.bestSeason || null,
+        average_daily_cost: d.averageDailyCost ?? null,
+        currency: d.currency || null,
+        visa_info: d.visaInfo || null,
+        vaccination_info: d.vaccinationInfo || null,
+        health_safety_info: d.healthSafetyInfo || null,
+        source: d.source || null,
+        parent_id: d.parentId || null,
+        coords_lat: d.coords?.lat ?? null,
+        coords_lon: d.coords?.lon ?? null,
+        children_count: d.childrenCount ?? null,
+      });
+    });
+  }
+
+  curatedDestinations.forEach((d) => {
+    const nameKey = toKey(d.name);
+    const isCountryLevel = toKey(d.name) === toKey(d.country);
+    const byName = countryByName.get(nameKey);
+    const byCode = isCountryLevel && d.countryCode ? countryByCode.get(d.countryCode.toUpperCase()) : null;
+    const target = byName || byCode;
+    if (target) {
+      const existingTypes = Array.isArray(target.types) ? target.types.slice() : [];
+      const nextTypes = new Set(existingTypes);
+      nextTypes.add(d.type);
+      (d.types || []).forEach((t) => nextTypes.add(t));
+      target.types = Array.from(nextTypes);
+      target.image_url = d.imageUrl || target.image_url;
+      target.description = d.description || target.description;
+      target.highlights = d.highlights || target.highlights;
+      target.best_season = d.bestSeason || target.best_season;
+      target.average_daily_cost = d.averageDailyCost ?? target.average_daily_cost;
+      target.currency = d.currency || target.currency;
+      target.visa_info = d.visaInfo || target.visa_info;
+      target.vaccination_info = d.vaccinationInfo || target.vaccination_info;
+      target.health_safety_info = d.healthSafetyInfo || target.health_safety_info;
+      target.source = d.source || target.source;
+      return;
+    }
+    const parentFromCode = d.countryCode ? countryByCode.get(d.countryCode.toUpperCase()) : null;
+    const id = ensureUniqueId(`dest-${toSlug(d.name)}`);
+    addEntry({
+      id,
+      name: d.name,
+      country: d.country,
+      country_code: d.countryCode || null,
+      type: d.type,
+      types: d.types && d.types.length > 0 ? d.types : [d.type],
+      image_url: d.imageUrl || null,
+      description: d.description || null,
+      highlights: d.highlights || [],
+      best_season: d.bestSeason || null,
+      average_daily_cost: d.averageDailyCost ?? null,
+      currency: d.currency || null,
+      visa_info: d.visaInfo || null,
+      vaccination_info: d.vaccinationInfo || null,
+      health_safety_info: d.healthSafetyInfo || null,
+      source: d.source || null,
+      parent_id: parentFromCode?.id || d.parentId || null,
+      coords_lat: d.coords?.lat ?? null,
+      coords_lon: d.coords?.lon ?? null,
+      children_count: d.childrenCount ?? null,
+    });
+  });
+
+  const childCounts = new Map<string, number>();
+  entries.forEach((entry) => {
+    if (!entry.parent_id) return;
+    const count = childCounts.get(entry.parent_id) || 0;
+    childCounts.set(entry.parent_id, count + 1);
+  });
+  entries.forEach((entry) => {
+    const count = childCounts.get(entry.id);
+    if (typeof count === "number") entry.children_count = count;
+  });
+
+  return entries;
 };
 
 const AdminReview = () => {
@@ -252,27 +818,7 @@ const AdminReview = () => {
           <h1 className="font-display text-3xl md:text-4xl font-bold">Beiträge prüfen</h1>
           <Button variant="secondary" className="gap-2" onClick={async () => {
             try {
-              const rows = inspirationDestinations.map((d) => ({
-                id: d.id,
-                name: d.name,
-                country: d.country,
-                country_code: d.countryCode || null,
-                type: d.type,
-                image_url: d.imageUrl,
-                description: d.description,
-                highlights: d.highlights,
-                best_season: d.bestSeason,
-                average_daily_cost: d.averageDailyCost,
-                currency: d.currency,
-                visa_info: d.visaInfo || null,
-                vaccination_info: d.vaccinationInfo || null,
-                health_safety_info: d.healthSafetyInfo || null,
-                source: d.source || null,
-                parent_id: d.parentId || null,
-                coords_lat: d.coords?.lat ?? null,
-                coords_lon: d.coords?.lon ?? null,
-                children_count: d.childrenCount ?? null,
-              }));
+              const rows = await buildDestinationSeedRows();
               const { error } = await supabaseUntyped
                 .from("destinations")
                 .upsert(rows, { onConflict: "id" });

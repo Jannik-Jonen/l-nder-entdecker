@@ -2,6 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { inspirationDestinations } from '@/data/mockData';
+import { Destination } from '@/types/travel';
 
 const SUPABASE_URL = (() => {
   const raw = import.meta.env.VITE_SUPABASE_URL;
@@ -236,6 +237,217 @@ const islandNameSet = new Set([
   'vanuatu',
 ]);
 
+const defaultDestinationImage = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
+
+const extraDestinations: Destination[] = [
+  {
+    id: 'island-zakynthos',
+    name: 'Zakynthos',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Navagio Beach', 'Blaue Grotten', 'Buchten'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 110,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-grc',
+    coords: { lat: 37.787, lon: 20.899 },
+  },
+  {
+    id: 'island-santorini',
+    name: 'Santorin',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Caldera', 'Sonnenuntergänge', 'Strände'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 140,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-grc',
+    coords: { lat: 36.393, lon: 25.461 },
+  },
+  {
+    id: 'island-mykonos',
+    name: 'Mykonos',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Windmühlen', 'Strände', 'Altstadt'],
+    bestSeason: 'Mai bis September',
+    averageDailyCost: 160,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-grc',
+    coords: { lat: 37.446, lon: 25.328 },
+  },
+  {
+    id: 'island-crete',
+    name: 'Kreta',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Schluchten', 'Strände', 'Paläste'],
+    bestSeason: 'April bis Oktober',
+    averageDailyCost: 120,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-grc',
+    coords: { lat: 35.24, lon: 24.809 },
+  },
+  {
+    id: 'island-rhodes',
+    name: 'Rhodos',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Altstadt', 'Strände', 'Buchten'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 115,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-grc',
+    coords: { lat: 36.434, lon: 28.217 },
+  },
+  {
+    id: 'island-corfu',
+    name: 'Korfu',
+    country: 'Griechenland',
+    countryCode: 'GR',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Buchten', 'Altstadt', 'Olivenhaine'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 110,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-grc',
+    coords: { lat: 39.624, lon: 19.922 },
+  },
+  {
+    id: 'island-mallorca',
+    name: 'Mallorca',
+    country: 'Spanien',
+    countryCode: 'ES',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Serra de Tramuntana', 'Strände', 'Palma'],
+    bestSeason: 'April bis Oktober',
+    averageDailyCost: 130,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-esp',
+    coords: { lat: 39.613, lon: 2.882 },
+  },
+  {
+    id: 'island-ibiza',
+    name: 'Ibiza',
+    country: 'Spanien',
+    countryCode: 'ES',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Cala-Strände', 'Altstadt', 'Sonnenuntergänge'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 150,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-esp',
+    coords: { lat: 38.906, lon: 1.42 },
+  },
+  {
+    id: 'island-sicily',
+    name: 'Sizilien',
+    country: 'Italien',
+    countryCode: 'IT',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Ätna', 'Küsten', 'Barockstädte'],
+    bestSeason: 'April bis Oktober',
+    averageDailyCost: 125,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-ita',
+    coords: { lat: 37.599, lon: 14.015 },
+  },
+  {
+    id: 'island-sardinia',
+    name: 'Sardinien',
+    country: 'Italien',
+    countryCode: 'IT',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Costa Smeralda', 'Strände', 'Buchten'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 130,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-ita',
+    coords: { lat: 40.12, lon: 9.012 },
+  },
+  {
+    id: 'island-madeira',
+    name: 'Madeira',
+    country: 'Portugal',
+    countryCode: 'PT',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Levadas', 'Klifflandschaften', 'Gärten'],
+    bestSeason: 'Ganzjährig',
+    averageDailyCost: 110,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-prt',
+    coords: { lat: 32.76, lon: -16.959 },
+  },
+  {
+    id: 'island-azores',
+    name: 'Azoren',
+    country: 'Portugal',
+    countryCode: 'PT',
+    type: 'island',
+    types: ['island'],
+    imageUrl: defaultDestinationImage,
+    description: '',
+    highlights: ['Kraterseen', 'Wale', 'Wandern'],
+    bestSeason: 'Mai bis Oktober',
+    averageDailyCost: 105,
+    currency: 'EUR',
+    source: 'curated',
+    parentId: 'country-prt',
+    coords: { lat: 37.742, lon: -25.675 },
+  },
+];
+
+const curatedDestinations = [...inspirationDestinations, ...extraDestinations];
+
 const isIslandCountry = (country: RestCountry, name: string) => {
   const key = toKey(name);
   if (key.includes('island') || key.includes('islands')) return true;
@@ -401,14 +613,14 @@ const seedDestinations = async (db: LocalDb) => {
       });
     });
   } catch {
-    inspirationDestinations.forEach((d) => {
+    curatedDestinations.forEach((d) => {
       addEntry({
         id: d.id,
         name: d.name,
         country: d.country,
         country_code: d.countryCode || null,
         type: d.type,
-        types: [d.type],
+        types: d.types && d.types.length > 0 ? d.types : [d.type],
         image_url: d.imageUrl,
         description: d.description,
         highlights: d.highlights,
@@ -428,7 +640,7 @@ const seedDestinations = async (db: LocalDb) => {
     });
   }
 
-  inspirationDestinations.forEach((d) => {
+  curatedDestinations.forEach((d) => {
     const nameKey = toKey(d.name);
     const isCountryLevel = toKey(d.name) === toKey(d.country);
     const byName = countryByName.get(nameKey);
@@ -436,8 +648,10 @@ const seedDestinations = async (db: LocalDb) => {
     const target = byName || byCode;
     if (target) {
       const existingTypes = Array.isArray(target.types) ? target.types.slice() : [];
-      if (!existingTypes.includes(d.type)) existingTypes.push(d.type);
-      target.types = existingTypes;
+      const nextTypes = new Set(existingTypes);
+      nextTypes.add(d.type);
+      (d.types || []).forEach((t) => nextTypes.add(t));
+      target.types = Array.from(nextTypes);
       target.image_url = d.imageUrl || target.image_url;
       target.description = d.description || target.description;
       target.highlights = d.highlights || target.highlights;
@@ -458,7 +672,7 @@ const seedDestinations = async (db: LocalDb) => {
       country: d.country,
       country_code: d.countryCode || null,
       type: d.type,
-      types: [d.type],
+      types: d.types && d.types.length > 0 ? d.types : [d.type],
       image_url: d.imageUrl,
       description: d.description,
       highlights: d.highlights,
