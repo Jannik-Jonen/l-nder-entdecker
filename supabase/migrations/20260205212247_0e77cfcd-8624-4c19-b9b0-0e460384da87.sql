@@ -27,6 +27,7 @@ CREATE TABLE public.destinations (
 CREATE INDEX idx_destinations_type ON public.destinations(type);
 CREATE INDEX idx_destinations_country_code ON public.destinations(country_code);
 CREATE INDEX idx_destinations_parent_id ON public.destinations(parent_id);
+CREATE UNIQUE INDEX idx_destinations_unique_name_country_type ON public.destinations(name, country, type);
 
 -- RLS aktivieren
 ALTER TABLE public.destinations ENABLE ROW LEVEL SECURITY;
