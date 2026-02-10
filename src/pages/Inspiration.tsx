@@ -289,7 +289,7 @@ const Inspiration = () => {
                 Katalog wird geladen...
               </div>
             )}
-            {!catalogLoading && catalog.length === 0 && (
+            {!catalogLoading && searchQuery.trim() && catalog.length === 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
                 Aktuell sind keine Destinationen im Katalog verfügbar.
               </p>
