@@ -14,18 +14,32 @@ export default async function handler(
 
   const FALLBACK_SUPABASE_URL = 'https://axdldqmknnjngxqqurlg.supabase.co';
   const FALLBACK_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_qLxYKroavOk5b6mb2PRc3w_kQB9oEGQ';
-  const supabaseUrl =
-    (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || FALLBACK_SUPABASE_URL)?.trim() ||
-    FALLBACK_SUPABASE_URL;
-  const supabaseKey =
-    (
-      process.env.SUPABASE_SERVICE_ROLE_KEY ||
-      process.env.SUPABASE_ANON_KEY ||
-      process.env.SUPABASE_PUBLISHABLE_KEY ||
-      process.env.VITE_SUPABASE_ANON_KEY ||
-      process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-      FALLBACK_SUPABASE_PUBLISHABLE_KEY
-    )?.trim() || FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+  const pickEnv = (entries: Array<[string, string | undefined]>, fallback: string) => {
+    for (const [label, value] of entries) {
+      const trimmed = value?.trim();
+      if (trimmed) return { value: trimmed, source: label };
+    }
+    return { value: fallback, source: 'fallback' };
+  };
+  const supabaseUrlPick = pickEnv(
+    [
+      ['SUPABASE_URL', process.env.SUPABASE_URL],
+      ['VITE_SUPABASE_URL', process.env.VITE_SUPABASE_URL],
+    ],
+    FALLBACK_SUPABASE_URL
+  );
+  const supabaseKeyPick = pickEnv(
+    [
+      ['SUPABASE_SERVICE_ROLE_KEY', process.env.SUPABASE_SERVICE_ROLE_KEY],
+      ['SUPABASE_ANON_KEY', process.env.SUPABASE_ANON_KEY],
+      ['SUPABASE_PUBLISHABLE_KEY', process.env.SUPABASE_PUBLISHABLE_KEY],
+      ['VITE_SUPABASE_ANON_KEY', process.env.VITE_SUPABASE_ANON_KEY],
+      ['VITE_SUPABASE_PUBLISHABLE_KEY', process.env.VITE_SUPABASE_PUBLISHABLE_KEY],
+    ],
+    FALLBACK_SUPABASE_PUBLISHABLE_KEY
+  );
+  const supabaseUrl = supabaseUrlPick.value;
+  const supabaseKey = supabaseKeyPick.value;
 
   if (!supabaseUrl || !supabaseKey) {
     res.statusCode = 500;
@@ -38,6 +52,7 @@ export default async function handler(
   const search = (url.searchParams.get('search') || '').trim();
   const type = url.searchParams.get('type') || undefined;
   const countryCode = url.searchParams.get('countryCode') || undefined;
+  const debug = url.searchParams.get('debug') === '1';
 
   const columns =
     'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
@@ -45,6 +60,34 @@ export default async function handler(
   const normalizedSupabaseUrl = /^https?:\/\//i.test(supabaseUrl)
     ? supabaseUrl
     : `https://${supabaseUrl}`;
+  if (debug) {
+    let restProbe: { ok: boolean; status?: number; error?: string } = { ok: false };
+    try {
+      const probe = await fetch(
+        `${normalizedSupabaseUrl}/rest/v1/destinations?select=id&limit=1`,
+        {
+          headers: {
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`,
+          },
+        }
+      );
+      restProbe = { ok: probe.ok, status: probe.status };
+    } catch (error) {
+      restProbe = { ok: false, error: (error as Error).message };
+    }
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(
+      JSON.stringify({
+        supabaseUrlSource: supabaseUrlPick.source,
+        supabaseKeySource: supabaseKeyPick.source,
+        supabaseUrl: normalizedSupabaseUrl,
+        restProbe,
+      })
+    );
+    return;
+  }
   const supabaseAdmin = createClient(normalizedSupabaseUrl, supabaseKey);
   let query = supabaseAdmin.from('destinations').select(columns).order('name', { ascending: true });
 
