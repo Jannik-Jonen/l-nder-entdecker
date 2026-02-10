@@ -4,13 +4,15 @@ import type { Database } from './types';
 import { inspirationDestinations } from '@/data/mockData';
 import { Destination } from '@/types/travel';
 
+const FALLBACK_SUPABASE_URL = 'https://axdldqmknnjngxqqurlg.supabase.co';
+const FALLBACK_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_qLxYKroavOk5b6mb2PRc3w_kQB9oEGQ';
 const SUPABASE_URL = (() => {
-  const raw = import.meta.env.VITE_SUPABASE_URL;
+  const raw = import.meta.env.VITE_SUPABASE_URL || FALLBACK_SUPABASE_URL;
   if (!raw) return raw;
   if (/^https?:\/\//i.test(raw)) return raw;
   return `https://${raw}`;
 })();
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || FALLBACK_SUPABASE_PUBLISHABLE_KEY;
 const isValidHttpUrl = (value: string | undefined) => {
   if (!value) return false;
   try {
