@@ -122,27 +122,44 @@ type DestinationRow = {
 const fromDestinations = () => supabaseUntyped.from('destinations');
 
 const rankDestinations = (list: Destination[], search?: string) => {
-  const query = search?.trim().toLowerCase();
+  const normalize = (value: string) =>
+    value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  const query = search?.trim();
   if (!query) return list;
-  const word = query.split(/\s+/).filter(Boolean)[0] || query;
-  const score = (text: string) => {
-    if (text === query) return 5;
-    if (text.startsWith(query)) return 4;
-    if (text === word) return 3;
-    if (text.startsWith(word)) return 2;
-    if (text.includes(query)) return 1;
+  const q = normalize(query);
+  const qWord = q.split(/\s+/).filter(Boolean)[0] || q;
+  const scoreText = (text: string) => {
+    if (text === q) return 100;
+    if (text.startsWith(q)) return 80;
+    if (text === qWord) return 60;
+    if (text.startsWith(qWord)) return 40;
+    if (text.includes(q)) return 20;
+    if (text.includes(qWord)) return 10;
     return 0;
   };
-  const typeBoost = (type: Destination['type']) => (type === 'city' ? 0.4 : type === 'region' ? 0.3 : type === 'country' ? 0.2 : 0);
+  const scoreRow = (row: Destination) => {
+    const name = normalize(row.name);
+    const country = normalize(row.country);
+    const nameScore = scoreText(name);
+    const countryScore = scoreText(country);
+    let score = nameScore * 2 + countryScore;
+    if (country === q && row.type === 'country') score += 60;
+    if (name === q && row.type === 'city') score += 20;
+    if (name === q && row.type === 'region') score += 15;
+    return score;
+  };
   return list
     .slice()
     .sort((a, b) => {
-      const aName = a.name.toLowerCase();
-      const bName = b.name.toLowerCase();
-      const aScore = score(aName) + score(a.country.toLowerCase()) + typeBoost(a.type);
-      const bScore = score(bName) + score(b.country.toLowerCase()) + typeBoost(b.type);
+      const aScore = scoreRow(a);
+      const bScore = scoreRow(b);
       if (aScore !== bScore) return bScore - aScore;
-      return aName.localeCompare(bName);
+      return a.name.localeCompare(b.name);
     })
     .slice(0, 10);
 };

@@ -110,24 +110,40 @@ export default async function handler(
 
   const rows = (data || []) as Array<{ name: string; country: string; description?: string | null; type: string }>;
   if (search) {
-    const q = search.toLowerCase();
-    const word = q.split(/\s+/).filter(Boolean)[0] || q;
-    const score = (text: string) => {
-      if (text === q) return 5;
-      if (text.startsWith(q)) return 4;
-      if (text === word) return 3;
-      if (text.startsWith(word)) return 2;
-      if (text.includes(q)) return 1;
+    const normalize = (value: string) =>
+      value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+    const q = normalize(search);
+    const qWord = q.split(/\s+/).filter(Boolean)[0] || q;
+    const scoreText = (text: string) => {
+      if (text === q) return 100;
+      if (text.startsWith(q)) return 80;
+      if (text === qWord) return 60;
+      if (text.startsWith(qWord)) return 40;
+      if (text.includes(q)) return 20;
+      if (text.includes(qWord)) return 10;
       return 0;
     };
-    const typeBoost = (type: string) => (type === 'city' ? 0.4 : type === 'region' ? 0.3 : type === 'country' ? 0.2 : 0);
+    const scoreRow = (row: (typeof rows)[number]) => {
+      const name = normalize(row.name);
+      const country = normalize(row.country);
+      const nameScore = scoreText(name);
+      const countryScore = scoreText(country);
+      let score = nameScore * 2 + countryScore;
+      if (country === q && row.type === 'country') score += 60;
+      if (name === q && row.type === 'city') score += 20;
+      if (name === q && row.type === 'region') score += 15;
+      return score;
+    };
     rows.sort((a, b) => {
-      const aName = a.name.toLowerCase();
-      const bName = b.name.toLowerCase();
-      const aScore = score(aName) + score(a.country.toLowerCase()) + typeBoost(a.type);
-      const bScore = score(bName) + score(b.country.toLowerCase()) + typeBoost(b.type);
+      const aScore = scoreRow(a);
+      const bScore = scoreRow(b);
       if (aScore !== bScore) return bScore - aScore;
-      return aName.localeCompare(bName);
+      return a.name.localeCompare(b.name);
     });
     rows.splice(10);
   }
