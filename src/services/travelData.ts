@@ -182,7 +182,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
     if (_opts?.search) {
       const s = _opts.search.replace(/%/g, '\\%');
-      query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%,description.ilike.%${s}%`).limit(100);
+      query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(100);
     }
     const { data, error } = await query;
     if (error) throw error;
