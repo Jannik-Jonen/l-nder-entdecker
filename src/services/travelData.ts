@@ -121,6 +121,32 @@ type DestinationRow = {
 
 const fromDestinations = () => supabaseUntyped.from('destinations');
 
+const rankDestinations = (list: Destination[], search?: string) => {
+  const query = search?.trim().toLowerCase();
+  if (!query) return list;
+  const word = query.split(/\s+/).filter(Boolean)[0] || query;
+  const score = (text: string) => {
+    if (text === query) return 5;
+    if (text.startsWith(query)) return 4;
+    if (text === word) return 3;
+    if (text.startsWith(word)) return 2;
+    if (text.includes(query)) return 1;
+    return 0;
+  };
+  const typeBoost = (type: Destination['type']) => (type === 'city' ? 0.4 : type === 'region' ? 0.3 : type === 'country' ? 0.2 : 0);
+  return list
+    .slice()
+    .sort((a, b) => {
+      const aName = a.name.toLowerCase();
+      const bName = b.name.toLowerCase();
+      const aScore = score(aName) + score(a.country.toLowerCase()) + typeBoost(a.type);
+      const bScore = score(bName) + score(b.country.toLowerCase()) + typeBoost(b.type);
+      if (aScore !== bScore) return bScore - aScore;
+      return aName.localeCompare(bName);
+    })
+    .slice(0, 10);
+};
+
 const toDestination = (row: DestinationRow): Destination => ({
   id: row.id,
   name: row.name,
@@ -169,7 +195,9 @@ export const fetchDestinationsCatalog = async (_opts?: {
       } catch (error) {
         apiData = null;
       }
-      if (apiData && (search || apiData.length > 0)) return apiData.map(toDestination);
+      if (apiData && (search || apiData.length > 0)) {
+        return search ? rankDestinations(apiData.map(toDestination), search) : apiData.map(toDestination);
+      }
     }
     if (isLocalSupabase) {
       const { data, error } = await fromDestinations()
@@ -192,7 +220,8 @@ export const fetchDestinationsCatalog = async (_opts?: {
           (row.description || '').toLowerCase().includes(s)
         );
       }
-      return rows.map(toDestination);
+      const mapped = rows.map(toDestination);
+      return search ? rankDestinations(mapped, search) : mapped;
     }
     let query = fromDestinations()
       .select(columns)
@@ -206,7 +235,8 @@ export const fetchDestinationsCatalog = async (_opts?: {
     const { data, error } = await query;
     if (error) throw error;
     const rows = (data || []) as DestinationRow[];
-    return rows.map(toDestination);
+    const mapped = rows.map(toDestination);
+    return search ? rankDestinations(mapped, search) : mapped;
   } catch {
     let list = inspirationDestinations.slice();
     if (_opts?.type) list = list.filter((d) => d.type === _opts.type || (Array.isArray(d.types) && d.types.includes(_opts.type)));
@@ -215,7 +245,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
       const s = _opts.search.toLowerCase();
       list = list.filter((d) => d.name.toLowerCase().includes(s));
     }
-    return list.sort((a, b) => a.name.localeCompare(b.name));
+    return rankDestinations(list, _opts?.search);
   }
 };
 

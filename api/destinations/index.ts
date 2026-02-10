@@ -108,7 +108,31 @@ export default async function handler(
     return;
   }
 
+  const rows = (data || []) as Array<{ name: string; country: string; description?: string | null; type: string }>;
+  if (search) {
+    const q = search.toLowerCase();
+    const word = q.split(/\s+/).filter(Boolean)[0] || q;
+    const score = (text: string) => {
+      if (text === q) return 5;
+      if (text.startsWith(q)) return 4;
+      if (text === word) return 3;
+      if (text.startsWith(word)) return 2;
+      if (text.includes(q)) return 1;
+      return 0;
+    };
+    const typeBoost = (type: string) => (type === 'city' ? 0.4 : type === 'region' ? 0.3 : type === 'country' ? 0.2 : 0);
+    rows.sort((a, b) => {
+      const aName = a.name.toLowerCase();
+      const bName = b.name.toLowerCase();
+      const aScore = score(aName) + score(a.country.toLowerCase()) + typeBoost(a.type);
+      const bScore = score(bName) + score(b.country.toLowerCase()) + typeBoost(b.type);
+      if (aScore !== bScore) return bScore - aScore;
+      return aName.localeCompare(bName);
+    });
+    rows.splice(10);
+  }
+
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(data || []));
+  res.end(JSON.stringify(rows));
 }
