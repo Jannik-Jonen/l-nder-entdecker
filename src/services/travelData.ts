@@ -167,7 +167,11 @@ export const fetchDestinationsCatalog = async (_opts?: {
       }
       if (_opts?.search) {
         const s = _opts.search.toLowerCase();
-        rows = rows.filter((row) => row.name.toLowerCase().includes(s));
+        rows = rows.filter((row) =>
+          row.name.toLowerCase().includes(s) ||
+          row.country.toLowerCase().includes(s) ||
+          (row.description || '').toLowerCase().includes(s)
+        );
       }
       return rows.map(toDestination);
     }
@@ -176,7 +180,10 @@ export const fetchDestinationsCatalog = async (_opts?: {
       .order('name', { ascending: true });
     if (_opts?.type) query = query.contains('types', [_opts.type]);
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
-    if (_opts?.search) query = query.ilike('name', `%${_opts.search}%`);
+    if (_opts?.search) {
+      const s = _opts.search.replace(/%/g, '\\%');
+      query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%,description.ilike.%${s}%`);
+    }
     const { data, error } = await query;
     if (error) throw error;
     const rows = (data || []) as DestinationRow[];

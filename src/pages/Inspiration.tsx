@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { defaultTodos } from '@/data/mockData';
+import { defaultTodos, inspirationDestinations } from '@/data/mockData';
 import type { PackingItem, TodoItem } from '@/types/travel';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
@@ -43,19 +43,29 @@ const Inspiration = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const load = async () => {
+    const query = searchQuery.trim();
+    if (!query) {
+      setCatalog([]);
+      setCatalogLoading(false);
+      return;
+    }
+    let active = true;
+    const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
-        const data = await fetchDestinationsCatalog();
-        setCatalog(Array.isArray(data) ? data : []);
+        const data = await fetchDestinationsCatalog({ search: query });
+        if (active) setCatalog(Array.isArray(data) ? data : []);
       } catch {
-        setCatalog([]);
+        if (active) setCatalog([]);
       } finally {
-        setCatalogLoading(false);
+        if (active) setCatalogLoading(false);
       }
+    }, 300);
+    return () => {
+      active = false;
+      window.clearTimeout(handle);
     };
-    load();
-  }, []);
+  }, [searchQuery]);
 
   // Filter destinations based on search query from the database
   const searchFilteredDestinations = React.useMemo(() => {
@@ -246,9 +256,10 @@ const Inspiration = () => {
 
  
 
+  const visibleDestinations = searchQuery.trim() ? searchFilteredDestinations : inspirationDestinations;
   const filteredDestinations = selectedType === 'all'
-    ? searchFilteredDestinations
-    : searchFilteredDestinations.filter((d) => d.type === selectedType || (Array.isArray(d.types) && d.types.includes(selectedType)));
+    ? visibleDestinations
+    : visibleDestinations.filter((d) => d.type === selectedType || (Array.isArray(d.types) && d.types.includes(selectedType)));
 
   const types: Array<Destination['type'] | 'all'> = ['all', 'country', 'island', 'city', 'region'];
 
