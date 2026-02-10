@@ -6,13 +6,6 @@ import { Destination } from '@/types/travel';
 
 const FALLBACK_SUPABASE_URL = 'https://axdldqmknnjngxqqurlg.supabase.co';
 const FALLBACK_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_qLxYKroavOk5b6mb2PRc3w_kQB9oEGQ';
-const SUPABASE_URL = (() => {
-  const raw = import.meta.env.VITE_SUPABASE_URL || FALLBACK_SUPABASE_URL;
-  if (!raw) return raw;
-  if (/^https?:\/\//i.test(raw)) return raw;
-  return `https://${raw}`;
-})();
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || FALLBACK_SUPABASE_PUBLISHABLE_KEY;
 const isValidHttpUrl = (value: string | undefined) => {
   if (!value) return false;
   try {
@@ -22,15 +15,18 @@ const isValidHttpUrl = (value: string | undefined) => {
     return false;
   }
 };
-const FORCE_LOCAL_DB =
-  import.meta.env.VITE_LOCAL_DB === 'true' ||
-  import.meta.env.VITE_DISABLE_SUPABASE === 'true' ||
-  SUPABASE_URL === 'local' ||
-  SUPABASE_PUBLISHABLE_KEY === 'local' ||
-  !SUPABASE_URL ||
-  !isValidHttpUrl(SUPABASE_URL) ||
-  !SUPABASE_PUBLISHABLE_KEY;
-export const isLocalSupabase = FORCE_LOCAL_DB;
+const SUPABASE_URL = (() => {
+  const raw = import.meta.env.VITE_SUPABASE_URL;
+  const candidate = !raw || raw === 'local' ? FALLBACK_SUPABASE_URL : raw;
+  if (!candidate) return candidate;
+  const normalized = /^https?:\/\//i.test(candidate) ? candidate : `https://${candidate}`;
+  return isValidHttpUrl(normalized) ? normalized : FALLBACK_SUPABASE_URL;
+})();
+const SUPABASE_PUBLISHABLE_KEY = (() => {
+  const raw = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  return !raw || raw === 'local' ? FALLBACK_SUPABASE_PUBLISHABLE_KEY : raw;
+})();
+export const isLocalSupabase = false;
 
 const LOCAL_DB_KEY = 'local-db';
 const LOCAL_AUTH_USERS_KEY = 'local-auth-users';
