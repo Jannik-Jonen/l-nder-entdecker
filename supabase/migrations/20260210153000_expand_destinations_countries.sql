@@ -675,7 +675,7 @@ WITH data AS (
         "types": ["country", "island"],
         "image_url": "https://source.unsplash.com/featured/?jamaica,negril",
         "description": "Reggae-Insel mit Stränden, Bergen und Wasserfällen.",
-        "highlights": ["Negril", "Blue Mountains", "Dunn's River Falls", "Kingston"],
+        "highlights": ["Negril", "Blue Mountains", "Dunn''s River Falls", "Kingston"],
         "best_season": "November bis April",
         "average_daily_cost": 100,
         "currency": "JMD",
@@ -838,9 +838,27 @@ WITH data AS (
         "coords_lat": -0.7893,
         "coords_lon": 113.9213
       }
-      }
     ]'::jsonb
+  ) AS d(
+    name text,
+    country text,
+    country_code text,
+    type text,
+    types text[],
+    image_url text,
+    description text,
+    highlights text[],
+    best_season text,
+    average_daily_cost numeric,
+    currency text,
+    visa_info text,
+    vaccination_info text,
+    health_safety_info text,
+    source text,
+    coords_lat numeric,
+    coords_lon numeric
   )
+)
 INSERT INTO public.destinations (
   name,
   country,

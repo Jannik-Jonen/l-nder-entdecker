@@ -191,6 +191,20 @@ export const fetchDestinationsCatalog = async (_opts?: {
   countryCode?: string;
   search?: string;
 }): Promise<Destination[]> => {
+  const fallbackSearch = (search?: string) => {
+    let list = inspirationDestinations.slice();
+    if (_opts?.type) list = list.filter((d) => d.type === _opts.type || (Array.isArray(d.types) && d.types.includes(_opts.type)));
+    if (_opts?.countryCode) list = list.filter((d) => (d.countryCode || '').toUpperCase() === _opts.countryCode?.toUpperCase());
+    if (search) {
+      const s = search.toLowerCase();
+      list = list.filter((d) =>
+        d.name.toLowerCase().includes(s) ||
+        d.country.toLowerCase().includes(s) ||
+        (d.description || '').toLowerCase().includes(s)
+      );
+    }
+    return rankDestinations(list, search);
+  };
   try {
     const columns = isLocalSupabase
       ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
@@ -213,7 +227,9 @@ export const fetchDestinationsCatalog = async (_opts?: {
         apiData = null;
       }
       if (apiData && (search || apiData.length > 0)) {
-        return search ? rankDestinations(apiData.map(toDestination), search) : apiData.map(toDestination);
+        const mapped = apiData.map(toDestination);
+        if (search && mapped.length === 0) return fallbackSearch(search);
+        return search ? rankDestinations(mapped, search) : mapped;
       }
     }
     if (isLocalSupabase) {
@@ -238,6 +254,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
         );
       }
       const mapped = rows.map(toDestination);
+      if (search && mapped.length === 0) return fallbackSearch(search);
       return search ? rankDestinations(mapped, search) : mapped;
     }
     let query = fromDestinations()
@@ -253,16 +270,10 @@ export const fetchDestinationsCatalog = async (_opts?: {
     if (error) throw error;
     const rows = (data || []) as DestinationRow[];
     const mapped = rows.map(toDestination);
+    if (search && mapped.length === 0) return fallbackSearch(search);
     return search ? rankDestinations(mapped, search) : mapped;
   } catch {
-    let list = inspirationDestinations.slice();
-    if (_opts?.type) list = list.filter((d) => d.type === _opts.type || (Array.isArray(d.types) && d.types.includes(_opts.type)));
-    if (_opts?.countryCode) list = list.filter((d) => (d.countryCode || '').toUpperCase() === _opts.countryCode?.toUpperCase());
-    if (_opts?.search) {
-      const s = _opts.search.toLowerCase();
-      list = list.filter((d) => d.name.toLowerCase().includes(s));
-    }
-    return rankDestinations(list, _opts?.search);
+    return fallbackSearch(_opts?.search?.trim());
   }
 };
 

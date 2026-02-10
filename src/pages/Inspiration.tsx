@@ -49,11 +49,12 @@ const Inspiration = () => {
       setCatalogLoading(false);
       return;
     }
+    const type = selectedType === 'all' ? undefined : selectedType;
     let active = true;
     const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
-        const data = await fetchDestinationsCatalog({ search: query });
+        const data = await fetchDestinationsCatalog({ search: query, type });
         if (active) setCatalog(Array.isArray(data) ? data : []);
       } catch {
         if (active) setCatalog([]);
@@ -65,12 +66,12 @@ const Inspiration = () => {
       active = false;
       window.clearTimeout(handle);
     };
-  }, [searchQuery]);
+  }, [searchQuery, selectedType]);
 
   // Filter destinations based on search query from the database
   const searchFilteredDestinations = React.useMemo(() => {
-    if (!searchQuery.trim()) return catalog;
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return catalog;
     return catalog.filter((d) => 
       d.name.toLowerCase().includes(query) || 
       d.country.toLowerCase().includes(query) ||

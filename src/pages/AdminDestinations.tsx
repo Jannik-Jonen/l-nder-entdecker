@@ -174,6 +174,7 @@ const AdminDestinations = () => {
         country: form.country.trim(),
         country_code: form.country_code.trim().toUpperCase() || null,
         type: form.type,
+        types: [form.type],
         image_url: form.image_url.trim() || null,
         description: form.description.trim() || null,
         highlights: highlights.length > 0 ? highlights : null,

@@ -431,6 +431,22 @@ export const inspirationDestinations: Destination[] = [
     healthSafetyInfo: 'Sehr sicheres Reiseland. Wetter kann schnell umschlagen – warme Kleidung wichtig! Ausgezeichnete medizinische Versorgung.'
   },
   {
+    id: 'dest-venezuela',
+    name: 'Venezuela',
+    country: 'Venezuela',
+    countryCode: 'VE',
+    type: 'country',
+    imageUrl: 'https://images.unsplash.com/photo-1714594923299-e915b7d71701?w=1200&q=80&auto=format&fit=crop',
+    description: 'Land mit Karibikküste, Tepuis und spektakulären Wasserfällen.',
+    highlights: ['Angel Falls', 'Los Roques', 'Caracas', 'Tepuis'],
+    bestSeason: 'Dezember bis April',
+    averageDailyCost: 80,
+    currency: 'VES',
+    visaInfo: 'Visumfrei für viele EU-Länder bis 90 Tage.',
+    vaccinationInfo: 'Hepatitis A empfohlen; Gelbfieber je nach Region.',
+    healthSafetyInfo: 'Sicherheitslage prüfen und Reisewege gut planen.'
+  },
+  {
     id: 'dest-3',
     name: 'Kyoto',
     country: 'Japan',
@@ -614,7 +630,7 @@ export const inspirationDestinations: Destination[] = [
     country: 'Griechenland',
     countryCode: 'GR',
     type: 'country',
-    imageUrl: 'https://images.unsplash.com/photo-1506086679524-493c64fdfaa6?w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?q=80&w=1470',
     description: 'Mittelmeerland mit Inseln, antiken Stätten und guter Küche.',
     highlights: ['Athen', 'Santorini', 'Kreta', 'Delphi'],
     bestSeason: 'April bis Oktober',

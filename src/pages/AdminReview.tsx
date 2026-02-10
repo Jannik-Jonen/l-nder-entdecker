@@ -103,6 +103,40 @@ const isIslandCountry = (country: RestCountry, name: string) => {
 
 const defaultDestinationImage = "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop";
 
+const imageFromName = (name?: string, fallback = defaultDestinationImage) => {
+  if (!name) return fallback;
+  return `https://source.unsplash.com/featured/?${encodeURIComponent(name)}`;
+};
+
+const regionCostMap: Record<string, { cost: number; currencyFallback: string }> = {
+  Europe: { cost: 110, currencyFallback: "EUR" },
+  Asia: { cost: 60, currencyFallback: "USD" },
+  Africa: { cost: 70, currencyFallback: "USD" },
+  Americas: { cost: 120, currencyFallback: "USD" },
+  Oceania: { cost: 140, currencyFallback: "AUD" },
+  Antarctic: { cost: 120, currencyFallback: "USD" },
+  Other: { cost: 90, currencyFallback: "USD" },
+};
+
+const getRegionDefaults = (regionName?: string | null) => {
+  if (regionName && regionCostMap[regionName]) return regionCostMap[regionName];
+  return regionCostMap.Other;
+};
+
+const buildCountriesFromIntl = (): RestCountry[] => {
+  const supportedValuesOf = (Intl as unknown as { supportedValuesOf?: (type: string) => string[] }).supportedValuesOf;
+  if (typeof supportedValuesOf !== "function") return [];
+  const display = new Intl.DisplayNames(["en"], { type: "region" });
+  return supportedValuesOf("region")
+    .map((code) => ({
+      name: { common: display.of(code) || code },
+      cca2: code,
+      cca3: code,
+      region: "Other",
+    }))
+    .filter((entry) => entry.name?.common);
+};
+
 const extraDestinations: Destination[] = [
   {
     id: "island-zakynthos",
@@ -111,12 +145,15 @@ const extraDestinations: Destination[] = [
     countryCode: "GR",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Navagio Beach", "Blaue Grotten", "Buchten"],
+    imageUrl: "https://images.unsplash.com/photo-1629286521433-dfa4637fbe9a?q=80&w=800",
+    description: "Ionische Insel mit türkisfarbenen Buchten, Steilklippen und berühmtem Schiffswrackstrand.",
+    highlights: ["Navagio Beach", "Blaue Grotten", "Gerakas Beach", "Keri Cliffs"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 110,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Starker Sonnenschutz und ausreichend Trinkwasser; in der Hochsaison früh zu beliebten Stränden.",
     source: "curated",
     parentId: "country-grc",
     coords: { lat: 37.787, lon: 20.899 },
@@ -128,12 +165,15 @@ const extraDestinations: Destination[] = [
     countryCode: "GR",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Caldera", "Sonnenuntergänge", "Strände"],
+    imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=800&q=80",
+    description: "Vulkaninsel mit weiß‑blauen Dörfern, spektakulärer Caldera und Sonnenuntergängen.",
+    highlights: ["Caldera", "Oia", "Fira", "Schwarze Sandstrände"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 140,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Viel Sonne und steile Wege – feste Schuhe und Sonnenschutz einplanen.",
     source: "curated",
     parentId: "country-grc",
     coords: { lat: 36.393, lon: 25.461 },
@@ -145,12 +185,15 @@ const extraDestinations: Destination[] = [
     countryCode: "GR",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Windmühlen", "Strände", "Altstadt"],
+    imageUrl: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
+    description: "Kykladeninsel mit lebendiger Altstadt, Windmühlen und lebhaften Strandbars.",
+    highlights: ["Windmühlen", "Little Venice", "Paradise Beach", "Altstadt"],
     bestSeason: "Mai bis September",
     averageDailyCost: 160,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Hochsaison ist sehr voll und teuer – rechtzeitig buchen.",
     source: "curated",
     parentId: "country-grc",
     coords: { lat: 37.446, lon: 25.328 },
@@ -162,12 +205,15 @@ const extraDestinations: Destination[] = [
     countryCode: "GR",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Schluchten", "Strände", "Paläste"],
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
+    description: "Größte griechische Insel mit Stränden, Schluchten, Bergen und minoischer Geschichte.",
+    highlights: ["Samaria-Schlucht", "Palast von Knossos", "Elafonissi", "Chania"],
     bestSeason: "April bis Oktober",
     averageDailyCost: 120,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Mietwagen ideal für Erkundung; in den Bergen wechselhaftes Wetter beachten.",
     source: "curated",
     parentId: "country-grc",
     coords: { lat: 35.24, lon: 24.809 },
@@ -179,12 +225,15 @@ const extraDestinations: Destination[] = [
     countryCode: "GR",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Altstadt", "Strände", "Buchten"],
+    imageUrl: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80",
+    description: "Sonnenreiche Insel mit mittelalterlicher Altstadt, Stränden und historischen Burgen.",
+    highlights: ["Altstadt von Rhodos", "Lindos", "Strände", "Buchten"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 115,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Sonnenschutz und ausreichend Wasser; Altstadt ist kopfsteingepflastert.",
     source: "curated",
     parentId: "country-grc",
     coords: { lat: 36.434, lon: 28.217 },
@@ -196,12 +245,15 @@ const extraDestinations: Destination[] = [
     countryCode: "GR",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Buchten", "Altstadt", "Olivenhaine"],
+    imageUrl: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80",
+    description: "Grüne Insel im Ionischen Meer mit venezianischer Altstadt und ruhigen Buchten.",
+    highlights: ["Altstadt", "Paleokastritsa", "Olivenhaine", "Buchten"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 110,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Leichte Mückenbelastung im Sommer – Repellent mitnehmen.",
     source: "curated",
     parentId: "country-grc",
     coords: { lat: 39.624, lon: 19.922 },
@@ -213,29 +265,15 @@ const extraDestinations: Destination[] = [
     countryCode: "ES",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Serra de Tramuntana", "Strände", "Palma"],
+    imageUrl: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800&q=80",
+    description: "Baleareninsel mit abwechslungsreicher Küste, Bergen und lebendiger Hauptstadt.",
+    highlights: ["Serra de Tramuntana", "Palma", "Cala Mondragó", "Valldemossa"],
     bestSeason: "April bis Oktober",
     averageDailyCost: 130,
     currency: "EUR",
-    source: "curated",
-    parentId: "country-esp",
-    coords: { lat: 39.613, lon: 2.882 },
-  },
-  {
-    id: "island-meno",
-    name: "Mallorca",
-    country: "Spanien",
-    countryCode: "ES",
-    type: "island",
-    types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Serra de Tramuntana", "Strände", "Palma"],
-    bestSeason: "April bis Oktober",
-    averageDailyCost: 130,
-    currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "In der Hochsaison früh reservieren; Mietwagen für abgelegene Buchten hilfreich.",
     source: "curated",
     parentId: "country-esp",
     coords: { lat: 39.613, lon: 2.882 },
@@ -247,12 +285,15 @@ const extraDestinations: Destination[] = [
     countryCode: "ES",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Cala-Strände", "Altstadt", "Sonnenuntergänge"],
+    imageUrl: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+    description: "Baleareninsel mit ruhigen Buchten, Altstadt und legendären Sonnenuntergängen.",
+    highlights: ["Cala Comte", "Dalt Vila", "Sonnenuntergänge", "Strände"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 150,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Nachts Transfers planen; tagsüber Sonnenschutz wichtig.",
     source: "curated",
     parentId: "country-esp",
     coords: { lat: 38.906, lon: 1.42 },
@@ -264,12 +305,15 @@ const extraDestinations: Destination[] = [
     countryCode: "IT",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Ätna", "Küsten", "Barockstädte"],
+    imageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80",
+    description: "Italiens größte Insel mit Vulkanlandschaften, Stränden und barocken Städten.",
+    highlights: ["Ätna", "Taormina", "Cefalù", "Val di Noto"],
     bestSeason: "April bis Oktober",
     averageDailyCost: 125,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Sommer sehr heiß – Ausflüge früh oder spät planen.",
     source: "curated",
     parentId: "country-ita",
     coords: { lat: 37.599, lon: 14.015 },
@@ -281,12 +325,15 @@ const extraDestinations: Destination[] = [
     countryCode: "IT",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Costa Smeralda", "Strände", "Buchten"],
+    imageUrl: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800&q=80",
+    description: "Mittelmeerinsel mit türkisfarbenen Buchten, Granitküste und traditionellen Dörfern.",
+    highlights: ["Costa Smeralda", "La Maddalena", "Cala Luna", "Alghero"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 130,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Mietwagen sinnvoll; viele Buchten sind nur per Auto erreichbar.",
     source: "curated",
     parentId: "country-ita",
     coords: { lat: 40.12, lon: 9.012 },
@@ -298,12 +345,15 @@ const extraDestinations: Destination[] = [
     countryCode: "PT",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Levadas", "Klifflandschaften", "Gärten"],
+    imageUrl: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80",
+    description: "Ganzjähriges Wanderparadies mit Levadas, Steilküsten und üppiger Vegetation.",
+    highlights: ["Levadas", "Funchal", "Pico do Arieiro", "Klifflandschaften"],
     bestSeason: "Ganzjährig",
     averageDailyCost: 110,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Wetter kann schnell wechseln – Regenjacke und gutes Schuhwerk mitnehmen.",
     source: "curated",
     parentId: "country-prt",
     coords: { lat: 32.76, lon: -16.959 },
@@ -315,12 +365,15 @@ const extraDestinations: Destination[] = [
     countryCode: "PT",
     type: "island",
     types: ["island"],
-    imageUrl: defaultDestinationImage,
-    description: "",
-    highlights: ["Kraterseen", "Wale", "Wandern"],
+    imageUrl: "https://images.unsplash.com/photo-1482192505345-5655af888cc4?w=800&q=80",
+    description: "Atlantischer Archipel mit Kraterseen, Thermalquellen und besten Whale-Watching-Spots.",
+    highlights: ["Sete Cidades", "Whale Watching", "Wandern", "Thermalquellen"],
     bestSeason: "Mai bis Oktober",
     averageDailyCost: 105,
     currency: "EUR",
+    visaInfo: "Kein Visum erforderlich (EU/Schengen).",
+    vaccinationInfo: "Standardimpfungen empfohlen.",
+    healthSafetyInfo: "Wechselhaftes Wetter; Kleidung im Zwiebellook einplanen.",
     source: "curated",
     parentId: "country-prt",
     coords: { lat: 37.742, lon: -25.675 },
@@ -370,6 +423,7 @@ const buildDestinationSeedRows = async () => {
     const key = toKey(name);
     const existing = regionByName.get(key);
     if (existing) return existing;
+    const regionDefaults = getRegionDefaults(name);
     const entry = addEntry({
       id: `region-${key}`,
       name,
@@ -377,12 +431,12 @@ const buildDestinationSeedRows = async () => {
       country_code: null,
       type: "region",
       types: ["region"],
-      image_url: null,
+      image_url: imageFromName(name),
       description: null,
       highlights: [],
       best_season: null,
-      average_daily_cost: null,
-      currency: null,
+      average_daily_cost: regionDefaults.cost,
+      currency: regionDefaults.currencyFallback,
       visa_info: null,
       vaccination_info: null,
       health_safety_info: null,
@@ -400,6 +454,7 @@ const buildDestinationSeedRows = async () => {
     const key = `${toKey(region.name)}-${toKey(name)}`;
     const existing = subregionByName.get(key);
     if (existing) return existing;
+    const regionDefaults = getRegionDefaults(region.name);
     const entry = addEntry({
       id: `region-${key}`,
       name,
@@ -407,12 +462,12 @@ const buildDestinationSeedRows = async () => {
       country_code: null,
       type: "region",
       types: ["region"],
-      image_url: null,
+      image_url: imageFromName(name),
       description: null,
       highlights: [],
       best_season: null,
-      average_daily_cost: null,
-      currency: null,
+      average_daily_cost: regionDefaults.cost,
+      currency: regionDefaults.currencyFallback,
       visa_info: null,
       vaccination_info: null,
       health_safety_info: null,
@@ -436,72 +491,79 @@ const buildDestinationSeedRows = async () => {
     return id;
   };
 
+  let list: RestCountry[] = [];
   try {
     const resp = await fetch("https://restcountries.com/v3.1/all?fields=name,cca2,cca3,region,subregion,capital,latlng,capitalInfo,currencies,landlocked");
     if (!resp.ok) throw new Error("restcountries");
-    const list = (await resp.json()) as RestCountry[];
-    list.forEach((country) => {
-      const name = country.name?.common;
-      const cca3 = country.cca3;
-      if (!name || !cca3) return;
-      const regionName = country.region || "Other";
-      const region = ensureRegion(regionName);
-      const subregion = country.subregion ? ensureSubregion(region, country.subregion) : null;
-      const types: Array<"country" | "island" | "city" | "region"> = ["country"];
-      if (isIslandCountry(country, name)) types.push("island");
-      const currencyCode = country.currencies ? Object.keys(country.currencies)[0] : null;
-      const countryEntry = addEntry({
-        id: `country-${cca3.toLowerCase()}`,
-        name,
+    list = (await resp.json()) as RestCountry[];
+  } catch {
+    list = buildCountriesFromIntl();
+  }
+
+  list.forEach((country) => {
+    const name = country.name?.common;
+    const cca3 = country.cca3;
+    if (!name || !cca3) return;
+    const regionName = country.region || "Other";
+    const regionDefaults = getRegionDefaults(regionName);
+    const region = ensureRegion(regionName);
+    const subregion = country.subregion ? ensureSubregion(region, country.subregion) : null;
+    const types: Array<"country" | "island" | "city" | "region"> = ["country"];
+    if (isIslandCountry(country, name)) types.push("island");
+    const currencyCode = country.currencies ? Object.keys(country.currencies)[0] : null;
+    const countryEntry = addEntry({
+      id: `country-${cca3.toLowerCase()}`,
+      name,
+      country: name,
+      country_code: country.cca2 || null,
+      type: "country",
+      types,
+      image_url: imageFromName(name),
+      description: null,
+      highlights: [],
+      best_season: null,
+      average_daily_cost: regionDefaults.cost,
+      currency: currencyCode || regionDefaults.currencyFallback,
+      visa_info: null,
+      vaccination_info: null,
+      health_safety_info: null,
+      source: "restcountries",
+      parent_id: subregion?.id || region.id,
+      coords_lat: country.latlng?.[0] ?? null,
+      coords_lon: country.latlng?.[1] ?? null,
+      children_count: null,
+    });
+    countryByName.set(toKey(name), countryEntry);
+    if (country.cca2) countryByCode.set(country.cca2.toUpperCase(), countryEntry);
+    (country.capital || []).forEach((capital) => {
+      if (!capital) return;
+      const capitalId = ensureUniqueId(`city-${cca3.toLowerCase()}-${toSlug(capital)}`);
+      addEntry({
+        id: capitalId,
+        name: capital,
         country: name,
         country_code: country.cca2 || null,
-        type: "country",
-        types,
-        image_url: null,
+        type: "city",
+        types: ["city"],
+        image_url: imageFromName(capital),
         description: null,
         highlights: [],
         best_season: null,
-        average_daily_cost: null,
-        currency: currencyCode,
+        average_daily_cost: regionDefaults.cost,
+        currency: currencyCode || regionDefaults.currencyFallback,
         visa_info: null,
         vaccination_info: null,
         health_safety_info: null,
         source: "restcountries",
-        parent_id: subregion?.id || region.id,
-        coords_lat: country.latlng?.[0] ?? null,
-        coords_lon: country.latlng?.[1] ?? null,
+        parent_id: countryEntry.id,
+        coords_lat: country.capitalInfo?.latlng?.[0] ?? null,
+        coords_lon: country.capitalInfo?.latlng?.[1] ?? null,
         children_count: null,
       });
-      countryByName.set(toKey(name), countryEntry);
-      if (country.cca2) countryByCode.set(country.cca2.toUpperCase(), countryEntry);
-      (country.capital || []).forEach((capital) => {
-        if (!capital) return;
-        const capitalId = ensureUniqueId(`city-${cca3.toLowerCase()}-${toSlug(capital)}`);
-        addEntry({
-          id: capitalId,
-          name: capital,
-          country: name,
-          country_code: country.cca2 || null,
-          type: "city",
-          types: ["city"],
-          image_url: null,
-          description: null,
-          highlights: [],
-          best_season: null,
-          average_daily_cost: null,
-          currency: currencyCode,
-          visa_info: null,
-          vaccination_info: null,
-          health_safety_info: null,
-          source: "restcountries",
-          parent_id: countryEntry.id,
-          coords_lat: country.capitalInfo?.latlng?.[0] ?? null,
-          coords_lon: country.capitalInfo?.latlng?.[1] ?? null,
-          children_count: null,
-        });
-      });
     });
-  } catch {
+  });
+
+  if (list.length === 0) {
     curatedDestinations.forEach((d) => {
       addEntry({
         id: d.id,
