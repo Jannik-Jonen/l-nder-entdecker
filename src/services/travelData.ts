@@ -149,9 +149,28 @@ export const fetchDestinationsCatalog = async (_opts?: {
   search?: string;
 }): Promise<Destination[]> => {
   try {
-  const columns = isLocalSupabase
+    const columns = isLocalSupabase
       ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
       : 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    const search = _opts?.search?.trim();
+    const isLocalHost =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const canUseApi = !isLocalSupabase && !!search && !isLocalHost;
+    if (canUseApi) {
+      let apiData: DestinationRow[] | null = null;
+      try {
+        const params = new URLSearchParams();
+        params.set('search', search);
+        if (_opts?.type) params.set('type', _opts.type);
+        if (_opts?.countryCode) params.set('countryCode', _opts.countryCode);
+        const response = await fetch(`/api/destinations?${params.toString()}`);
+        if (response.ok) apiData = (await response.json()) as DestinationRow[];
+      } catch (error) {
+        apiData = null;
+      }
+      if (apiData) return apiData.map(toDestination);
+    }
     if (isLocalSupabase) {
       const { data, error } = await fromDestinations()
         .select(columns)
@@ -165,8 +184,8 @@ export const fetchDestinationsCatalog = async (_opts?: {
         const code = _opts.countryCode.toUpperCase();
         rows = rows.filter((row) => (row.country_code || '').toUpperCase() === code);
       }
-      if (_opts?.search) {
-        const s = _opts.search.toLowerCase();
+      if (search) {
+        const s = search.toLowerCase();
         rows = rows.filter((row) =>
           row.name.toLowerCase().includes(s) ||
           row.country.toLowerCase().includes(s) ||
@@ -180,8 +199,8 @@ export const fetchDestinationsCatalog = async (_opts?: {
       .order('name', { ascending: true });
     if (_opts?.type) query = query.contains('types', [_opts.type]);
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
-    if (_opts?.search) {
-      const s = _opts.search.replace(/%/g, '\\%');
+    if (search) {
+      const s = search.replace(/%/g, '\\%');
       query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(100);
     }
     const { data, error } = await query;
