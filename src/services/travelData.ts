@@ -156,12 +156,12 @@ export const fetchDestinationsCatalog = async (_opts?: {
     const isLocalHost =
       typeof window !== 'undefined' &&
       (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-    const canUseApi = !isLocalSupabase && !!search && !isLocalHost;
+    const canUseApi = !isLocalSupabase && !isLocalHost;
     if (canUseApi) {
       let apiData: DestinationRow[] | null = null;
       try {
         const params = new URLSearchParams();
-        params.set('search', search);
+        if (search) params.set('search', search);
         if (_opts?.type) params.set('type', _opts.type);
         if (_opts?.countryCode) params.set('countryCode', _opts.countryCode);
         const response = await fetch(`/api/destinations?${params.toString()}`);
@@ -169,7 +169,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
       } catch (error) {
         apiData = null;
       }
-      if (apiData) return apiData.map(toDestination);
+      if (apiData && (search || apiData.length > 0)) return apiData.map(toDestination);
     }
     if (isLocalSupabase) {
       const { data, error } = await fromDestinations()
