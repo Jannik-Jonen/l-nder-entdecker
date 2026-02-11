@@ -13,7 +13,8 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Edit2, Trash2, MapPin, Globe, Palmtree, Building2, Mountain, Save, X, Loader2 } from 'lucide-react';
 import { Destination } from '@/types/travel';
-import { fetchDestinationsCatalog } from '@/services/travelData';
+import { fetchDestinationsCatalog, fetchRichDestinationData } from '@/services/travelData';
+import { fetchWikiData } from '@/services/wikipedia';
 
 const typeIcons: Record<Destination['type'], React.ElementType> = {
   country: Globe,
@@ -79,6 +80,7 @@ const AdminDestinations = () => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<DestinationFormData>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [autoFillLoading, setAutoFillLoading] = useState(false);
 
   // Check admin role from database
   useEffect(() => {
@@ -212,6 +214,65 @@ const AdminDestinations = () => {
     }
   };
 
+  const handleAutoFill = async () => {
+    const query = (form.name || form.country).trim();
+    if (!query) {
+      toast.error('Name oder Land fehlt');
+      return;
+    }
+    setAutoFillLoading(true);
+    try {
+      const [wiki, rich] = await Promise.all([
+        fetchWikiData(query),
+        fetchRichDestinationData(query),
+      ]);
+      setForm((current) => {
+        const next = { ...current };
+        const hasDescription = current.description.trim().length > 0;
+        const hasImage = current.image_url.trim().length > 0;
+        const hasBestSeason = current.best_season.trim().length > 0;
+        const hasHighlights = current.highlights.trim().length > 0;
+        const hasBudget = current.average_daily_cost.trim().length > 0;
+        const hasCurrency = current.currency.trim().length > 0;
+        const hasVisa = current.visa_info.trim().length > 0;
+        const hasHealth = current.health_safety_info.trim().length > 0;
+        if (!hasDescription && (wiki?.description || rich?.description)) {
+          next.description = (wiki?.description || rich?.description || '').trim();
+        }
+        if (!hasImage) {
+          next.image_url =
+            wiki?.imageUrl ||
+            rich?.imageUrl ||
+            `https://source.unsplash.com/featured/?${encodeURIComponent(query)}`;
+        }
+        if (!hasBestSeason && (wiki?.bestSeason || rich?.bestSeason)) {
+          next.best_season = (wiki?.bestSeason || rich?.bestSeason || '').trim();
+        }
+        if (!hasHighlights && Array.isArray(rich?.highlights) && rich?.highlights.length > 0) {
+          next.highlights = rich.highlights.join(', ');
+        }
+        if (!hasBudget && typeof rich?.averageDailyCost === 'number') {
+          next.average_daily_cost = String(rich.averageDailyCost);
+        }
+        if (!hasCurrency && rich?.currency) {
+          next.currency = rich.currency;
+        }
+        if (!hasVisa && rich?.visaInfo) {
+          next.visa_info = rich.visaInfo;
+        }
+        if (!hasHealth && rich?.healthSafetyInfo) {
+          next.health_safety_info = rich.healthSafetyInfo;
+        }
+        return next;
+      });
+      toast.success('Infos automatisch ergänzt');
+    } catch {
+      toast.error('Auto-Fill fehlgeschlagen');
+    } finally {
+      setAutoFillLoading(false);
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm('Destination wirklich löschen?')) return;
 
@@ -292,7 +353,12 @@ const AdminDestinations = () => {
         {showForm && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>{editingId ? 'Destination bearbeiten' : 'Neue Destination'}</CardTitle>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <CardTitle>{editingId ? 'Destination bearbeiten' : 'Neue Destination'}</CardTitle>
+                <Button variant="outline" size="sm" onClick={handleAutoFill} disabled={autoFillLoading}>
+                  {autoFillLoading ? 'Fülle automatisch…' : 'Auto-Fill'}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

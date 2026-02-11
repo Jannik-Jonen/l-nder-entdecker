@@ -370,7 +370,7 @@ const Inspiration = () => {
                     src={destination.imageUrl}
                     alt={destination.name}
                     loading="lazy"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://source.unsplash.com/featured/?${encodeURIComponent(destination.name)},landscape`; }}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   {/* stärkerer, dunkler Overlay für bessere Lesbarkeit */}
@@ -444,7 +444,7 @@ const Inspiration = () => {
                   src={selectedDestination.imageUrl}
                   alt={selectedDestination.name}
                   loading="lazy"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Bild+nicht+verfügbar'; }}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://source.unsplash.com/featured/?${encodeURIComponent(selectedDestination.name)},landscape`; }}
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
