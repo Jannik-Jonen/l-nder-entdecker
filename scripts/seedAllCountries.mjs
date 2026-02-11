@@ -18,10 +18,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 const defaultDestinationImage = "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop";
 
-const imageFromName = (name) => {
+const imageFromName = (name, countryCode) => {
+  if (countryCode) return `https://flagcdn.com/w1280/${String(countryCode).toLowerCase()}.png`;
   if (!name) return defaultDestinationImage;
   const q = String(name).trim().replace(/\s+/g, "+");
-  return `https://source.unsplash.com/featured/?${encodeURIComponent(q)}`;
+  return `https://picsum.photos/seed/${encodeURIComponent(q)}/1200/800`;
 };
 
 const toSlug = (value) => {
@@ -307,7 +308,7 @@ const buildAmericasCityRows = (countries, countryNameByCode, currencyByCode, reg
         country_code: code,
         type: "city",
         types: entry.isHidden ? ["city", "hidden-gem"] : ["city"],
-        image_url: imageFromName(entry.name),
+        image_url: imageFromName(entry.name, code),
         description: entry.isHidden
           ? `Geheimtipp: ${entry.name} bietet authentische Einblicke in ${countryName} abseits der Hauptziele.`
           : `${entry.name} ist eine der groessten Staedte in ${countryName}.`,
@@ -394,7 +395,7 @@ const buildRows = (countries) => {
       country_code: cca2,
       type: "country",
       types,
-      image_url: imageFromName(name),
+      image_url: imageFromName(name, cca2),
       description,
       highlights: capital ? [capital] : [],
       best_season: null,
@@ -545,7 +546,7 @@ const streamGeonamesRows = async (countries, countryNameByCode, currencyByCode, 
       country_code: countryCode,
       type,
       types,
-      image_url: imageFromName(name),
+      image_url: imageFromName(name, countryCode),
       description,
       highlights,
       best_season: null,

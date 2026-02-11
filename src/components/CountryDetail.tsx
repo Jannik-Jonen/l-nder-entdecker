@@ -356,7 +356,12 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
           src={country.imageUrl}
           alt={country.name}
           className="h-full w-full object-cover"
-          onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${encodeURIComponent(country.name)}/1200/800`; }}
+          onError={(e) => {
+            const code = country.code;
+            (e.currentTarget as HTMLImageElement).src = code
+              ? `https://flagcdn.com/w1280/${code.toLowerCase()}.png`
+              : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6 text-primary-foreground">

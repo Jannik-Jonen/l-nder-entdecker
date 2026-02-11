@@ -50,7 +50,12 @@ export const InspirationPreview = () => {
                 src={destination.imageUrl}
                 alt={destination.name}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${encodeURIComponent(destination.name)}/1200/800`; }}
+                onError={(e) => {
+                  const code = destination.countryCode;
+                  (e.currentTarget as HTMLImageElement).src = code
+                    ? `https://flagcdn.com/w1280/${code.toLowerCase()}.png`
+                    : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6">

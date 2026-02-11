@@ -236,7 +236,8 @@ const islandNameSet = new Set([
 
 const defaultDestinationImage = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
 
-const imageFromName = (name?: string, fallback = defaultDestinationImage) => {
+const imageFromName = (name?: string, fallback = defaultDestinationImage, countryCode?: string | null) => {
+  if (countryCode) return `https://flagcdn.com/w1280/${countryCode.toLowerCase()}.png`;
   if (!name) return fallback;
   return `https://picsum.photos/seed/${encodeURIComponent(name)}/1200/800`;
 };
@@ -641,7 +642,7 @@ const seedDestinations = async (db: LocalDb) => {
       country_code: country.cca2 || null,
       type: 'country',
       types,
-      image_url: imageFromName(name),
+      image_url: imageFromName(name, defaultDestinationImage, country.cca2 || null),
       description: null,
       highlights: [],
       best_season: null,
@@ -669,7 +670,7 @@ const seedDestinations = async (db: LocalDb) => {
         country_code: country.cca2 || null,
         type: 'city',
         types: ['city'],
-        image_url: imageFromName(capital),
+        image_url: imageFromName(capital, defaultDestinationImage, country.cca2 || null),
         description: null,
         highlights: [],
         best_season: null,

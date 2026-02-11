@@ -4374,13 +4374,13 @@ WHERE NOT EXISTS (
 );
 
 UPDATE public.destinations
-SET image_url = 'https://picsum.photos/seed/'
-  || replace(replace(lower(country), '''', ''), ' ', '%20')
-  || '/1200/800'
+SET image_url = 'https://flagcdn.com/w1280/' || lower(country_code) || '.png'
 WHERE type = 'country'
   AND source = 'generated'
+  AND country_code IS NOT NULL
   AND (
     image_url IS NULL
     OR image_url = ''
-    OR image_url NOT ILIKE 'https://picsum.photos/seed/%'
+    OR image_url ILIKE 'https://picsum.photos/seed/%'
+    OR image_url ILIKE 'https://source.unsplash.com/%'
   );

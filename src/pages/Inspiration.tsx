@@ -370,7 +370,12 @@ const Inspiration = () => {
                     src={destination.imageUrl}
                     alt={destination.name}
                     loading="lazy"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${encodeURIComponent(destination.name)}/1200/800`; }}
+                    onError={(e) => {
+                      const code = destination.countryCode;
+                      (e.currentTarget as HTMLImageElement).src = code
+                        ? `https://flagcdn.com/w1280/${code.toLowerCase()}.png`
+                        : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
+                    }}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   {/* stärkerer, dunkler Overlay für bessere Lesbarkeit */}
@@ -444,7 +449,12 @@ const Inspiration = () => {
                   src={selectedDestination.imageUrl}
                   alt={selectedDestination.name}
                   loading="lazy"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${encodeURIComponent(selectedDestination.name)}/1200/800`; }}
+                  onError={(e) => {
+                    const code = selectedDestination.countryCode;
+                    (e.currentTarget as HTMLImageElement).src = code
+                      ? `https://flagcdn.com/w1280/${code.toLowerCase()}.png`
+                      : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
+                  }}
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />

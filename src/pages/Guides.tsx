@@ -143,7 +143,12 @@ const Guides = () => {
               <div key={d.id} className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all">
                 <div className="relative h-40">
                   <img src={d.imageUrl} alt={d.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${encodeURIComponent(d.name)}/1200/800`; }} />
+                    onError={(e) => {
+                      const code = d.countryCode;
+                      (e.currentTarget as HTMLImageElement).src = code
+                        ? `https://flagcdn.com/w1280/${code.toLowerCase()}.png`
+                        : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
+                    }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <h3 className="font-display text-xl font-semibold text-white">{d.name}</h3>

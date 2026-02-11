@@ -166,12 +166,25 @@ const rankDestinations = (list: Destination[], search?: string) => {
 
 const fallbackDestinationImage = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
 
-const resolveDestinationImage = (name: string, imageUrl?: string | null) => {
-  if (imageUrl && !imageUrl.includes('source.unsplash.com')) {
+const flagFromCountryCode = (countryCode?: string | null) => {
+  if (!countryCode) return null;
+  return `https://flagcdn.com/w1280/${countryCode.toLowerCase()}.png`;
+};
+
+const isPlaceholderImage = (imageUrl?: string | null) => {
+  if (!imageUrl) return true;
+  return imageUrl.includes('source.unsplash.com') || imageUrl.includes('picsum.photos');
+};
+
+const resolveDestinationImage = (row: DestinationRow) => {
+  const imageUrl = row.image_url;
+  if (imageUrl && !isPlaceholderImage(imageUrl)) {
     return imageUrl;
   }
-  const seed = encodeURIComponent(name || 'destination');
-  return `https://picsum.photos/seed/${seed}/1200/800`;
+  const flag = flagFromCountryCode(row.country_code);
+  if (flag) return flag;
+  if (imageUrl) return imageUrl;
+  return fallbackDestinationImage;
 };
 
 const toDestination = (row: DestinationRow): Destination => ({
@@ -181,7 +194,7 @@ const toDestination = (row: DestinationRow): Destination => ({
   countryCode: row.country_code || undefined,
   type: row.type,
   types: Array.isArray(row.types) ? row.types : undefined,
-  imageUrl: resolveDestinationImage(row.name, row.image_url || fallbackDestinationImage),
+  imageUrl: resolveDestinationImage(row),
   description: row.description || '',
   highlights: Array.isArray(row.highlights) ? row.highlights : [],
   bestSeason: row.best_season || '',
