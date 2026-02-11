@@ -243,7 +243,7 @@ const AdminDestinations = () => {
           next.image_url =
             wiki?.imageUrl ||
             rich?.imageUrl ||
-            `https://source.unsplash.com/featured/?${encodeURIComponent(query)}`;
+            `https://picsum.photos/seed/${encodeURIComponent(query)}/1200/800`;
         }
         if (!hasBestSeason && (wiki?.bestSeason || rich?.bestSeason)) {
           next.best_season = (wiki?.bestSeason || rich?.bestSeason || '').trim();

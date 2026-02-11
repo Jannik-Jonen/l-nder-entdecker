@@ -238,7 +238,7 @@ const defaultDestinationImage = 'https://images.unsplash.com/photo-1476514525535
 
 const imageFromName = (name?: string, fallback = defaultDestinationImage) => {
   if (!name) return fallback;
-  return `https://source.unsplash.com/featured/?${encodeURIComponent(name)}`;
+  return `https://picsum.photos/seed/${encodeURIComponent(name)}/1200/800`;
 };
 
 const regionCostMap: Record<string, { cost: number; currencyFallback: string }> = {

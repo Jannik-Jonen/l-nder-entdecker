@@ -356,7 +356,7 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
           src={country.imageUrl}
           alt={country.name}
           className="h-full w-full object-cover"
-          onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://source.unsplash.com/featured/?${encodeURIComponent(country.name)},landscape`; }}
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${encodeURIComponent(country.name)}/1200/800`; }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6 text-primary-foreground">

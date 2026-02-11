@@ -1349,12 +1349,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Cameroon",
-        "country": "Cameroon",
+        "name": "Kamerun",
+        "country": "Kamerun",
         "country_code": "CM",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cameroon,landscape",
+        "image_url": "https://source.unsplash.com/featured/?kamerun,landscape",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -1366,12 +1366,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Cape Verde",
-        "country": "Cape Verde",
+        "name": "Kap Verde",
+        "country": "Kap Verde",
         "country_code": "CV",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cape%20verde,landscape",
+        "image_url": "https://plus.unsplash.com/premium_photo-1697729707449-8de5d66c5a83?q=80&w=1482&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -1502,12 +1502,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Comoros",
-        "country": "Comoros",
+        "name": "Komoren",
+        "country": "Komoren",
         "country_code": "KM",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?comoros,landscape",
+        "image_url": "https://source.unsplash.com/featured/?komoren,landscape",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -1519,12 +1519,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Congo (Dem. Rep.)",
-        "country": "Congo (Dem. Rep.)",
+        "name": "Kongo (Dem. Rep.)",
+        "country": "Kongo (Dem. Rep.)",
         "country_code": "CD",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?congo%20(dem.%20rep.),landscape",
+        "image_url": "https://images.unsplash.com/photo-1657671520058-64293338bf94?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -1536,12 +1536,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Congo (Rep.)",
-        "country": "Congo (Rep.)",
+        "name": "Kongo (Rep.)",
+        "country": "Kongo (Rep.)",
         "country_code": "CG",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?congo%20(rep.),landscape",
+        "image_url": "https://source.unsplash.com/featured/?kongo%20(rep.),landscape",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -1570,12 +1570,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Croatia",
-        "country": "Croatia",
+        "name": "Kroatien",
+        "country": "Kroatien",
         "country_code": "HR",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?croatia,landscape",
+        "image_url": "https://images.unsplash.com/photo-1555990793-da11153b2473?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4074,7 +4074,7 @@ WITH data AS (
         "country_code": "UA",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?ukraine,landscape",
+        "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4091,7 +4091,7 @@ WITH data AS (
         "country_code": "AE",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?united%20arab%20emirates,landscape",
+        "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4108,7 +4108,7 @@ WITH data AS (
         "country_code": "US",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?united%20states,landscape",
+        "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4125,7 +4125,7 @@ WITH data AS (
         "country_code": "UZ",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?uzbekistan,landscape",
+        "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4142,7 +4142,7 @@ WITH data AS (
         "country_code": "VU",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?vanuatu,landscape",
+        "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4159,7 +4159,7 @@ WITH data AS (
         "country_code": "VA",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?vatican%20city,landscape",
+        "image_url": "https://images.unsplash.com/photo-1531572753322-ad063cecc140?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4176,7 +4176,7 @@ WITH data AS (
         "country_code": "VN",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?vietnam,landscape",
+        "image_url": "https://images.unsplash.com/photo-1605189914441-47183c6fcd08?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4188,29 +4188,12 @@ WITH data AS (
         "source": "generated"
       },
       {
-        "name": "Virgin Islands (UK)",
-        "country": "Virgin Islands (UK)",
-        "country_code": "VG",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?virgin%20islands%20(uk),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Virgin Islands (US)",
-        "country": "Virgin Islands (US)",
+        "name": "Britische Jungfern Inseln",
+        "country": "Britische Jungfern Inseln",
         "country_code": "VI",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?virgin%20islands%20(us),landscape",
+        "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4244,7 +4227,7 @@ WITH data AS (
         "country_code": "EH",
         "type": "country",
         "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?western%20sahara,landscape",
+        "image_url": "https://images.unsplash.com/photo-1559586616-361e18714958?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4278,7 +4261,7 @@ WITH data AS (
         "country_code": "ZM",
         "type": "country",
         "types": ["country"],
-        "image_url": "hhttps://images.unsplash.com/photo-1666732566977-8805c13a6ce2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "image_url": "https://images.unsplash.com/photo-1666732566977-8805c13a6ce2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
         "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
         "best_season": "Ganzjährig",
@@ -4391,13 +4374,13 @@ WHERE NOT EXISTS (
 );
 
 UPDATE public.destinations
-SET image_url = 'https://source.unsplash.com/featured/?'
-  || replace(replace(lower(country), '''', '%27'), ' ', '%20')
-  || ',landscape'
+SET image_url = 'https://picsum.photos/seed/'
+  || replace(replace(lower(country), '''', ''), ' ', '%20')
+  || '/1200/800'
 WHERE type = 'country'
   AND source = 'generated'
   AND (
     image_url IS NULL
     OR image_url = ''
-    OR image_url NOT ILIKE 'https://source.unsplash.com/featured/?%'
+    OR image_url NOT ILIKE 'https://picsum.photos/seed/%'
   );
