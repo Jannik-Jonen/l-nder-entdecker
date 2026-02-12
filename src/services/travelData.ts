@@ -1,7 +1,6 @@
 import { Destination } from '@/types/travel';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { isLocalSupabase } from '@/integrations/supabase/client';
-import { inspirationDestinations } from '@/data/mockData';
 
 interface WikiSection {
   toclevel: number;
@@ -245,20 +244,6 @@ export const fetchDestinationsCatalog = async (_opts?: {
   countryCode?: string;
   search?: string;
 }): Promise<Destination[]> => {
-  const fallbackSearch = (search?: string) => {
-    let list = inspirationDestinations.slice();
-    if (_opts?.type) list = list.filter((d) => d.type === _opts.type || (Array.isArray(d.types) && d.types.includes(_opts.type)));
-    if (_opts?.countryCode) list = list.filter((d) => (d.countryCode || '').toUpperCase() === _opts.countryCode?.toUpperCase());
-    if (search) {
-      const s = search.toLowerCase();
-      list = list.filter((d) =>
-        d.name.toLowerCase().includes(s) ||
-        d.country.toLowerCase().includes(s) ||
-        (d.description || '').toLowerCase().includes(s)
-      );
-    }
-    return rankDestinations(list, search);
-  };
   try {
     const columns = isLocalSupabase
       ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
@@ -282,7 +267,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
       }
       if (apiData && (search || apiData.length > 0)) {
         const mapped = apiData.map(toDestination);
-        if (search && mapped.length === 0) return fallbackSearch(search);
+        if (search && mapped.length === 0) return [];
         return search ? rankDestinations(mapped, search) : mapped;
       }
     }
@@ -308,7 +293,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
         );
       }
       const mapped = rows.map(toDestination);
-      if (search && mapped.length === 0) return fallbackSearch(search);
+      if (search && mapped.length === 0) return [];
       return search ? rankDestinations(mapped, search) : mapped;
     }
     let query = fromDestinations()
@@ -324,10 +309,10 @@ export const fetchDestinationsCatalog = async (_opts?: {
     if (error) throw error;
     const rows = (data || []) as DestinationRow[];
     const mapped = rows.map(toDestination);
-    if (search && mapped.length === 0) return fallbackSearch(search);
+    if (search && mapped.length === 0) return [];
     return search ? rankDestinations(mapped, search) : mapped;
   } catch {
-    return fallbackSearch(_opts?.search?.trim());
+    return [];
   }
 };
 
@@ -344,8 +329,7 @@ export const getDestinationById = async (_id: string): Promise<Destination | nul
     if (!data) return null;
     return toDestination(data as DestinationRow);
   } catch {
-    const found = inspirationDestinations.find((d) => d.id === _id);
-    return found || null;
+    return null;
   }
 };
 
@@ -374,9 +358,7 @@ export const getChildren = async (_id: string, _type?: Destination['type']): Pro
     const rows = (data || []) as DestinationRow[];
     return rows.map(toDestination);
   } catch {
-    let list = inspirationDestinations.filter((d) => d.parentId === _id);
-    if (_type) list = list.filter((d) => d.type === _type || (Array.isArray(d.types) && d.types.includes(_type)));
-    return list.sort((a, b) => a.name.localeCompare(b.name));
+    return [];
   }
 };
 
@@ -397,12 +379,6 @@ export const getAncestors = async (_id: string): Promise<Destination[]> => {
     }
     return result;
   } catch {
-    let current = inspirationDestinations.find((d) => d.id === _id) || null;
-    for (let i = 0; i < 10; i++) {
-      if (!current) break;
-      result.push(current);
-      current = current.parentId ? inspirationDestinations.find((d) => d.id === current?.parentId) || null : null;
-    }
     return result;
   }
 };

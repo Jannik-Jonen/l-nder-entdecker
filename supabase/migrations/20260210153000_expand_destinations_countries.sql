@@ -7,10 +7,17 @@ WITH data AS (
         "country": "Venezuela",
         "country_code": "VE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://images.unsplash.com/photo-1714594923299-e915b7d71701?w=1200&q=80&auto=format&fit=crop",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://plus.unsplash.com/premium_photo-1733317216216-1bf7b1db4f65?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Karibikküste, Tepuis und Wasserfällen.",
-        "highlights": ["Angel Falls", "Los Roques", "Caracas", "Tepuis"],
+        "highlights": [
+          "Angel Falls",
+          "Los Roques",
+          "Caracas",
+          "Tepuis"
+        ],
         "best_season": "Dezember bis April",
         "average_daily_cost": 80,
         "currency": "VES",
@@ -26,10 +33,17 @@ WITH data AS (
         "country": "Kolumbien",
         "country_code": "CO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?colombia,cartagena",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1577070173374-6894bfa13803?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Vielfältiges Land mit Anden, Karibik und Kaffeezonen.",
-        "highlights": ["Cartagena", "Medellín", "Kaffeezone", "Tayrona"],
+        "highlights": [
+          "Cartagena",
+          "Medellín",
+          "Kaffeezone",
+          "Tayrona"
+        ],
         "best_season": "Dezember bis März",
         "average_daily_cost": 70,
         "currency": "COP",
@@ -45,10 +59,17 @@ WITH data AS (
         "country": "Peru",
         "country_code": "PE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?peru,machu%20picchu",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land der Anden mit Inka-Kultur, Wüste und Regenwald.",
-        "highlights": ["Machu Picchu", "Cusco", "Arequipa", "Amazonas"],
+        "highlights": [
+          "Machu Picchu",
+          "Cusco",
+          "Arequipa",
+          "Amazonas"
+        ],
         "best_season": "Mai bis September",
         "average_daily_cost": 65,
         "currency": "PEN",
@@ -64,10 +85,17 @@ WITH data AS (
         "country": "Chile",
         "country_code": "CL",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?chile,patagonia",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1478827387698-1527781a4887?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Langes Küstenland mit Wüste, Bergen und Patagonien.",
-        "highlights": ["Atacama", "Santiago", "Valparaíso", "Patagonien"],
+        "highlights": [
+          "Atacama",
+          "Santiago",
+          "Valparaíso",
+          "Patagonien"
+        ],
         "best_season": "Oktober bis März",
         "average_daily_cost": 85,
         "currency": "CLP",
@@ -83,10 +111,17 @@ WITH data AS (
         "country": "Ecuador",
         "country_code": "EC",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?ecuador,galapagos",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1606591808963-8fc3c63fa6a2?q=80&w=1402&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Kleines Land mit Anden, Amazonas und Galápagos.",
-        "highlights": ["Quito", "Galápagos", "Baños", "Amazonas"],
+        "highlights": [
+          "Quito",
+          "Galápagos",
+          "Baños",
+          "Amazonas"
+        ],
         "best_season": "Juni bis September",
         "average_daily_cost": 60,
         "currency": "USD",
@@ -102,10 +137,17 @@ WITH data AS (
         "country": "Costa Rica",
         "country_code": "CR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?costa%20rica,arenal",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1620658927695-c33df6fb8130?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Naturparadies mit Regenwald, Vulkanen und Stränden.",
-        "highlights": ["Arenal", "Monteverde", "Manuel Antonio", "Tamarindo"],
+        "highlights": [
+          "Arenal",
+          "Monteverde",
+          "Manuel Antonio",
+          "Tamarindo"
+        ],
         "best_season": "Dezember bis April",
         "average_daily_cost": 95,
         "currency": "CRC",
@@ -121,10 +163,17 @@ WITH data AS (
         "country": "Südafrika",
         "country_code": "ZA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?south%20africa,capetown",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Safari, Küsten und abwechslungsreicher Natur.",
-        "highlights": ["Kapstadt", "Krüger Park", "Garden Route", "Weinregionen"],
+        "highlights": [
+          "Kapstadt",
+          "Krüger Park",
+          "Garden Route",
+          "Weinregionen"
+        ],
         "best_season": "Mai bis September",
         "average_daily_cost": 80,
         "currency": "ZAR",
@@ -140,10 +189,17 @@ WITH data AS (
         "country": "Kenia",
         "country_code": "KE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kenya,masai%20mara",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Safari-Land mit Savannen, Seen und Küste.",
-        "highlights": ["Masai Mara", "Nairobi", "Diani Beach", "Naivasha"],
+        "highlights": [
+          "Masai Mara",
+          "Nairobi",
+          "Diani Beach",
+          "Naivasha"
+        ],
         "best_season": "Juni bis Oktober",
         "average_daily_cost": 90,
         "currency": "KES",
@@ -159,10 +215,17 @@ WITH data AS (
         "country": "Tansania",
         "country_code": "TZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?tanzania,serengeti",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1613864309738-9102a9e22883?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Safari-Klassiker mit Serengeti und Sansibar.",
-        "highlights": ["Serengeti", "Sansibar", "Ngorongoro", "Kilimandscharo"],
+        "highlights": [
+          "Serengeti",
+          "Sansibar",
+          "Ngorongoro",
+          "Kilimandscharo"
+        ],
         "best_season": "Juni bis Oktober",
         "average_daily_cost": 90,
         "currency": "TZS",
@@ -178,10 +241,17 @@ WITH data AS (
         "country": "Uganda",
         "country_code": "UG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?uganda,bwindi",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1551357141-f73a8402ceb3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Grünes Land mit Gorillas, Seen und Savannen.",
-        "highlights": ["Bwindi", "Kampala", "Murchison Falls", "Lake Bunyonyi"],
+        "highlights": [
+          "Bwindi",
+          "Kampala",
+          "Murchison Falls",
+          "Lake Bunyonyi"
+        ],
         "best_season": "Juni bis August, Dezember bis Februar",
         "average_daily_cost": 70,
         "currency": "UGX",
@@ -197,10 +267,17 @@ WITH data AS (
         "country": "Ägypten",
         "country_code": "EG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?egypt,pyramids",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1600520611035-84157ad4084d?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Antikes Kulturland mit Pyramiden und Roter Meer Küste.",
-        "highlights": ["Gizeh", "Luxor", "Nil", "Hurghada"],
+        "highlights": [
+          "Gizeh",
+          "Luxor",
+          "Nil",
+          "Hurghada"
+        ],
         "best_season": "Oktober bis April",
         "average_daily_cost": 55,
         "currency": "EGP",
@@ -216,10 +293,17 @@ WITH data AS (
         "country": "Namibia",
         "country_code": "NA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?namibia,sossusvlei",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1559160581-44bd4222d397?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Wüstenland mit Weite, Dünen und Safaris.",
-        "highlights": ["Sossusvlei", "Etosha", "Swakopmund", "Skeleton Coast"],
+        "highlights": [
+          "Sossusvlei",
+          "Etosha",
+          "Swakopmund",
+          "Skeleton Coast"
+        ],
         "best_season": "Mai bis Oktober",
         "average_daily_cost": 95,
         "currency": "NAD",
@@ -235,10 +319,17 @@ WITH data AS (
         "country": "Botswana",
         "country_code": "BW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?botswana,okavango",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1591046940577-5badf473537a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Safari-Land mit Okavango Delta und weiten Ebenen.",
-        "highlights": ["Okavango", "Chobe", "Makgadikgadi", "Gaborone"],
+        "highlights": [
+          "Okavango",
+          "Chobe",
+          "Makgadikgadi",
+          "Gaborone"
+        ],
         "best_season": "Mai bis Oktober",
         "average_daily_cost": 120,
         "currency": "BWP",
@@ -254,10 +345,17 @@ WITH data AS (
         "country": "Thailand",
         "country_code": "TH",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?thailand,phuket",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Beliebtes Reiseziel mit Tempeln, Inseln und Streetfood.",
-        "highlights": ["Bangkok", "Chiang Mai", "Phuket", "Krabi"],
+        "highlights": [
+          "Bangkok",
+          "Chiang Mai",
+          "Phuket",
+          "Krabi"
+        ],
         "best_season": "November bis Februar",
         "average_daily_cost": 50,
         "currency": "THB",
@@ -273,10 +371,17 @@ WITH data AS (
         "country": "Malaysia",
         "country_code": "MY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?malaysia,borneo",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1508062878650-88b52897f298?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Regenwald, Metropolen und Inseln.",
-        "highlights": ["Kuala Lumpur", "Borneo", "Penang", "Langkawi"],
+        "highlights": [
+          "Kuala Lumpur",
+          "Borneo",
+          "Penang",
+          "Langkawi"
+        ],
         "best_season": "Mai bis September",
         "average_daily_cost": 55,
         "currency": "MYR",
@@ -292,10 +397,17 @@ WITH data AS (
         "country": "Singapur",
         "country_code": "SG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?singapore,marina%20bay",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=1352&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Moderne Stadtstaat-Metropole mit Kultur und Kulinarik.",
-        "highlights": ["Marina Bay", "Gardens by the Bay", "Sentosa", "Chinatown"],
+        "highlights": [
+          "Marina Bay",
+          "Gardens by the Bay",
+          "Sentosa",
+          "Chinatown"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 150,
         "currency": "SGD",
@@ -311,10 +423,17 @@ WITH data AS (
         "country": "Indien",
         "country_code": "IN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?india,taj%20mahal",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1496372412473-e8548ffd82bc?q=80&w=1614&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Riesiges Land mit Kulturen, Bergen und tropischen Stränden.",
-        "highlights": ["Delhi", "Agra", "Kerala", "Rajasthan"],
+        "highlights": [
+          "Delhi",
+          "Agra",
+          "Kerala",
+          "Rajasthan"
+        ],
         "best_season": "Oktober bis März",
         "average_daily_cost": 45,
         "currency": "INR",
@@ -330,10 +449,18 @@ WITH data AS (
         "country": "Sri Lanka",
         "country_code": "LK",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?sri%20lanka,sigiriya",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1612862862126-865765df2ded?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Insel im Indischen Ozean mit Teeplantagen und Stränden.",
-        "highlights": ["Sigiriya", "Kandy", "Ella", "Galle"],
+        "highlights": [
+          "Sigiriya",
+          "Kandy",
+          "Ella",
+          "Galle"
+        ],
         "best_season": "Dezember bis März",
         "average_daily_cost": 50,
         "currency": "LKR",
@@ -349,10 +476,18 @@ WITH data AS (
         "country": "Philippinen",
         "country_code": "PH",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?philippines,palawan",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Archipel mit Traumstränden, Vulkanen und Tauchspots.",
-        "highlights": ["Palawan", "Cebu", "Bohol", "Siargao"],
+        "highlights": [
+          "Palawan",
+          "Cebu",
+          "Bohol",
+          "Siargao"
+        ],
         "best_season": "Dezember bis Mai",
         "average_daily_cost": 55,
         "currency": "PHP",
@@ -368,10 +503,17 @@ WITH data AS (
         "country": "Australien",
         "country_code": "AU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?australia,opera%20house",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1494233892892-84542a694e72?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Kontinent mit Metropolen, Outback und Stränden.",
-        "highlights": ["Sydney", "Great Barrier Reef", "Melbourne", "Outback"],
+        "highlights": [
+          "Sydney",
+          "Great Barrier Reef",
+          "Melbourne",
+          "Outback"
+        ],
         "best_season": "September bis November, März bis Mai",
         "average_daily_cost": 140,
         "currency": "AUD",
@@ -387,10 +529,17 @@ WITH data AS (
         "country": "Neuseeland",
         "country_code": "NZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?new%20zealand,fiordland",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1597655601841-214a4cfe8b2c?q=80&w=989&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Naturparadies mit Fjorden, Bergen und Seen.",
-        "highlights": ["Queenstown", "Fiordland", "Rotorua", "Aoraki"],
+        "highlights": [
+          "Queenstown",
+          "Fiordland",
+          "Rotorua",
+          "Aoraki"
+        ],
         "best_season": "November bis März",
         "average_daily_cost": 130,
         "currency": "NZD",
@@ -406,10 +555,17 @@ WITH data AS (
         "country": "Kanada",
         "country_code": "CA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?canada,banff",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=1411&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Weites Land mit Nationalparks, Seen und Städten.",
-        "highlights": ["Banff", "Vancouver", "Toronto", "Niagara"],
+        "highlights": [
+          "Banff",
+          "Vancouver",
+          "Toronto",
+          "Niagara"
+        ],
         "best_season": "Juni bis September",
         "average_daily_cost": 140,
         "currency": "CAD",
@@ -425,10 +581,17 @@ WITH data AS (
         "country": "Mexiko",
         "country_code": "MX",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?mexico,chichen%20itza",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1568402102990-bc541580b59f?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Maya-Kultur, Kolonialstädten und Pazifik- sowie Karibikküste.",
-        "highlights": ["Mexiko-Stadt", "Yucatán", "Oaxaca", "Baja California"],
+        "highlights": [
+          "Mexiko-Stadt",
+          "Yucatán",
+          "Oaxaca",
+          "Baja California"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 75,
         "currency": "MXN",
@@ -444,10 +607,17 @@ WITH data AS (
         "country": "Brasilien",
         "country_code": "BR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?brazil,rio",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Riesiges Land mit Amazonas, Stränden und pulsierenden Städten.",
-        "highlights": ["Rio de Janeiro", "Amazonas", "Iguaçu", "Salvador"],
+        "highlights": [
+          "Rio de Janeiro",
+          "Amazonas",
+          "Iguaçu",
+          "Salvador"
+        ],
         "best_season": "Mai bis Oktober",
         "average_daily_cost": 85,
         "currency": "BRL",
@@ -463,10 +633,17 @@ WITH data AS (
         "country": "Argentinien",
         "country_code": "AR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?argentina,patagonia",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1599094792743-7df3e8870800?q=80&w=1458&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Anden, Weingebieten und Patagonien.",
-        "highlights": ["Buenos Aires", "Patagonien", "Mendoza", "Iguazú"],
+        "highlights": [
+          "Buenos Aires",
+          "Patagonien",
+          "Mendoza",
+          "Iguazú"
+        ],
         "best_season": "Oktober bis März",
         "average_daily_cost": 85,
         "currency": "ARS",
@@ -482,10 +659,17 @@ WITH data AS (
         "country": "Bolivien",
         "country_code": "BO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bolivia,salar%20de%20uyuni",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1529801877115-8a69a227fcc0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Höhenland mit Salzseen, Anden und indigener Kultur.",
-        "highlights": ["Salar de Uyuni", "La Paz", "Sucre", "Titicacasee"],
+        "highlights": [
+          "Salar de Uyuni",
+          "La Paz",
+          "Sucre",
+          "Titicacasee"
+        ],
         "best_season": "Mai bis Oktober",
         "average_daily_cost": 50,
         "currency": "BOB",
@@ -501,10 +685,17 @@ WITH data AS (
         "country": "Paraguay",
         "country_code": "PY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?paraguay,asuncion",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1614949260630-1d8a27791215?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Ruhiges Land mit Flusslandschaften und kolonialem Erbe.",
-        "highlights": ["Asunción", "Itaipú", "Jesuitenruinen", "Chaco"],
+        "highlights": [
+          "Asunción",
+          "Itaipú",
+          "Jesuitenruinen",
+          "Chaco"
+        ],
         "best_season": "Mai bis September",
         "average_daily_cost": 45,
         "currency": "PYG",
@@ -520,10 +711,17 @@ WITH data AS (
         "country": "Uruguay",
         "country_code": "UY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?uruguay,montevideo",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1689723744935-60e01c337543?q=80&w=1529&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Küstenland mit Stränden, Weingütern und entspannter Atmosphäre.",
-        "highlights": ["Montevideo", "Punta del Este", "Colonia", "Weingüter"],
+        "highlights": [
+          "Montevideo",
+          "Punta del Este",
+          "Colonia",
+          "Weingüter"
+        ],
         "best_season": "November bis März",
         "average_daily_cost": 85,
         "currency": "UYU",
@@ -539,10 +737,17 @@ WITH data AS (
         "country": "Guatemala",
         "country_code": "GT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guatemala,antigua",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1628128594359-25d5e30661dd?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Vulkanland mit Maya-Stätten und kolonialen Städten.",
-        "highlights": ["Antigua", "Tikal", "Atitlán", "Semuc Champey"],
+        "highlights": [
+          "Antigua",
+          "Tikal",
+          "Atitlán",
+          "Semuc Champey"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 55,
         "currency": "GTQ",
@@ -558,10 +763,17 @@ WITH data AS (
         "country": "Panama",
         "country_code": "PA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?panama,canal",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1632505702897-cc41b0ba3b64?q=80&w=1633&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Kanal, Regenwald und Karibikinseln.",
-        "highlights": ["Panamakanal", "Casco Viejo", "San Blas", "Boquete"],
+        "highlights": [
+          "Panamakanal",
+          "Casco Viejo",
+          "San Blas",
+          "Boquete"
+        ],
         "best_season": "Dezember bis April",
         "average_daily_cost": 85,
         "currency": "PAB",
@@ -577,10 +789,17 @@ WITH data AS (
         "country": "Nicaragua",
         "country_code": "NI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?nicaragua,granada",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1590856028965-5683c4b48ad0?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Vulkanen, Seen und kolonialen Städten.",
-        "highlights": ["Granada", "Ometepe", "León", "Vulkane"],
+        "highlights": [
+          "Granada",
+          "Ometepe",
+          "León",
+          "Vulkane"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 45,
         "currency": "NIO",
@@ -596,10 +815,17 @@ WITH data AS (
         "country": "Honduras",
         "country_code": "HN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?honduras,roatan",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1637353831495-80b454520a24?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Karibikinseln, Regenwald und Maya-Stätten.",
-        "highlights": ["Roatán", "Copán", "Karibikküste", "Nationalparks"],
+        "highlights": [
+          "Roatán",
+          "Copán",
+          "Karibikküste",
+          "Nationalparks"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 55,
         "currency": "HNL",
@@ -615,10 +841,17 @@ WITH data AS (
         "country": "Belize",
         "country_code": "BZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?belize,barrier%20reef",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1585541115010-5ea9833eacfe?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Karibikland mit Riffen, Dschungel und Höhlen.",
-        "highlights": ["Barrier Reef", "Cayes", "ATM Cave", "Dschungel"],
+        "highlights": [
+          "Barrier Reef",
+          "Cayes",
+          "ATM Cave",
+          "Dschungel"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 90,
         "currency": "BZD",
@@ -634,10 +867,18 @@ WITH data AS (
         "country": "Kuba",
         "country_code": "CU",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?cuba,havana",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1529426301869-82f4d98d3d81?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Inselstaat mit kolonialen Städten, Oldtimern und Stränden.",
-        "highlights": ["Havanna", "Trinidad", "Viñales", "Varadero"],
+        "highlights": [
+          "Havanna",
+          "Trinidad",
+          "Viñales",
+          "Varadero"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 70,
         "currency": "CUP",
@@ -653,10 +894,18 @@ WITH data AS (
         "country": "Dominikanische Republik",
         "country_code": "DO",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?dominican%20republic,punta%20cana",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1551908080-36c7c22746a2?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Karibikland mit Stränden, Bergen und Kolonialgeschichte.",
-        "highlights": ["Punta Cana", "Santo Domingo", "Samaná", "Jarabacoa"],
+        "highlights": [
+          "Punta Cana",
+          "Santo Domingo",
+          "Samaná",
+          "Jarabacoa"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 95,
         "currency": "DOP",
@@ -672,10 +921,18 @@ WITH data AS (
         "country": "Jamaika",
         "country_code": "JM",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?jamaica,negril",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1437719417032-8595fd9e9dc6?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reggae-Insel mit Stränden, Bergen und Wasserfällen.",
-        "highlights": ["Negril", "Blue Mountains", "Dunn''''s River Falls", "Kingston"],
+        "highlights": [
+          "Negril",
+          "Blue Mountains",
+          "Dunn''''s River Falls",
+          "Kingston"
+        ],
         "best_season": "November bis April",
         "average_daily_cost": 100,
         "currency": "JMD",
@@ -691,10 +948,18 @@ WITH data AS (
         "country": "Island",
         "country_code": "IS",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?iceland,waterfall",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1531168556467-80aace0d0144?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Insel mit Geysiren, Wasserfällen und spektakulären Landschaften.",
-        "highlights": ["Golden Circle", "Reykjavík", "Skógafoss", "Gletscher"],
+        "highlights": [
+          "Golden Circle",
+          "Reykjavík",
+          "Skógafoss",
+          "Gletscher"
+        ],
         "best_season": "Juni bis September",
         "average_daily_cost": 180,
         "currency": "ISK",
@@ -710,10 +975,17 @@ WITH data AS (
         "country": "Norwegen",
         "country_code": "NO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?norway,fjord",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1544085311-11a028465b03?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Skandinavisches Land mit Fjorden, Bergen und Nordlicht.",
-        "highlights": ["Geirangerfjord", "Lofoten", "Oslo", "Tromsø"],
+        "highlights": [
+          "Geirangerfjord",
+          "Lofoten",
+          "Oslo",
+          "Tromsø"
+        ],
         "best_season": "Juni bis August, Dezember bis März",
         "average_daily_cost": 180,
         "currency": "NOK",
@@ -729,10 +1001,17 @@ WITH data AS (
         "country": "Schweden",
         "country_code": "SE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?sweden,stockholm",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1534143340226-6cbc7628dbe5?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Seen, Wäldern und moderner Designkultur.",
-        "highlights": ["Stockholm", "Schären", "Lappland", "Göteborg"],
+        "highlights": [
+          "Stockholm",
+          "Schären",
+          "Lappland",
+          "Göteborg"
+        ],
         "best_season": "Juni bis August",
         "average_daily_cost": 160,
         "currency": "SEK",
@@ -748,10 +1027,17 @@ WITH data AS (
         "country": "Finnland",
         "country_code": "FI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?finland,lapland",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1528155124528-06c125d81e89?q=80&w=689&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land der tausend Seen, Saunen und Polarlichter.",
-        "highlights": ["Helsinki", "Lappland", "Seenplatte", "Rovaniemi"],
+        "highlights": [
+          "Helsinki",
+          "Lappland",
+          "Seenplatte",
+          "Rovaniemi"
+        ],
         "best_season": "Juni bis August, Dezember bis März",
         "average_daily_cost": 160,
         "currency": "EUR",
@@ -767,10 +1053,17 @@ WITH data AS (
         "country": "Irland",
         "country_code": "IE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?ireland,cliffs%20of%20moher",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1530538095376-a4936b35b5f0?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Grünes Land mit Küste, Burgen und Pubkultur.",
-        "highlights": ["Dublin", "Cliffs of Moher", "Galway", "Ring of Kerry"],
+        "highlights": [
+          "Dublin",
+          "Cliffs of Moher",
+          "Galway",
+          "Ring of Kerry"
+        ],
         "best_season": "Mai bis September",
         "average_daily_cost": 150,
         "currency": "EUR",
@@ -786,10 +1079,17 @@ WITH data AS (
         "country": "Türkei",
         "country_code": "TR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?turkey,cappadocia",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1510253687831-0f982d7862fc?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land zwischen Europa und Asien mit Küsten, Geschichte und Vielfalt.",
-        "highlights": ["Istanbul", "Kappadokien", "Pamukkale", "Antalya"],
+        "highlights": [
+          "Istanbul",
+          "Kappadokien",
+          "Pamukkale",
+          "Antalya"
+        ],
         "best_season": "April bis Juni, September bis Oktober",
         "average_daily_cost": 60,
         "currency": "TRY",
@@ -805,10 +1105,17 @@ WITH data AS (
         "country": "Jordanien",
         "country_code": "JO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?jordan,petra",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1580834341580-8c17a3a630ca?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Wüstenland mit Petra, Wadi Rum und Toten Meer.",
-        "highlights": ["Petra", "Wadi Rum", "Amman", "Totes Meer"],
+        "highlights": [
+          "Petra",
+          "Wadi Rum",
+          "Amman",
+          "Totes Meer"
+        ],
         "best_season": "März bis Mai, Oktober bis November",
         "average_daily_cost": 85,
         "currency": "JOD",
@@ -824,10 +1131,18 @@ WITH data AS (
         "country": "Indonesien",
         "country_code": "ID",
         "type": "country",
-        "types": ["country", "island"],
-        "image_url": "https://source.unsplash.com/featured/?indonesia,bali",
+        "types": [
+          "country",
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1559628233-100c798642d4?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Archipel mit Vulkanen, Stränden und kultureller Vielfalt.",
-        "highlights": ["Bali", "Java", "Komodo", "Raja Ampat"],
+        "highlights": [
+          "Bali",
+          "Java",
+          "Komodo",
+          "Raja Ampat"
+        ],
         "best_season": "Mai bis Oktober",
         "average_daily_cost": 55,
         "currency": "IDR",
@@ -837,22 +1152,29 @@ WITH data AS (
         "source": "curated",
         "coords_lat": -0.7893,
         "coords_lon": 113.9213
-      }
+      },
       {
         "name": "Afghanistan",
         "country": "Afghanistan",
         "country_code": "AF",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?afghanistan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1637750832829-7cc7e0605c15?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Afghanistan ist ein Land in Asia (Southern Asia). Hauptstadt: Kabul.",
+        "highlights": [
+          "Kabul",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AFN",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -860,16 +1182,23 @@ WITH data AS (
         "country": "Albania",
         "country_code": "AL",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?albania,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1623167278440-fd212b72e1bd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Albania ist ein Land in Europe (Southeast Europe). Hauptstadt: Tirana.",
+        "highlights": [
+          "Tirana",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ALL",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -877,16 +1206,23 @@ WITH data AS (
         "country": "Algeria",
         "country_code": "DZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?algeria,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1602496252172-8030f4df6ed0?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Algeria ist ein Land in Africa (Northern Africa). Hauptstadt: Algiers.",
+        "highlights": [
+          "Algiers",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "DZD",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -894,16 +1230,23 @@ WITH data AS (
         "country": "Andorra",
         "country_code": "AD",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?andorra,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1634141428610-1781a3862a9b?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Andorra ist ein Land in Europe (Southern Europe). Hauptstadt: Andorra la Vella.",
+        "highlights": [
+          "Andorra la Vella",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -911,16 +1254,23 @@ WITH data AS (
         "country": "Angola",
         "country_code": "AO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?angola,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1518521901256-c90d4db6f85c?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Angola ist ein Land in Africa (Middle Africa). Hauptstadt: Luanda.",
+        "highlights": [
+          "Luanda",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AOA",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -928,16 +1278,23 @@ WITH data AS (
         "country": "Anguilla",
         "country_code": "AI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?anguilla,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1732817207979-b78bee396ddb?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Anguilla ist ein Land in Americas (Caribbean). Hauptstadt: The Valley.",
+        "highlights": [
+          "The Valley",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -945,15 +1302,22 @@ WITH data AS (
         "country": "Antarctica",
         "country_code": "AQ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?antarctica,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1603548746365-0c7a1583d826?q=80&w=722&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Antarctica ist ein Land in Antarctic.",
+        "highlights": [
+          "Natur",
+          "Kultur",
+          "Kulinarik",
+          "Städte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
         "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
+        "visa_info": "Einreisebestimmungen vor Reiseantritt prüfen.",
+        "vaccination_info": "Standardimpfungen prüfen.",
         "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
         "source": "generated"
       },
@@ -962,16 +1326,23 @@ WITH data AS (
         "country": "Antigua & Barbuda",
         "country_code": "AG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?antigua%20&%20barbuda,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1527354490195-9abc2e0b93cb?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Antigua & Barbuda ist ein Land in Americas (Caribbean). Hauptstadt: Saint John's.",
+        "highlights": [
+          "Saint John's",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -979,16 +1350,23 @@ WITH data AS (
         "country": "Armenia",
         "country_code": "AM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?armenia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1620693654464-7d33c7eac5a3?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Armenia ist ein Land in Asia (Western Asia). Hauptstadt: Yerevan.",
+        "highlights": [
+          "Yerevan",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AMD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -996,16 +1374,23 @@ WITH data AS (
         "country": "Aruba",
         "country_code": "AW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?aruba,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1635153756203-cfea696035d4?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Aruba ist ein Land in Americas (Caribbean). Hauptstadt: Oranjestad.",
+        "highlights": [
+          "Oranjestad",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AWG",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1013,16 +1398,23 @@ WITH data AS (
         "country": "Austria",
         "country_code": "AT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?austria,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1597086831879-756db15e81d3?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Austria ist ein Land in Europe (Central Europe). Hauptstadt: Vienna.",
+        "highlights": [
+          "Vienna",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1030,16 +1422,23 @@ WITH data AS (
         "country": "Azerbaijan",
         "country_code": "AZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?azerbaijan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1596306499398-8d88944a5ec4?q=80&w=1412&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Azerbaijan ist ein Land in Asia (Western Asia). Hauptstadt: Baku.",
+        "highlights": [
+          "Baku",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AZN",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1047,16 +1446,23 @@ WITH data AS (
         "country": "Bahamas",
         "country_code": "BS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bahamas,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1559956144-83a135c9872e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bahamas ist ein Land in Americas (Caribbean). Hauptstadt: Nassau.",
+        "highlights": [
+          "Nassau",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BSD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1064,16 +1470,23 @@ WITH data AS (
         "country": "Bahrain",
         "country_code": "BH",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bahrain,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1519677214308-f7f2f8b71acf?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bahrain ist ein Land in Asia (Western Asia). Hauptstadt: Manama.",
+        "highlights": [
+          "Manama",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BHD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1081,16 +1494,23 @@ WITH data AS (
         "country": "Bangladesh",
         "country_code": "BD",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bangladesh,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1564034503-e7c9edcb420c?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bangladesh ist ein Land in Asia (Southern Asia). Hauptstadt: Dhaka.",
+        "highlights": [
+          "Dhaka",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BDT",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1098,16 +1518,23 @@ WITH data AS (
         "country": "Barbados",
         "country_code": "BB",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?barbados,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1636728157814-17e3dd6cc94c?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Barbados ist ein Land in Americas (Caribbean). Hauptstadt: Bridgetown.",
+        "highlights": [
+          "Bridgetown",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BBD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1115,16 +1542,23 @@ WITH data AS (
         "country": "Belarus",
         "country_code": "BY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?belarus,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1597986762540-bd1206e2a8b0?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Belarus ist ein Land in Europe (Eastern Europe). Hauptstadt: Minsk.",
+        "highlights": [
+          "Minsk",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BYN",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1132,16 +1566,23 @@ WITH data AS (
         "country": "Belgium",
         "country_code": "BE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?belgium,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1491557345352-5929e343eb89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Belgium ist ein Land in Europe (Western Europe). Hauptstadt: Brussels.",
+        "highlights": [
+          "Brussels",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1149,33 +1590,23 @@ WITH data AS (
         "country": "Benin",
         "country_code": "BJ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?benin,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1600241005059-71de13374958?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Benin ist ein Land in Africa (Western Africa). Hauptstadt: Porto-Novo.",
+        "highlights": [
+          "Porto-Novo",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Bermuda",
-        "country": "Bermuda",
-        "country_code": "BM",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bermuda,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1183,16 +1614,23 @@ WITH data AS (
         "country": "Bhutan",
         "country_code": "BT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bhutan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1578556881786-851d4b79cb73?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bhutan ist ein Land in Asia (Southern Asia). Hauptstadt: Thimphu.",
+        "highlights": [
+          "Thimphu",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BTN",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1200,33 +1638,23 @@ WITH data AS (
         "country": "Bosnia & Herzegovina",
         "country_code": "BA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bosnia%20&%20herzegovina,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1623536167776-922ccb1ff749?q=80&w=488&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bosnia & Herzegovina ist ein Land in Europe (Southeast Europe). Hauptstadt: Sarajevo.",
+        "highlights": [
+          "Sarajevo",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Bouvet Island",
-        "country": "Bouvet Island",
-        "country_code": "BV",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bouvet%20island,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BAM",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1234,33 +1662,23 @@ WITH data AS (
         "country": "Britain (UK)",
         "country_code": "GB",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?britain%20(uk),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1561234311-a9e16fa60b25?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Britain (UK) ist ein Land in Europe (Northern Europe). Hauptstadt: London.",
+        "highlights": [
+          "London",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "British Indian Ocean Territory",
-        "country": "British Indian Ocean Territory",
-        "country_code": "IO",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?british%20indian%20ocean%20territory,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "GBP",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1268,16 +1686,23 @@ WITH data AS (
         "country": "Brunei",
         "country_code": "BN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?brunei,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1659418499116-a4580f895679?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Brunei ist ein Land in Asia (South-Eastern Asia). Hauptstadt: Bandar Seri Begawan.",
+        "highlights": [
+          "Bandar Seri Begawan",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BND",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1285,16 +1710,23 @@ WITH data AS (
         "country": "Bulgaria",
         "country_code": "BG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?bulgaria,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1633210181101-774c588bc997?q=80&w=1577&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bulgaria ist ein Land in Europe (Southeast Europe). Hauptstadt: Sofia.",
+        "highlights": [
+          "Sofia",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BGN",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1302,16 +1734,23 @@ WITH data AS (
         "country": "Burkina Faso",
         "country_code": "BF",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?burkina%20faso,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1739066109742-90f2807449f0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Burkina Faso ist ein Land in Africa (Western Africa). Hauptstadt: Ouagadougou.",
+        "highlights": [
+          "Ouagadougou",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1319,16 +1758,23 @@ WITH data AS (
         "country": "Burundi",
         "country_code": "BI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?burundi,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1672787076496-ccb18a869605?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Burundi ist ein Land in Africa (Eastern Africa). Hauptstadt: Gitega.",
+        "highlights": [
+          "Gitega",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "BIF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1336,16 +1782,23 @@ WITH data AS (
         "country": "Cambodia",
         "country_code": "KH",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cambodia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1566706546199-a93ba33ce9f7?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Cambodia ist ein Land in Asia (South-Eastern Asia). Hauptstadt: Phnom Penh.",
+        "highlights": [
+          "Phnom Penh",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KHR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1353,16 +1806,23 @@ WITH data AS (
         "country": "Kamerun",
         "country_code": "CM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kamerun,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1682924754698-9f0a3bcef68f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Kamerun ist ein Land in Africa (Middle Africa). Hauptstadt: Yaoundé.",
+        "highlights": [
+          "Yaoundé",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XAF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1370,33 +1830,23 @@ WITH data AS (
         "country": "Kap Verde",
         "country_code": "CV",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://plus.unsplash.com/premium_photo-1697729707449-8de5d66c5a83?q=80&w=1482&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Kap Verde ist ein Land in Africa (Western Africa). Hauptstadt: Praia.",
+        "highlights": [
+          "Praia",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Caribbean NL",
-        "country": "Caribbean NL",
-        "country_code": "BQ",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?caribbean%20nl,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CVE",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1404,16 +1854,23 @@ WITH data AS (
         "country": "Cayman Islands",
         "country_code": "KY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cayman%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1611946022552-d2ca5ffba186?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Cayman Islands ist ein Land in Americas (Caribbean). Hauptstadt: George Town.",
+        "highlights": [
+          "George Town",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KYD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1421,16 +1878,23 @@ WITH data AS (
         "country": "Central African Rep.",
         "country_code": "CF",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?central%20african%20rep.,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1653714802676-6a50c7ead70e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Central African Rep. ist ein Land in Africa (Middle Africa). Hauptstadt: Bangui.",
+        "highlights": [
+          "Bangui",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XAF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1438,16 +1902,23 @@ WITH data AS (
         "country": "Chad",
         "country_code": "TD",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?chad,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1676034625780-f662d34ac673?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Chad ist ein Land in Africa (Middle Africa). Hauptstadt: N'Djamena.",
+        "highlights": [
+          "N'Djamena",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XAF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1455,27 +1926,41 @@ WITH data AS (
         "country": "China",
         "country_code": "CN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?china,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1508804052814-cd3ba865a116?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "China ist ein Land in Asia (Eastern Asia). Hauptstadt: Beijing.",
+        "highlights": [
+          "Beijing",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CNY",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
         "name": "Christmas Island",
-        "country": "Christmas Island",
-        "country_code": "CX",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?christmas%20island,landscape",
+        "country": "Australia",
+        "country_code": "AU",
+        "type": "island",
+        "types": [
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1666203395124-df1f3416c3e1?q=80&w=1633&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -1486,13 +1971,20 @@ WITH data AS (
       },
       {
         "name": "Cocos (Keeling) Islands",
-        "country": "Cocos (Keeling) Islands",
-        "country_code": "CC",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cocos%20(keeling)%20islands,landscape",
+        "country": "Australia",
+        "country_code": "AU",
+        "type": "island",
+        "types": [
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1743377432405-ce77fa78c5cf?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -1506,16 +1998,23 @@ WITH data AS (
         "country": "Komoren",
         "country_code": "KM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?komoren,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1748098210743-972125c9f3da?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Komoren ist ein Land in Africa (Eastern Africa). Hauptstadt: Moroni.",
+        "highlights": [
+          "Moroni",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KMF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1523,16 +2022,23 @@ WITH data AS (
         "country": "Kongo (Dem. Rep.)",
         "country_code": "CD",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1657671520058-64293338bf94?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "description": "Kongo (Dem. Rep.) ist ein Land in Africa (Middle Africa). Hauptstadt: Kinshasa.",
+        "highlights": [
+          "Kinshasa",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CDF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1540,16 +2046,23 @@ WITH data AS (
         "country": "Kongo (Rep.)",
         "country_code": "CG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kongo%20(rep.),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1584192194671-0ebc0c8c4b53?q=80&w=1025&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Kongo (Rep.) ist ein Land in Africa (Middle Africa). Hauptstadt: Brazzaville.",
+        "highlights": [
+          "Brazzaville",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XAF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1557,16 +2070,23 @@ WITH data AS (
         "country": "Cook Islands",
         "country_code": "CK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cook%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1598376538586-c244746bfa1e?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Cook Islands ist ein Land in Oceania (Polynesia). Hauptstadt: Avarua.",
+        "highlights": [
+          "Avarua",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CKD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -1574,16 +2094,23 @@ WITH data AS (
         "country": "Kroatien",
         "country_code": "HR",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1555990793-da11153b2473?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Kroatien ist ein Land in Europe (Southeast Europe). Hauptstadt: Zagreb.",
+        "highlights": [
+          "Zagreb",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1591,16 +2118,23 @@ WITH data AS (
         "country": "Curaçao",
         "country_code": "CW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?curaçao,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1724598674807-6acb225b98f2?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Curaçao ist ein Land in Americas (Caribbean). Hauptstadt: Willemstad.",
+        "highlights": [
+          "Willemstad",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ANG",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1608,16 +2142,23 @@ WITH data AS (
         "country": "Cyprus",
         "country_code": "CY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?cyprus,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1677023484291-005b9840132f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Cyprus ist ein Land in Europe (Southern Europe). Hauptstadt: Nicosia.",
+        "highlights": [
+          "Nicosia",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1625,16 +2166,23 @@ WITH data AS (
         "country": "Czech Republic",
         "country_code": "CZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?czech%20republic,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1563913801192-bcefb1bb7651?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Czech Republic ist ein Land in Europe (Central Europe). Hauptstadt: Prague.",
+        "highlights": [
+          "Prague",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CZK",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1642,16 +2190,23 @@ WITH data AS (
         "country": "Côte d''Ivoire",
         "country_code": "CI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?côte%20d''ivoire,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1519566335946-e6f65f0f4fdf?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Côte d''Ivoire ist ein Land in Africa (Western Africa). Hauptstadt: Yamoussoukro.",
+        "highlights": [
+          "Yamoussoukro",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1659,16 +2214,23 @@ WITH data AS (
         "country": "Denmark",
         "country_code": "DK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?denmark,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1552560880-2482cef14240?q=80&w=743&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Denmark ist ein Land in Europe (Northern Europe). Hauptstadt: Copenhagen.",
+        "highlights": [
+          "Copenhagen",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "DKK",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1676,16 +2238,23 @@ WITH data AS (
         "country": "Djibouti",
         "country_code": "DJ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?djibouti,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1669792976534-0633ce36a000?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Djibouti ist ein Land in Africa (Eastern Africa). Hauptstadt: Djibouti.",
+        "highlights": [
+          "Djibouti",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "DJF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1693,16 +2262,23 @@ WITH data AS (
         "country": "Dominica",
         "country_code": "DM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?dominica,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1678377402149-7e13cedccd4a?q=80&w=1473&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Dominica ist ein Land in Americas (Caribbean). Hauptstadt: Roseau.",
+        "highlights": [
+          "Roseau",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1710,16 +2286,23 @@ WITH data AS (
         "country": "East Timor",
         "country_code": "TL",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?east%20timor,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1707445305630-5962c1e9e1e9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "East Timor ist ein Land in Asia (South-Eastern Asia). Hauptstadt: Dili.",
+        "highlights": [
+          "Dili",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1727,16 +2310,23 @@ WITH data AS (
         "country": "El Salvador",
         "country_code": "SV",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?el%20salvador,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1690384451505-2aef8ae1b0ef?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "El Salvador ist ein Land in Americas (Central America). Hauptstadt: San Salvador.",
+        "highlights": [
+          "San Salvador",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -1744,16 +2334,23 @@ WITH data AS (
         "country": "Equatorial Guinea",
         "country_code": "GQ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?equatorial%20guinea,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1728478988778-3c43c668624b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Equatorial Guinea ist ein Land in Africa (Middle Africa). Hauptstadt: Malabo.",
+        "highlights": [
+          "Malabo",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XAF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1761,16 +2358,23 @@ WITH data AS (
         "country": "Eritrea",
         "country_code": "ER",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?eritrea,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1723377434868-eaa60458b8a6?q=80&w=1464&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Eritrea ist ein Land in Africa (Eastern Africa). Hauptstadt: Asmara.",
+        "highlights": [
+          "Asmara",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ERN",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1778,16 +2382,23 @@ WITH data AS (
         "country": "Estonia",
         "country_code": "EE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?estonia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1709862366377-54b16f3e51f9?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Estonia ist ein Land in Europe (Northern Europe). Hauptstadt: Tallinn.",
+        "highlights": [
+          "Tallinn",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1795,16 +2406,23 @@ WITH data AS (
         "country": "Eswatini (Swaziland)",
         "country_code": "SZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?eswatini%20(swaziland),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1559160581-c3b6f035520b?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Eswatini (Swaziland) ist ein Land in Africa (Southern Africa). Hauptstadt: Mbabane.",
+        "highlights": [
+          "Mbabane",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SZL",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1812,27 +2430,41 @@ WITH data AS (
         "country": "Ethiopia",
         "country_code": "ET",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?ethiopia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1634029878815-1bb307302471?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Ethiopia ist ein Land in Africa (Eastern Africa). Hauptstadt: Addis Ababa.",
+        "highlights": [
+          "Addis Ababa",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ETB",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
         "name": "Falkland Islands",
-        "country": "Falkland Islands",
-        "country_code": "FK",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?falkland%20islands,landscape",
+        "country": "United Kingdom",
+        "country_code": "GB",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1580953889927-245d1fcd2519?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -1843,19 +2475,26 @@ WITH data AS (
       },
       {
         "name": "Faroe Islands",
-        "country": "Faroe Islands",
-        "country_code": "FO",
+        "country": "Denmark",
+        "country_code": "DK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?faroe%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1539634936668-036d13a9cc3b?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Faroe Islands ist ein Land in Europe (Northern Europe). Hauptstadt: Copenhagen.",
+        "highlights": [
+          "Copenhagen",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "DKK",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1863,16 +2502,23 @@ WITH data AS (
         "country": "Fiji",
         "country_code": "FJ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?fiji,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1579264670959-286d7b06f1ae?q=80&w=757&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Fiji ist ein Land in Oceania (Melanesia). Hauptstadt: Suva.",
+        "highlights": [
+          "Suva",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "FJD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -1880,16 +2526,23 @@ WITH data AS (
         "country": "France",
         "country_code": "FR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?france,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1503917988258-f87a78e3c995?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "France ist ein Land in Europe (Western Europe). Hauptstadt: Paris.",
+        "highlights": [
+          "Paris",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -1897,44 +2550,41 @@ WITH data AS (
         "country": "French Guiana",
         "country_code": "GF",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?french%20guiana,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1704759928716-7657e3ad7615?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "French Guiana ist ein Land in Americas (South America). Hauptstadt: Cayenne.",
+        "highlights": [
+          "Cayenne",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
         "name": "French Polynesia",
-        "country": "French Polynesia",
-        "country_code": "PF",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?french%20polynesia,landscape",
+        "country": "France",
+        "country_code": "FR",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1652842183703-47c2f7bb8c3c?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "French S. Terr.",
-        "country": "French S. Terr.",
-        "country_code": "TF",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?french%20s.%20terr.,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -1948,16 +2598,23 @@ WITH data AS (
         "country": "Gabon",
         "country_code": "GA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?gabon,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1708081744604-995bcb2edc76?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Gabon ist ein Land in Africa (Middle Africa). Hauptstadt: Libreville.",
+        "highlights": [
+          "Libreville",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XAF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1965,16 +2622,23 @@ WITH data AS (
         "country": "Gambia",
         "country_code": "GM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?gambia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1550517783-799cb706c757?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Gambia ist ein Land in Africa (Western Africa). Hauptstadt: Banjul.",
+        "highlights": [
+          "Banjul",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "GMD",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -1982,16 +2646,23 @@ WITH data AS (
         "country": "Georgia",
         "country_code": "GE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?georgia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1563284223-333497472e88?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Georgia ist ein Land in Asia (Western Asia). Hauptstadt: Tbilisi.",
+        "highlights": [
+          "Tbilisi",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "GEL",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -1999,16 +2670,23 @@ WITH data AS (
         "country": "Germany",
         "country_code": "DE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?germany,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Germany ist ein Land in Europe (Western Europe). Hauptstadt: Berlin.",
+        "highlights": [
+          "Berlin",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2016,27 +2694,41 @@ WITH data AS (
         "country": "Ghana",
         "country_code": "GH",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?ghana,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1610571005499-7963c7544d54?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Ghana ist ein Land in Africa (Western Africa). Hauptstadt: Accra.",
+        "highlights": [
+          "Accra",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "GHS",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
         "name": "Gibraltar",
-        "country": "Gibraltar",
-        "country_code": "GI",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?gibraltar,landscape",
+        "country": "United Kingdom",
+        "country_code": "GB",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1545289825-8b0664a68f63?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -2050,27 +2742,41 @@ WITH data AS (
         "country": "Greece",
         "country_code": "GR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?greece,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Greece ist ein Land in Europe (Southern Europe). Hauptstadt: Athens.",
+        "highlights": [
+          "Athens",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
         "name": "Greenland",
-        "country": "Greenland",
-        "country_code": "GL",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?greenland,landscape",
+        "country": "Denmark",
+        "country_code": "DM",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1573995975633-faee0123f31f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -2084,16 +2790,23 @@ WITH data AS (
         "country": "Grenada",
         "country_code": "GD",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?grenada,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1616555846456-6d53b92669a8?q=80&w=1633&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Grenada ist ein Land in Americas (Caribbean). Hauptstadt: St. George's.",
+        "highlights": [
+          "St. George's",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -2101,16 +2814,23 @@ WITH data AS (
         "country": "Guadeloupe",
         "country_code": "GP",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guadeloupe,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1614706580214-1f5412a118a2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Guadeloupe ist ein Land in Americas (Caribbean). Hauptstadt: Basse-Terre.",
+        "highlights": [
+          "Basse-Terre",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -2118,27 +2838,41 @@ WITH data AS (
         "country": "Guam",
         "country_code": "GU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guam,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1599172806227-55b02cefcc31?q=80&w=1473&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Guam ist ein Land in Oceania (Micronesia). Hauptstadt: Hagåtña.",
+        "highlights": [
+          "Hagåtña",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
         "name": "Guernsey",
-        "country": "Guernsey",
-        "country_code": "GG",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guernsey,landscape",
+        "country": "United Kingdom",
+        "country_code": "GB",
+        "type": "island",
+        "types": [
+          "island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1617387382064-ff300a829f7a?q=80&w=1449&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -2152,16 +2886,23 @@ WITH data AS (
         "country": "Guinea",
         "country_code": "GN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guinea,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1676405956449-64d51e0cc7bf?q=80&w=1373&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Guinea ist ein Land in Africa (Western Africa). Hauptstadt: Conakry.",
+        "highlights": [
+          "Conakry",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "GNF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2169,16 +2910,23 @@ WITH data AS (
         "country": "Guinea-Bissau",
         "country_code": "GW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guinea-bissau,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://plus.unsplash.com/premium_photo-1667223580051-d912e1e14050?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Guinea-Bissau ist ein Land in Africa (Western Africa). Hauptstadt: Bissau.",
+        "highlights": [
+          "Bissau",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2186,16 +2934,23 @@ WITH data AS (
         "country": "Guyana",
         "country_code": "GY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?guyana,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1589997169253-cd680c6fba7a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Guyana ist ein Land in Americas (South America). Hauptstadt: Georgetown.",
+        "highlights": [
+          "Georgetown",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "GYD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -2203,27 +2958,41 @@ WITH data AS (
         "country": "Haiti",
         "country_code": "HT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?haiti,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1602027333786-373a1b858831?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Haiti ist ein Land in Americas (Caribbean). Hauptstadt: Port-au-Prince.",
+        "highlights": [
+          "Port-au-Prince",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "HTG",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
         "name": "Heard Island & McDonald Islands",
-        "country": "Heard Island & McDonald Islands",
-        "country_code": "HM",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?heard%20island%20&%20mcdonald%20islands,landscape",
+        "country": "Australia",
+        "country_code": "AU",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://plus.unsplash.com/premium_photo-1709461852817-2f3d254a35de?q=80&w=1571&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -2237,16 +3006,23 @@ WITH data AS (
         "country": "Hong Kong",
         "country_code": "HK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?hong%20kong,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1616394158624-a2ba9cfe2994?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Hong Kong ist ein Land in Asia (Eastern Asia). Hauptstadt: City of Victoria.",
+        "highlights": [
+          "City of Victoria",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "HKD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2254,16 +3030,23 @@ WITH data AS (
         "country": "Hungary",
         "country_code": "HU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?hungary,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1541343672885-9be56236302a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Hungary ist ein Land in Europe (Central Europe). Hauptstadt: Budapest.",
+        "highlights": [
+          "Budapest",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "HUF",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2271,16 +3054,23 @@ WITH data AS (
         "country": "Iran",
         "country_code": "IR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?iran,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1579932979622-fc012038564d?q=80&w=686&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Iran ist ein Land in Asia (Southern Asia). Hauptstadt: Tehran.",
+        "highlights": [
+          "Tehran",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "IRR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2288,27 +3078,41 @@ WITH data AS (
         "country": "Iraq",
         "country_code": "IQ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?iraq,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1709659537459-c4e8ee1fe9c9?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Iraq ist ein Land in Asia (Western Asia). Hauptstadt: Baghdad.",
+        "highlights": [
+          "Baghdad",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "IQD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
         "name": "Isle of Man",
-        "country": "Isle of Man",
+        "country": "United Kingdom",
         "country_code": "IM",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?isle%20of%20man,landscape",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1559209540-0fdb2a8c126a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -2322,16 +3126,23 @@ WITH data AS (
         "country": "Israel",
         "country_code": "IL",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?israel,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1614517453351-6c1522fc7a56?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Israel ist ein Land in Asia (Western Asia). Hauptstadt: Jerusalem.",
+        "highlights": [
+          "Jerusalem",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ILS",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2339,16 +3150,23 @@ WITH data AS (
         "country": "Italy",
         "country_code": "IT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?italy,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1583855282680-6dbdc69b0932?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Italy ist ein Land in Europe (Southern Europe). Hauptstadt: Rome.",
+        "highlights": [
+          "Rome",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2356,27 +3174,41 @@ WITH data AS (
         "country": "Japan",
         "country_code": "JP",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?japan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Japan ist ein Land in Asia (Eastern Asia). Hauptstadt: Tokyo.",
+        "highlights": [
+          "Tokyo",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "JPY",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
         "name": "Jersey",
-        "country": "Jersey",
-        "country_code": "JE",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?jersey,landscape",
+        "country": "United Kingdom",
+        "country_code": "GB",
+        "type": "Island",
+        "types": [
+          "Island"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1574517232727-80513c4fe68d?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "highlights": [
+          "Hauptstadt",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
         "currency": null,
@@ -2390,16 +3222,23 @@ WITH data AS (
         "country": "Kazakhstan",
         "country_code": "KZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kazakhstan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1582053403239-c58c07d86ce1?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3De",
+        "description": "Kazakhstan ist ein Land in Asia (Central Asia). Hauptstadt: Astana.",
+        "highlights": [
+          "Astana",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KZT",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2407,50 +3246,71 @@ WITH data AS (
         "country": "Kiribati",
         "country_code": "KI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kiribati,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1443181994330-3e365ff8949e?q=80&w=881&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Kiribati ist ein Land in Oceania (Micronesia). Hauptstadt: South Tarawa.",
+        "highlights": [
+          "South Tarawa",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AUD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
-        "name": "Korea (North)",
-        "country": "Korea (North)",
+        "name": "North Korea",
+        "country": "North Korea",
         "country_code": "KP",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?korea%20(north),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1604359896927-0610b7a3a2be?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "North Korea ist ein Land in Asia (Eastern Asia). Hauptstadt: Pyongyang.",
+        "highlights": [
+          "Pyongyang",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KPW",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
-        "name": "Korea (South)",
-        "country": "Korea (South)",
+        "name": "South Korea",
+        "country": "South Korea",
         "country_code": "KR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?korea%20(south),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1603852452515-2dc92bd9c6f1?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "South Korea ist ein Land in Asia (Eastern Asia). Hauptstadt: Seoul.",
+        "highlights": [
+          "Seoul",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KRW",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2458,16 +3318,23 @@ WITH data AS (
         "country": "Kuwait",
         "country_code": "KW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kuwait,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1643763283594-0c3eccec8276?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Kuwait ist ein Land in Asia (Western Asia). Hauptstadt: Kuwait City.",
+        "highlights": [
+          "Kuwait City",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KWD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2475,16 +3342,23 @@ WITH data AS (
         "country": "Kyrgyzstan",
         "country_code": "KG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?kyrgyzstan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1610720684893-619cd7a5cde5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Kyrgyzstan ist ein Land in Asia (Central Asia). Hauptstadt: Bishkek.",
+        "highlights": [
+          "Bishkek",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "KGS",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2492,16 +3366,23 @@ WITH data AS (
         "country": "Laos",
         "country_code": "LA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?laos,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1570366583862-f91883984fde?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Laos ist ein Land in Asia (South-Eastern Asia). Hauptstadt: Vientiane.",
+        "highlights": [
+          "Vientiane",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "LAK",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2509,16 +3390,23 @@ WITH data AS (
         "country": "Latvia",
         "country_code": "LV",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?latvia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1609517760017-9b76ac28f0e9?q=80&w=1644&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Latvia ist ein Land in Europe (Northern Europe). Hauptstadt: Riga.",
+        "highlights": [
+          "Riga",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2526,16 +3414,23 @@ WITH data AS (
         "country": "Lebanon",
         "country_code": "LB",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?lebanon,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://plus.unsplash.com/premium_photo-1697729942579-93186371254e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Lebanon ist ein Land in Asia (Western Asia). Hauptstadt: Beirut.",
+        "highlights": [
+          "Beirut",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "LBP",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2543,16 +3438,23 @@ WITH data AS (
         "country": "Lesotho",
         "country_code": "LS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?lesotho,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1583744628322-e645a41527b9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Lesotho ist ein Land in Africa (Southern Africa). Hauptstadt: Maseru.",
+        "highlights": [
+          "Maseru",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "LSL",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2560,16 +3462,23 @@ WITH data AS (
         "country": "Liberia",
         "country_code": "LR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?liberia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://plus.unsplash.com/premium_photo-1697730411634-5313371ad8fe?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Liberia ist ein Land in Africa (Western Africa). Hauptstadt: Monrovia.",
+        "highlights": [
+          "Monrovia",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "LRD",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2577,16 +3486,23 @@ WITH data AS (
         "country": "Libya",
         "country_code": "LY",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?libya,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1639862819821-5350da089c43?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Libya ist ein Land in Africa (Northern Africa). Hauptstadt: Tripoli.",
+        "highlights": [
+          "Tripoli",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "LYD",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2594,16 +3510,23 @@ WITH data AS (
         "country": "Liechtenstein",
         "country_code": "LI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?liechtenstein,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1600105838943-1f52bf4dcaa9?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Liechtenstein ist ein Land in Europe (Western Europe). Hauptstadt: Vaduz.",
+        "highlights": [
+          "Vaduz",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CHF",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2611,16 +3534,23 @@ WITH data AS (
         "country": "Lithuania",
         "country_code": "LT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?lithuania,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1560940981-c867cc7b8b75?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Lithuania ist ein Land in Europe (Northern Europe). Hauptstadt: Vilnius.",
+        "highlights": [
+          "Vilnius",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2628,16 +3558,23 @@ WITH data AS (
         "country": "Luxembourg",
         "country_code": "LU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?luxembourg,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1588336899745-22da91d8f816?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Luxembourg ist ein Land in Europe (Western Europe). Hauptstadt: Luxembourg.",
+        "highlights": [
+          "Luxembourg",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2645,16 +3582,23 @@ WITH data AS (
         "country": "Macau",
         "country_code": "MO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?macau,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1708580175277-6c171e822f94?q=80&w=1366&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Macau ist ein Land in Asia (Eastern Asia).",
+        "highlights": [
+          "Tempel",
+          "Street Food",
+          "Berglandschaften",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MOP",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2662,16 +3606,23 @@ WITH data AS (
         "country": "Madagascar",
         "country_code": "MG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?madagascar,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1570742544137-3a469196c32b?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Madagascar ist ein Land in Africa (Eastern Africa). Hauptstadt: Antananarivo.",
+        "highlights": [
+          "Antananarivo",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MGA",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2679,16 +3630,23 @@ WITH data AS (
         "country": "Malawi",
         "country_code": "MW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?malawi,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1715948889565-210cf2eb920d?q=80&w=1634&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Malawi ist ein Land in Africa (Eastern Africa). Hauptstadt: Lilongwe.",
+        "highlights": [
+          "Lilongwe",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MWK",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2696,16 +3654,23 @@ WITH data AS (
         "country": "Maldives",
         "country_code": "MV",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?maldives,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Maldives ist ein Land in Asia (Southern Asia). Hauptstadt: Malé.",
+        "highlights": [
+          "Malé",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MVR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2713,16 +3678,23 @@ WITH data AS (
         "country": "Mali",
         "country_code": "ML",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?mali,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1602679968973-64d784e98675?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Mali ist ein Land in Africa (Western Africa). Hauptstadt: Bamako.",
+        "highlights": [
+          "Bamako",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2730,16 +3702,23 @@ WITH data AS (
         "country": "Malta",
         "country_code": "MT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?malta,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1571856975545-119703c5225c?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Malta ist ein Land in Europe (Southern Europe). Hauptstadt: Valletta.",
+        "highlights": [
+          "Valletta",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2747,16 +3726,23 @@ WITH data AS (
         "country": "Marshall Islands",
         "country_code": "MH",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?marshall%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1587583286131-7ee81eef8fa7?q=80&w=727&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Marshall Islands ist ein Land in Oceania (Micronesia). Hauptstadt: Majuro.",
+        "highlights": [
+          "Majuro",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -2764,16 +3750,23 @@ WITH data AS (
         "country": "Martinique",
         "country_code": "MQ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?martinique,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1629190001937-59b3dd4e9d50?q=80&w=2160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Martinique ist ein Land in Americas (Caribbean). Hauptstadt: Fort-de-France.",
+        "highlights": [
+          "Fort-de-France",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -2781,16 +3774,23 @@ WITH data AS (
         "country": "Mauritania",
         "country_code": "MR",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?mauritania,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Mauritania ist ein Land in Africa (Western Africa). Hauptstadt: Nouakchott.",
+        "highlights": [
+          "Nouakchott",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MRU",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2798,16 +3798,23 @@ WITH data AS (
         "country": "Mauritius",
         "country_code": "MU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?mauritius,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1513415431848-a433b3de449f?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Mauritius ist ein Land in Africa (Eastern Africa). Hauptstadt: Port Louis.",
+        "highlights": [
+          "Port Louis",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MUR",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2815,16 +3822,23 @@ WITH data AS (
         "country": "Mayotte",
         "country_code": "YT",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?mayotte,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1671573263475-4e67ba1c063c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Mayotte ist ein Land in Africa (Eastern Africa). Hauptstadt: Mamoudzou.",
+        "highlights": [
+          "Mamoudzou",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2832,16 +3846,23 @@ WITH data AS (
         "country": "Micronesia",
         "country_code": "FM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?micronesia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1553602932-f93f674a9aaa?q=80&w=2142&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Micronesia ist ein Land in Oceania (Micronesia). Hauptstadt: Palikir.",
+        "highlights": [
+          "Palikir",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -2849,16 +3870,23 @@ WITH data AS (
         "country": "Moldova",
         "country_code": "MD",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?moldova,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1600159953570-df048e507c7b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Moldova ist ein Land in Europe (Eastern Europe). Hauptstadt: Chișinău.",
+        "highlights": [
+          "Chișinău",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MDL",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2866,16 +3894,23 @@ WITH data AS (
         "country": "Monaco",
         "country_code": "MC",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?monaco,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1581819896533-f8ab6767ce7e?q=80&w=1501&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Monaco ist ein Land in Europe (Western Europe). Hauptstadt: Monaco.",
+        "highlights": [
+          "Monaco",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2883,16 +3918,23 @@ WITH data AS (
         "country": "Mongolia",
         "country_code": "MN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?mongolia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1589654615616-6756a5653100?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Mongolia ist ein Land in Asia (Eastern Asia). Hauptstadt: Ulan Bator.",
+        "highlights": [
+          "Ulan Bator",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MNT",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2900,16 +3942,23 @@ WITH data AS (
         "country": "Montenegro",
         "country_code": "ME",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?montenegro,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1587551329971-31ef450a12f3?q=80&w=626&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Montenegro ist ein Land in Europe (Southeast Europe). Hauptstadt: Podgorica.",
+        "highlights": [
+          "Podgorica",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -2917,16 +3966,23 @@ WITH data AS (
         "country": "Montserrat",
         "country_code": "MS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?montserrat,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1596203164608-3b34693e05d5?q=80&w=1529&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Montserrat ist ein Land in Americas (Caribbean). Hauptstadt: Plymouth.",
+        "highlights": [
+          "Plymouth",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -2934,16 +3990,23 @@ WITH data AS (
         "country": "Morocco",
         "country_code": "MA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?morocco,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1569383746724-6f1b882b8f46?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Morocco ist ein Land in Africa (Northern Africa). Hauptstadt: Rabat.",
+        "highlights": [
+          "Rabat",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MAD",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2951,16 +4014,23 @@ WITH data AS (
         "country": "Mozambique",
         "country_code": "MZ",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?mozambique,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1565104165703-0777aab1b278?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Mozambique ist ein Land in Africa (Eastern Africa). Hauptstadt: Maputo.",
+        "highlights": [
+          "Maputo",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MZN",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -2968,16 +4038,23 @@ WITH data AS (
         "country": "Myanmar (Burma)",
         "country_code": "MM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?myanmar%20(burma),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1490077476659-095159692ab5?q=80&w=1451&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Myanmar (Burma) ist ein Land in Asia (South-Eastern Asia). Hauptstadt: Naypyidaw.",
+        "highlights": [
+          "Naypyidaw",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MMK",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -2985,16 +4062,23 @@ WITH data AS (
         "country": "Nauru",
         "country_code": "NR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?nauru,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1553947315-42cee3c8c771?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Nauru ist ein Land in Oceania (Micronesia). Hauptstadt: Yaren.",
+        "highlights": [
+          "Yaren",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AUD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3002,16 +4086,23 @@ WITH data AS (
         "country": "Nepal",
         "country_code": "NP",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?nepal,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Nepal ist ein Land in Asia (Southern Asia). Hauptstadt: Kathmandu.",
+        "highlights": [
+          "Kathmandu",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "NPR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3019,33 +4110,23 @@ WITH data AS (
         "country": "Netherlands",
         "country_code": "NL",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?netherlands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Netherlands ist ein Land in Europe (Western Europe). Hauptstadt: Amsterdam.",
+        "highlights": [
+          "Amsterdam",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "New Caledonia",
-        "country": "New Caledonia",
-        "country_code": "NC",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?new%20caledonia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3053,16 +4134,23 @@ WITH data AS (
         "country": "Niger",
         "country_code": "NE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?niger,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1736355089441-4d0684e762d7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Niger ist ein Land in Africa (Western Africa). Hauptstadt: Niamey.",
+        "highlights": [
+          "Niamey",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3070,50 +4158,47 @@ WITH data AS (
         "country": "Nigeria",
         "country_code": "NG",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?nigeria,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1594538756542-8c88bda491c5?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Westafrikanisches Land mit pulsierenden Städten, Küste und vielfältiger Kultur.",
+        "highlights": [
+          "Lagos",
+          "Abuja",
+          "Yankari",
+          "Erin-Ijesha Wasserfälle"
+        ],
+        "best_season": "November bis März",
+        "average_daily_cost": 55,
+        "currency": "NGN",
+        "visa_info": "Visum erforderlich; Einreisebestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieberimpfung vorgeschrieben.",
+        "health_safety_info": "Sicherheitslage prüfen; Reisewege sorgfältig planen.",
+        "source": "curated"
       },
       {
         "name": "Niue",
         "country": "Niue",
         "country_code": "NU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?niue,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1637595823309-62c331c4c4ec?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Niue ist ein Land in Oceania (Polynesia). Hauptstadt: Alofi.",
+        "highlights": [
+          "Alofi",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Norfolk Island",
-        "country": "Norfolk Island",
-        "country_code": "NF",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?norfolk%20island,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "NZD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3121,33 +4206,23 @@ WITH data AS (
         "country": "North Macedonia",
         "country_code": "MK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?north%20macedonia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1619371620133-1c4b489a0569?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "North Macedonia ist ein Land in Europe (Southeast Europe). Hauptstadt: Skopje.",
+        "highlights": [
+          "Skopje",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Northern Mariana Islands",
-        "country": "Northern Mariana Islands",
-        "country_code": "MP",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?northern%20mariana%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "MKD",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3155,16 +4230,23 @@ WITH data AS (
         "country": "Oman",
         "country_code": "OM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?oman,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1621680696874-edd80ce57b72?q=80&w=1591&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Oman ist ein Land in Asia (Western Asia). Hauptstadt: Muscat.",
+        "highlights": [
+          "Muscat",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "OMR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3172,16 +4254,23 @@ WITH data AS (
         "country": "Pakistan",
         "country_code": "PK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?pakistan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1514558427911-8e293bebf18c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Pakistan ist ein Land in Asia (Southern Asia). Hauptstadt: Islamabad.",
+        "highlights": [
+          "Islamabad",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "PKR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3189,16 +4278,23 @@ WITH data AS (
         "country": "Palau",
         "country_code": "PW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?palau,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1682462238190-7558c70e3c3b?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Palau ist ein Land in Oceania (Micronesia). Hauptstadt: Ngerulmud.",
+        "highlights": [
+          "Ngerulmud",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3206,16 +4302,23 @@ WITH data AS (
         "country": "Palestine",
         "country_code": "PS",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?palestine,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Palestine ist ein Land in Asia (Western Asia). Hauptstadt: Ramallah.",
+        "highlights": [
+          "Ramallah",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EGP",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3223,33 +4326,23 @@ WITH data AS (
         "country": "Papua New Guinea",
         "country_code": "PG",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?papua%20new%20guinea,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "description": "Papua New Guinea ist ein Land in Oceania (Melanesia). Hauptstadt: Port Moresby.",
+        "highlights": [
+          "Port Moresby",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "Pitcairn",
-        "country": "Pitcairn",
-        "country_code": "PN",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?pitcairn,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "PGK",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3257,16 +4350,23 @@ WITH data AS (
         "country": "Poland",
         "country_code": "PL",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?poland,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1563177978-4c5ffc081b2a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Poland ist ein Land in Europe (Central Europe). Hauptstadt: Warsaw.",
+        "highlights": [
+          "Warsaw",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "PLN",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3274,16 +4374,23 @@ WITH data AS (
         "country": "Portugal",
         "country_code": "PT",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1583915171662-bafdaee1156a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Portugal ist ein Land in Europe (Southern Europe). Hauptstadt: Lisbon.",
+        "highlights": [
+          "Lisbon",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3291,16 +4398,23 @@ WITH data AS (
         "country": "Puerto Rico",
         "country_code": "PR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?puerto%20rico,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1579687196544-08ae57ab5c11?q=80&w=1631&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Puerto Rico ist ein Land in Americas (Caribbean). Hauptstadt: San Juan.",
+        "highlights": [
+          "San Juan",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3308,16 +4422,23 @@ WITH data AS (
         "country": "Qatar",
         "country_code": "QA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?qatar,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1539475314840-751cecc1dacd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Qatar ist ein Land in Asia (Western Asia). Hauptstadt: Doha.",
+        "highlights": [
+          "Doha",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "QAR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3325,16 +4446,23 @@ WITH data AS (
         "country": "Romania",
         "country_code": "RO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?romania,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1526112982068-f899a62e118e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Romania ist ein Land in Europe (Southeast Europe). Hauptstadt: Bucharest.",
+        "highlights": [
+          "Bucharest",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "RON",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3342,16 +4470,23 @@ WITH data AS (
         "country": "Russia",
         "country_code": "RU",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?russia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1547448415-e9f5b28e570d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Russia ist ein Land in Europe (Eastern Europe). Hauptstadt: Moscow.",
+        "highlights": [
+          "Moscow",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "RUB",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3359,16 +4494,23 @@ WITH data AS (
         "country": "Rwanda",
         "country_code": "RW",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?rwanda,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1651860282296-47055c68580e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Rwanda ist ein Land in Africa (Eastern Africa). Hauptstadt: Kigali.",
+        "highlights": [
+          "Kigali",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "RWF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3376,16 +4518,23 @@ WITH data AS (
         "country": "Réunion",
         "country_code": "RE",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?réunion,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1580910727537-e4c80c6a6a29?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Réunion ist ein Land in Africa (Eastern Africa). Hauptstadt: Saint-Denis.",
+        "highlights": [
+          "Saint-Denis",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3393,16 +4542,23 @@ WITH data AS (
         "country": "Samoa (American)",
         "country_code": "AS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?samoa%20(american),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1701156417506-b789655c7f3e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Samoa (American) ist ein Land in Oceania (Polynesia). Hauptstadt: Pago Pago.",
+        "highlights": [
+          "Pago Pago",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3410,16 +4566,23 @@ WITH data AS (
         "country": "Samoa (western)",
         "country_code": "WS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?samoa%20(western),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1701156417506-b789655c7f3e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Samoa (western) ist ein Land in Oceania (Polynesia). Hauptstadt: Apia.",
+        "highlights": [
+          "Apia",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "WST",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3427,16 +4590,23 @@ WITH data AS (
         "country": "San Marino",
         "country_code": "SM",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?san%20marino,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1633792006252-0247f57e94a9?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "San Marino ist ein Land in Europe (Southern Europe). Hauptstadt: City of San Marino.",
+        "highlights": [
+          "City of San Marino",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3444,16 +4614,23 @@ WITH data AS (
         "country": "Sao Tome & Principe",
         "country_code": "ST",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?sao%20tome%20&%20principe,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1521837095228-0acd6c1cf09a?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Sao Tome & Principe ist ein Land in Africa (Middle Africa). Hauptstadt: São Tomé.",
+        "highlights": [
+          "São Tomé",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "STN",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3461,16 +4638,23 @@ WITH data AS (
         "country": "Saudi Arabia",
         "country_code": "SA",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?saudi%20arabia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1590959914819-b767b9fe4cfb?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Saudi Arabia ist ein Land in Asia (Western Asia). Hauptstadt: Riyadh.",
+        "highlights": [
+          "Riyadh",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SAR",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3478,16 +4662,23 @@ WITH data AS (
         "country": "Senegal",
         "country_code": "SN",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?senegal,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1528047705243-ebb19baf436f?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Senegal ist ein Land in Africa (Western Africa). Hauptstadt: Dakar.",
+        "highlights": [
+          "Dakar",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3495,16 +4686,23 @@ WITH data AS (
         "country": "Serbia",
         "country_code": "RS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?serbia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1632343084107-353ad9e95e37?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Serbia ist ein Land in Europe (Southeast Europe). Hauptstadt: Belgrade.",
+        "highlights": [
+          "Belgrade",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "RSD",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3512,16 +4710,23 @@ WITH data AS (
         "country": "Seychelles",
         "country_code": "SC",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?seychelles,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1670234069735-a9b32837cee4?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Seychelles ist ein Land in Africa (Eastern Africa). Hauptstadt: Victoria.",
+        "highlights": [
+          "Victoria",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SCR",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3529,16 +4734,23 @@ WITH data AS (
         "country": "Sierra Leone",
         "country_code": "SL",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?sierra%20leone,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1611395813517-41f9be5e292d?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Sierra Leone ist ein Land in Africa (Western Africa). Hauptstadt: Freetown.",
+        "highlights": [
+          "Freetown",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SLE",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3546,16 +4758,23 @@ WITH data AS (
         "country": "Slovakia",
         "country_code": "SK",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?slovakia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1470043201067-764120126eb4?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Slovakia ist ein Land in Europe (Central Europe). Hauptstadt: Bratislava.",
+        "highlights": [
+          "Bratislava",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3563,16 +4782,23 @@ WITH data AS (
         "country": "Slovenia",
         "country_code": "SI",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?slovenia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1520900828798-002c1800f31a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Slovenia ist ein Land in Europe (Central Europe). Hauptstadt: Ljubljana.",
+        "highlights": [
+          "Ljubljana",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3580,16 +4806,23 @@ WITH data AS (
         "country": "Solomon Islands",
         "country_code": "SB",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?solomon%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1519155778036-e89552bc12f2?q=80&w=1389&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Solomon Islands ist ein Land in Oceania (Melanesia). Hauptstadt: Honiara.",
+        "highlights": [
+          "Honiara",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SBD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3597,16 +4830,23 @@ WITH data AS (
         "country": "Somalia",
         "country_code": "SO",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?somalia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1661135401065-36dee543c72b?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Somalia ist ein Land in Africa (Eastern Africa). Hauptstadt: Mogadishu.",
+        "highlights": [
+          "Mogadishu",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SOS",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3614,15 +4854,22 @@ WITH data AS (
         "country": "South Georgia & the South Sandwich Islands",
         "country_code": "GS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?south%20georgia%20&%20the%20south%20sandwich%20islands,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1551985812-aae4f1f6ae2e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "South Georgia & the South Sandwich Islands ist ein Land in Antarctic. Hauptstadt: King Edward Point.",
+        "highlights": [
+          "King Edward Point",
+          "Natur",
+          "Kultur",
+          "Kulinarik"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
+        "currency": "GBP",
+        "visa_info": "Einreisebestimmungen vor Reiseantritt prüfen.",
+        "vaccination_info": "Standardimpfungen prüfen.",
         "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
         "source": "generated"
       },
@@ -3631,16 +4878,23 @@ WITH data AS (
         "country": "South Sudan",
         "country_code": "SS",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?south%20sudan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1691935301739-7e63093963dc?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "South Sudan ist ein Land in Africa (Middle Africa). Hauptstadt: Juba.",
+        "highlights": [
+          "Juba",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SSP",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3648,50 +4902,23 @@ WITH data AS (
         "country": "Spain",
         "country_code": "ES",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?spain,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1573611030146-ff6916c398fa?q=80&w=1351&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Spain ist ein Land in Europe (Southern Europe). Hauptstadt: Madrid.",
+        "highlights": [
+          "Madrid",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "St Barthelemy",
-        "country": "St Barthelemy",
-        "country_code": "BL",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?st%20barthelemy,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "St Helena",
-        "country": "St Helena",
-        "country_code": "SH",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?st%20helena,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3699,16 +4926,23 @@ WITH data AS (
         "country": "St Kitts & Nevis",
         "country_code": "KN",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?st%20kitts%20&%20nevis,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "St Kitts & Nevis ist ein Land in Americas (Caribbean). Hauptstadt: Basseterre.",
+        "highlights": [
+          "Basseterre",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3716,16 +4950,23 @@ WITH data AS (
         "country": "St Lucia",
         "country_code": "LC",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?st%20lucia,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "St Lucia ist ein Land in Americas (Caribbean). Hauptstadt: Castries.",
+        "highlights": [
+          "Castries",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3733,50 +4974,23 @@ WITH data AS (
         "country": "St Maarten (Dutch)",
         "country_code": "SX",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?st%20maarten%20(dutch),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "St Maarten (Dutch) ist ein Land in Americas (Caribbean). Hauptstadt: Philipsburg.",
+        "highlights": [
+          "Philipsburg",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "St Martin (French)",
-        "country": "St Martin (French)",
-        "country_code": "MF",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?st%20martin%20(french),landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
-        "source": "generated"
-      },
-      {
-        "name": "St Pierre & Miquelon",
-        "country": "St Pierre & Miquelon",
-        "country_code": "PM",
-        "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?st%20pierre%20&%20miquelon,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
-        "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ANG",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3784,16 +4998,23 @@ WITH data AS (
         "country": "St Vincent",
         "country_code": "VC",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?st%20vincent,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1637169518288-ccb384040226?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "St Vincent ist ein Land in Americas (Caribbean). Hauptstadt: Kingstown.",
+        "highlights": [
+          "Kingstown",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XCD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3801,16 +5022,23 @@ WITH data AS (
         "country": "Sudan",
         "country_code": "SD",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?sudan,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1685677821127-169deb7fb349?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Sudan ist ein Land in Africa (Northern Africa). Hauptstadt: Khartoum.",
+        "highlights": [
+          "Khartoum",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SDG",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3818,16 +5046,23 @@ WITH data AS (
         "country": "Suriname",
         "country_code": "SR",
         "type": "country",
-        "types": ["country"],
-        "image_url": "https://source.unsplash.com/featured/?suriname,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "types": [
+          "country"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1660758898976-66382b34c00d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Suriname ist ein Land in Americas (South America). Hauptstadt: Paramaribo.",
+        "highlights": [
+          "Paramaribo",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SRD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3835,16 +5070,23 @@ WITH data AS (
         "country": "Switzerland",
         "country_code": "CH",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Switzerland ist ein Land in Europe (Western Europe). Hauptstadt: Bern.",
+        "highlights": [
+          "Bern",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "CHF",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -3852,16 +5094,23 @@ WITH data AS (
         "country": "Syria",
         "country_code": "SY",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1645740262380-d86b597b90c4?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Syria ist ein Land in Asia (Western Asia). Hauptstadt: Damascus.",
+        "highlights": [
+          "Damascus",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "SYP",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3869,16 +5118,23 @@ WITH data AS (
         "country": "Taiwan",
         "country_code": "TW",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1470004914212-05527e49370b?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Taiwan ist ein Land in Asia (Eastern Asia). Hauptstadt: Taipei.",
+        "highlights": [
+          "Taipei",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "TWD",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3886,16 +5142,23 @@ WITH data AS (
         "country": "Tajikistan",
         "country_code": "TJ",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1590999563469-effba37954b2?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Tajikistan ist ein Land in Asia (Central Asia). Hauptstadt: Dushanbe.",
+        "highlights": [
+          "Dushanbe",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "TJS",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -3903,16 +5166,23 @@ WITH data AS (
         "country": "Togo",
         "country_code": "TG",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1684211757307-ccf7d147a48c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "description": "Togo ist ein Land in Africa (Western Africa). Hauptstadt: Lomé.",
+        "highlights": [
+          "Lomé",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XOF",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3920,16 +5190,23 @@ WITH data AS (
         "country": "Tokelau",
         "country_code": "TK",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://plus.unsplash.com/premium_photo-1664283661426-c0daf3c67c6d?q=80&w=1473&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "description": "Tokelau ist ein Land in Oceania (Polynesia). Hauptstadt: Fakaofo.",
+        "highlights": [
+          "Fakaofo",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "NZD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3937,16 +5214,23 @@ WITH data AS (
         "country": "Tonga",
         "country_code": "TO",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1590491484047-3fc9757d5fba?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Tonga ist ein Land in Oceania (Polynesia). Hauptstadt: Nuku'alofa.",
+        "highlights": [
+          "Nuku'alofa",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "TOP",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -3954,16 +5238,23 @@ WITH data AS (
         "country": "Trinidad & Tobago",
         "country_code": "TT",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1714348515524-2d92c7799ef9?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Trinidad & Tobago ist ein Land in Americas (Caribbean). Hauptstadt: Port of Spain.",
+        "highlights": [
+          "Port of Spain",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "TTD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -3971,16 +5262,23 @@ WITH data AS (
         "country": "Tunisia",
         "country_code": "TN",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1556901599-6cd86f3da8b1?q=80&w=2099&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Tunisia ist ein Land in Africa (Northern Africa). Hauptstadt: Tunis.",
+        "highlights": [
+          "Tunis",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "TND",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -3988,16 +5286,23 @@ WITH data AS (
         "country": "Turkmenistan",
         "country_code": "TM",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1698771937461-914e16303d7a?q=80&w=929&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Turkmenistan ist ein Land in Asia (Central Asia). Hauptstadt: Ashgabat.",
+        "highlights": [
+          "Ashgabat",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "TMT",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -4005,16 +5310,23 @@ WITH data AS (
         "country": "Turks & Caicos Is",
         "country_code": "TC",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1482955903579-70929ba3a509?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Turks & Caicos Is ist ein Land in Americas (Caribbean). Hauptstadt: Cockburn Town.",
+        "highlights": [
+          "Cockburn Town",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -4022,16 +5334,23 @@ WITH data AS (
         "country": "Tuvalu",
         "country_code": "TV",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://plus.unsplash.com/premium_photo-1681839699894-b42c91a2eea2?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
+        "description": "Tuvalu ist ein Land in Oceania (Polynesia). Hauptstadt: Funafuti.",
+        "highlights": [
+          "Funafuti",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
         "best_season": "Ganzjährig",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AUD",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -4039,16 +5358,23 @@ WITH data AS (
         "country": "Ukraine",
         "country_code": "UA",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1639341267320-2d062b250c0d?q=80&w=1529&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Ukraine ist ein Land in Europe (Eastern Europe). Hauptstadt: Kyiv.",
+        "highlights": [
+          "Kyiv",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "UAH",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -4056,16 +5382,23 @@ WITH data AS (
         "country": "United Arab Emirates",
         "country_code": "AE",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1722502831620-e35451283894?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "United Arab Emirates ist ein Land in Asia (Western Asia). Hauptstadt: Abu Dhabi.",
+        "highlights": [
+          "Abu Dhabi",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "AED",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -4073,16 +5406,23 @@ WITH data AS (
         "country": "United States",
         "country_code": "US",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1511055882449-bef7ffcedac0?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "United States ist ein Land in Americas (North America). Hauptstadt: Washington, D.C..",
+        "highlights": [
+          "Washington, D.C.",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -4090,16 +5430,23 @@ WITH data AS (
         "country": "Uzbekistan",
         "country_code": "UZ",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1733586092622-1b3201e802a5?q=80&w=1025&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Uzbekistan ist ein Land in Asia (Central Asia). Hauptstadt: Tashkent.",
+        "highlights": [
+          "Tashkent",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "UZS",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -4107,16 +5454,23 @@ WITH data AS (
         "country": "Vanuatu",
         "country_code": "VU",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1602587557684-11163fe60c87?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Vanuatu ist ein Land in Oceania (Melanesia). Hauptstadt: Port Vila.",
+        "highlights": [
+          "Port Vila",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "VUV",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -4124,16 +5478,23 @@ WITH data AS (
         "country": "Vatican City",
         "country_code": "VA",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1531572753322-ad063cecc140?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Vatican City ist ein Land in Europe (Southern Europe). Hauptstadt: Vatican City.",
+        "highlights": [
+          "Vatican City",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       },
       {
@@ -4141,16 +5502,23 @@ WITH data AS (
         "country": "Vietnam",
         "country_code": "VN",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1605189914441-47183c6fcd08?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Vietnam ist ein Land in Asia (South-Eastern Asia). Hauptstadt: Hanoi.",
+        "highlights": [
+          "Hanoi",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "VND",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -4158,16 +5526,23 @@ WITH data AS (
         "country": "Britische Jungfern Inseln",
         "country_code": "VI",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1617709961064-7ebb1913f824?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Britische Jungfern Inseln ist ein Land in Americas (Caribbean). Hauptstadt: Charlotte Amalie.",
+        "highlights": [
+          "Charlotte Amalie",
+          "Nationalparks",
+          "Küsten",
+          "Roadtrips"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "USD",
+        "visa_info": "Einreisebestimmungen je nach Land vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber in Tropen möglich.",
+        "health_safety_info": "Sicherheitslage je nach Region prüfen; Mückenschutz in Tropen.",
         "source": "generated"
       },
       {
@@ -4175,16 +5550,23 @@ WITH data AS (
         "country": "Wallis & Futuna",
         "country_code": "WF",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://source.unsplash.com/featured/?wallis%20&%20futuna,landscape",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Wallis & Futuna ist ein Land in Oceania (Polynesia). Hauptstadt: Mata-Utu.",
+        "highlights": [
+          "Mata-Utu",
+          "Strände",
+          "Lagunen",
+          "Nationalparks"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "XPF",
+        "visa_info": "Einreisebestimmungen je nach Land prüfen.",
+        "vaccination_info": "Standardimpfungen; Mückenschutz in Tropeninseln.",
+        "health_safety_info": "UV-Schutz beachten; Meeresströmungen berücksichtigen.",
         "source": "generated"
       },
       {
@@ -4192,16 +5574,23 @@ WITH data AS (
         "country": "Western Sahara",
         "country_code": "EH",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1559586616-361e18714958?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Western Sahara ist ein Land in Africa (Northern Africa). Hauptstadt: El Aaiún.",
+        "highlights": [
+          "El Aaiún",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "DZD",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -4209,16 +5598,23 @@ WITH data AS (
         "country": "Yemen",
         "country_code": "YE",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1642425149556-b6f90e946859?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Yemen ist ein Land in Asia (Western Asia). Hauptstadt: Sana'a.",
+        "highlights": [
+          "Sana'a",
+          "Tempel",
+          "Street Food",
+          "Berglandschaften"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "YER",
+        "visa_info": "Visumregeln je nach Land prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; je nach Region Typhus/Jap. Enzephalitis.",
+        "health_safety_info": "Mückenschutz in Tropen; Verkehr kann chaotisch sein.",
         "source": "generated"
       },
       {
@@ -4226,16 +5622,23 @@ WITH data AS (
         "country": "Zambia",
         "country_code": "ZM",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1666732566977-8805c13a6ce2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Zambia ist ein Land in Africa (Eastern Africa). Hauptstadt: Lusaka.",
+        "highlights": [
+          "Lusaka",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ZMW",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -4243,16 +5646,23 @@ WITH data AS (
         "country": "Zimbabwe",
         "country_code": "ZW",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1634179412263-19d96377c1a2?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Zimbabwe ist ein Land in Africa (Southern Africa). Hauptstadt: Harare.",
+        "highlights": [
+          "Harare",
+          "Nationalparks",
+          "Küstenorte",
+          "Märkte"
+        ],
+        "best_season": "November bis März",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "ZWL",
+        "visa_info": "Visum häufig erforderlich; Bestimmungen vorab prüfen.",
+        "vaccination_info": "Hepatitis A empfohlen; Gelbfieber je nach Region.",
+        "health_safety_info": "Sicherheitslage prüfen; Mückenschutz beachten.",
         "source": "generated"
       },
       {
@@ -4260,16 +5670,23 @@ WITH data AS (
         "country": "Åland Islands",
         "country_code": "AX",
         "type": "country",
-        "types": ["country"],
+        "types": [
+          "country"
+        ],
         "image_url": "https://images.unsplash.com/photo-1600942956900-0522090c4182?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "description": "Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.",
-        "highlights": ["Hauptstadt", "Natur", "Kultur", "Kulinarik"],
-        "best_season": "Ganzjährig",
+        "description": "Åland Islands ist ein Land in Europe (Northern Europe). Hauptstadt: Mariehamn.",
+        "highlights": [
+          "Mariehamn",
+          "Altstädte",
+          "Museen",
+          "Kulturstätten"
+        ],
+        "best_season": "Mai bis Oktober",
         "average_daily_cost": 90,
-        "currency": null,
-        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.",
-        "vaccination_info": "Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.",
-        "health_safety_info": "Aktuelle Reise- und Sicherheitshinweise beachten.",
+        "currency": "EUR",
+        "visa_info": "Einreisebestimmungen je nach Staatsangehörigkeit prüfen.",
+        "vaccination_info": "Standardimpfungen; Zeckenschutz in Waldgebieten.",
+        "health_safety_info": "Taschendiebstahl beachten; hohe medizinische Standards.",
         "source": "generated"
       }
     ]'::jsonb
@@ -4339,6 +5756,25 @@ WHERE NOT EXISTS (
     AND existing.country = d.country
 );
 
+UPDATE public.destinations existing
+SET image_url = d.image_url,
+    description = d.description,
+    highlights = d.highlights,
+    best_season = d.best_season,
+    average_daily_cost = d.average_daily_cost,
+    currency = d.currency,
+    visa_info = d.visa_info,
+    vaccination_info = d.vaccination_info,
+    health_safety_info = d.health_safety_info,
+    source = d.source,
+    types = COALESCE(d.types, existing.types),
+    coords_lat = COALESCE(d.coords_lat, existing.coords_lat),
+    coords_lon = COALESCE(d.coords_lon, existing.coords_lon)
+FROM data d
+WHERE existing.type = 'country'
+  AND existing.name = d.name
+  AND existing.country = d.country;
+
 UPDATE public.destinations
 SET image_url = 'https://flagcdn.com/w1280/' || lower(country_code) || '.png'
 WHERE type = 'country'
@@ -4347,6 +5783,4 @@ WHERE type = 'country'
   AND (
     image_url IS NULL
     OR image_url = ''
-    OR image_url ILIKE 'https://picsum.photos/seed/%'
-    OR image_url ILIKE 'https://source.unsplash.com/%'
   );
