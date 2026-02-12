@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { defaultTodos } from '@/data/mockData';
+import { defaultTodos, inspirationDestinations } from '@/data/mockData';
 import type { PackingItem, TodoItem } from '@/types/travel';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
@@ -31,6 +31,34 @@ const typeLabels: Record<Destination['type'], string> = {
 };
 
 import { fetchDestinationsCatalog } from '@/services/travelData';
+
+const normalizeSearch = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/\uFFFD/g, '')
+    .trim();
+
+const stripReplacementChar = (value: string) => value.replace(/\uFFFD/g, '');
+
+const displayNames = (() => {
+  try {
+    return {
+      de: new Intl.DisplayNames(['de'], { type: 'region' }),
+      en: new Intl.DisplayNames(['en'], { type: 'region' }),
+    };
+  } catch {
+    return null;
+  }
+})();
+
+const getCountryAliases = (code?: string | null) => {
+  if (!code || !displayNames) return [];
+  const de = displayNames.de.of(code);
+  const en = displayNames.en.of(code);
+  return [de, en].filter((value): value is string => Boolean(value));
+};
 
 const Inspiration = () => {
   const { user } = useAuth();
@@ -64,16 +92,87 @@ const Inspiration = () => {
     };
   }, [searchQuery, selectedType]);
 
-  // Filter destinations based on search query from the database
+  const defaultInspirationList = React.useMemo(() => {
+    if (catalog.length === 0) return inspirationDestinations;
+    const byCode = new Map<string, Destination[]>();
+    catalog.forEach((item) => {
+      if (!item.countryCode) return;
+      const key = item.countryCode.toUpperCase();
+      const list = byCode.get(key) || [];
+      list.push(item);
+      byCode.set(key, list);
+    });
+    const seen = new Set<string>();
+    const ordered = inspirationDestinations.map((seed) => {
+      const normalizedName = normalizeSearch(seed.name);
+      const normalizedCountry = normalizeSearch(seed.country);
+      const codeMatches = seed.countryCode
+        ? byCode
+            .get(seed.countryCode.toUpperCase())
+            ?.find(
+              (item) =>
+                item.type === seed.type ||
+                (Array.isArray(item.types) && item.types.includes(seed.type)),
+            )
+        : undefined;
+      const nameMatch =
+        codeMatches ||
+        catalog.find((item) => {
+          const itemName = normalizeSearch(item.name);
+          const itemCountry = normalizeSearch(item.country);
+          return itemName === normalizedName || itemCountry === normalizedCountry;
+        });
+      return nameMatch || seed;
+    });
+    return ordered.filter((item) => {
+      const key = item.countryCode
+        ? `${item.type}:${item.countryCode.toUpperCase()}`
+        : `${item.type}:${normalizeSearch(item.name)}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [catalog]);
+
   const searchFilteredDestinations = React.useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return catalog;
-    return catalog.filter((d) => 
-      d.name.toLowerCase().includes(query) || 
-      d.country.toLowerCase().includes(query) ||
-      (d.description && d.description.toLowerCase().includes(query))
-    );
-  }, [catalog, searchQuery]);
+    const query = normalizeSearch(searchQuery);
+    if (!query) return defaultInspirationList;
+    const scored = catalog
+      .filter((d) => {
+        const name = normalizeSearch(d.name);
+        const country = normalizeSearch(d.country);
+        const description = d.description ? normalizeSearch(d.description) : '';
+        if (name.includes(query) || country.includes(query) || description.includes(query)) return true;
+        const aliases = getCountryAliases(d.countryCode).map(normalizeSearch);
+        return aliases.some((alias) => alias.includes(query));
+      })
+      .map((d) => {
+        const name = normalizeSearch(d.name);
+        const country = normalizeSearch(d.country);
+        const aliases = getCountryAliases(d.countryCode).map(normalizeSearch);
+        let score = 0;
+        if (name.startsWith(query)) score += 3;
+        else if (name.includes(query)) score += 2;
+        if (country.startsWith(query)) score += 2;
+        else if (country.includes(query)) score += 1;
+        if (aliases.some((alias) => alias.startsWith(query))) score += 2;
+        else if (aliases.some((alias) => alias.includes(query))) score += 1;
+        return { destination: d, score };
+      });
+    const deduped = new Map<string, { destination: Destination; score: number }>();
+    scored.forEach((entry) => {
+      const key = entry.destination.countryCode
+        ? `${entry.destination.type}:${entry.destination.countryCode.toUpperCase()}`
+        : `${entry.destination.type}:${normalizeSearch(entry.destination.name)}`;
+      const existing = deduped.get(key);
+      if (!existing || entry.score > existing.score) {
+        deduped.set(key, entry);
+      }
+    });
+    return Array.from(deduped.values())
+      .sort((a, b) => b.score - a.score)
+      .map((entry) => entry.destination);
+  }, [catalog, defaultInspirationList, searchQuery]);
 
   const startPlanningTrip = (destination: Destination) => {
     setPlanningDestination(destination);
@@ -346,6 +445,9 @@ const Inspiration = () => {
             const typeList = Array.isArray(destination.types) && destination.types.length > 0
               ? Array.from(new Set([destination.type, ...destination.types]))
               : [destination.type];
+            const safeName = stripReplacementChar(destination.name);
+            const safeCountry = stripReplacementChar(destination.country);
+            const safeDescription = destination.description ? stripReplacementChar(destination.description) : '';
             return (
               <div
                 key={destination.id}
@@ -364,7 +466,7 @@ const Inspiration = () => {
                 <div className="relative h-48 overflow-hidden">
                   <img
                     src={destination.imageUrl}
-                    alt={destination.name}
+                    alt={safeName}
                     loading="lazy"
                     onError={(e) => {
                       const code = destination.countryCode;
@@ -394,14 +496,14 @@ const Inspiration = () => {
                 </div>
 
                   <div className="absolute bottom-4 left-4 right-4 text-white drop-shadow-xl">
-                    <h3 className="font-display text-xl font-semibold">{destination.name}</h3>
-                    <p className="text-sm opacity-90">{destination.country}</p>
+                    <h3 className="font-display text-xl font-semibold">{safeName}</h3>
+                    <p className="text-sm opacity-90">{safeCountry}</p>
                   </div>
                 </div>
 
                 <div className="p-4 space-y-3">
                   <p className="text-sm text-muted-foreground line-clamp-2">
-                    {destination.description}
+                    {safeDescription}
                   </p>
 
                   <div className="flex items-center justify-between text-sm">
@@ -439,11 +541,20 @@ const Inspiration = () => {
               className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-card shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
+              {(() => {
+                const safeSelectedName = stripReplacementChar(selectedDestination.name);
+                const safeSelectedCountry = stripReplacementChar(selectedDestination.country);
+                const safeSelectedDescription = selectedDestination.description
+                  ? stripReplacementChar(selectedDestination.description)
+                  : '';
+                const safeHighlights = selectedDestination.highlights?.map(stripReplacementChar) || [];
+                return (
+                  <>
               {/* Bild + Header */}
               <div className="relative h-64 overflow-hidden rounded-t-2xl">
                 <img
                   src={selectedDestination.imageUrl}
-                  alt={selectedDestination.name}
+                  alt={safeSelectedName}
                   loading="lazy"
                   onError={(e) => {
                     const code = selectedDestination.countryCode;
@@ -469,8 +580,8 @@ const Inspiration = () => {
                   </Badge>
                 </div>
 
-                <h2 className="font-display text-2xl font-bold mb-1">{selectedDestination.name}</h2>
-                <p className="text-sm opacity-80 mb-4">{selectedDestination.country}</p>
+                <h2 className="font-display text-2xl font-bold mb-1">{safeSelectedName}</h2>
+                <p className="text-sm opacity-80 mb-4">{safeSelectedCountry}</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
                   <div className="rounded-lg bg-muted/40 p-3 flex items-center gap-2">
@@ -487,16 +598,16 @@ const Inspiration = () => {
                   </div>
                 </div>
 
-                <p className="text-sm text-muted-foreground mb-6">{selectedDestination.description}</p>
+                <p className="text-sm text-muted-foreground mb-6">{safeSelectedDescription}</p>
                 {selectedDestination.source && (
                   <p className="text-xs text-muted-foreground mb-6">Quelle: {selectedDestination.source}</p>
                 )}
 
-                {selectedDestination.highlights && selectedDestination.highlights.length > 0 && (
+                {safeHighlights.length > 0 && (
                   <div className="mb-6">
                     <div className="text-sm font-medium mb-2">Highlights</div>
                     <div className="flex flex-wrap gap-2">
-                      {selectedDestination.highlights.map((h, i) => (
+                      {safeHighlights.map((h, i) => (
                         <Badge key={`${selectedDestination.id}-hl-${i}`} variant="secondary" className="px-3 py-1">
                           {h}
                         </Badge>
@@ -584,6 +695,9 @@ const Inspiration = () => {
                   </Button>
                 </div>
               </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}
