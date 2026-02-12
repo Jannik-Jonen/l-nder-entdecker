@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { defaultTodos, inspirationDestinations } from '@/data/mockData';
@@ -69,16 +69,23 @@ const Inspiration = () => {
   const [catalog, setCatalog] = useState<Destination[]>([]);
   const [catalogLoading, setCatalogLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const lastFetchKey = useRef<string | null>(null);
 
   useEffect(() => {
     const query = searchQuery.trim();
     const type = selectedType === 'all' ? undefined : selectedType;
+    const fetchKey = `${selectedType}|${selectedType === 'all' ? '' : query}`;
+    if (lastFetchKey.current === fetchKey) return;
+    lastFetchKey.current = fetchKey;
     let active = true;
-    const delay = query ? 300 : 0;
+    const delay = query && selectedType !== 'all' ? 300 : 0;
     const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
-        const data = await fetchDestinationsCatalog({ search: query || undefined, type });
+        const data = await fetchDestinationsCatalog({
+          search: selectedType === 'all' ? undefined : query || undefined,
+          type,
+        });
         if (active) setCatalog(Array.isArray(data) ? data : []);
       } catch {
         if (active) setCatalog([]);
