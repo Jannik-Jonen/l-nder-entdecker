@@ -171,43 +171,74 @@ const flagFromCountryCode = (countryCode?: string | null) => {
   return `https://flagcdn.com/w1280/${countryCode.toLowerCase()}.png`;
 };
 
-const isPlaceholderImage = (imageUrl?: string | null) => {
-  if (!imageUrl) return true;
-  return imageUrl.includes('source.unsplash.com') || imageUrl.includes('picsum.photos');
+const genericDescription = 'Reiseziel mit vielfältigen Landschaften, Kultur und regionalen Highlights.';
+const genericHighlights = ['Hauptstadt', 'Natur', 'Kultur', 'Kulinarik'];
+const genericVisaInfo = 'Einreisebestimmungen je nach Staatsangehörigkeit vor Reiseantritt prüfen.';
+const genericVaccinationInfo = 'Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.';
+const genericHealthSafetyInfo = 'Aktuelle Reise- und Sicherheitshinweise beachten.';
+
+const sanitizeGeneratedRow = (row: DestinationRow): DestinationRow => {
+  if (row.source !== 'generated') return row;
+  const descriptionMatches = row.description?.trim() === genericDescription;
+  const highlightsMatches =
+    Array.isArray(row.highlights) &&
+    row.highlights.length === genericHighlights.length &&
+    row.highlights.every((h) => genericHighlights.includes(h));
+  const visaMatches = row.visa_info?.trim() === genericVisaInfo;
+  const vaccinationMatches = row.vaccination_info?.trim() === genericVaccinationInfo;
+  const healthMatches = row.health_safety_info?.trim() === genericHealthSafetyInfo;
+  const bestSeasonMatches = row.best_season?.trim() === 'Ganzjährig';
+
+  if (!descriptionMatches && !highlightsMatches && !visaMatches && !vaccinationMatches && !healthMatches && !bestSeasonMatches) {
+    return row;
+  }
+
+  return {
+    ...row,
+    description: descriptionMatches ? null : row.description,
+    highlights: highlightsMatches ? null : row.highlights,
+    best_season: bestSeasonMatches ? null : row.best_season,
+    visa_info: visaMatches ? null : row.visa_info,
+    vaccination_info: vaccinationMatches ? null : row.vaccination_info,
+    health_safety_info: healthMatches ? null : row.health_safety_info,
+  };
 };
 
 const resolveDestinationImage = (row: DestinationRow) => {
   const imageUrl = row.image_url;
-  if (imageUrl && !isPlaceholderImage(imageUrl)) {
-    return imageUrl;
-  }
+  if (imageUrl) return imageUrl;
   const flag = flagFromCountryCode(row.country_code);
   if (flag) return flag;
-  if (imageUrl) return imageUrl;
   return fallbackDestinationImage;
 };
 
-const toDestination = (row: DestinationRow): Destination => ({
-  id: row.id,
-  name: row.name,
-  country: row.country,
-  countryCode: row.country_code || undefined,
-  type: row.type,
-  types: Array.isArray(row.types) ? row.types : undefined,
-  imageUrl: resolveDestinationImage(row),
-  description: row.description || '',
-  highlights: Array.isArray(row.highlights) ? row.highlights : [],
-  bestSeason: row.best_season || '',
-  averageDailyCost: typeof row.average_daily_cost === 'number' ? row.average_daily_cost : 0,
-  currency: row.currency || 'EUR',
-  visaInfo: row.visa_info || undefined,
-  vaccinationInfo: row.vaccination_info || undefined,
-  healthSafetyInfo: row.health_safety_info || undefined,
-  source: row.source || undefined,
-  parentId: row.parent_id || undefined,
-  coords: typeof row.coords_lat === 'number' && typeof row.coords_lon === 'number' ? { lat: row.coords_lat, lon: row.coords_lon } : undefined,
-  childrenCount: typeof row.children_count === 'number' ? row.children_count : undefined,
-});
+const toDestination = (row: DestinationRow): Destination => {
+  const sanitized = sanitizeGeneratedRow(row);
+  return {
+    id: sanitized.id,
+    name: sanitized.name,
+    country: sanitized.country,
+    countryCode: sanitized.country_code || undefined,
+    type: sanitized.type,
+    types: Array.isArray(sanitized.types) ? sanitized.types : undefined,
+    imageUrl: resolveDestinationImage(sanitized),
+    description: sanitized.description || '',
+    highlights: Array.isArray(sanitized.highlights) ? sanitized.highlights : [],
+    bestSeason: sanitized.best_season || '',
+    averageDailyCost: typeof sanitized.average_daily_cost === 'number' ? sanitized.average_daily_cost : 0,
+    currency: sanitized.currency || 'EUR',
+    visaInfo: sanitized.visa_info || undefined,
+    vaccinationInfo: sanitized.vaccination_info || undefined,
+    healthSafetyInfo: sanitized.health_safety_info || undefined,
+    source: sanitized.source || undefined,
+    parentId: sanitized.parent_id || undefined,
+    coords:
+      typeof sanitized.coords_lat === 'number' && typeof sanitized.coords_lon === 'number'
+        ? { lat: sanitized.coords_lat, lon: sanitized.coords_lon }
+        : undefined,
+    childrenCount: typeof sanitized.children_count === 'number' ? sanitized.children_count : undefined,
+  };
+};
 
 export const fetchDestinationsCatalog = async (_opts?: {
   type?: Destination['type'];
