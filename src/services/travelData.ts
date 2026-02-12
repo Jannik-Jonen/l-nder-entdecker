@@ -1,6 +1,7 @@
 import { Destination } from '@/types/travel';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { isLocalSupabase } from '@/integrations/supabase/client';
+import migrationRaw from '../../supabase/migrations/20260210153000_expand_destinations_countries.sql?raw';
 
 interface WikiSection {
   toclevel: number;
@@ -176,6 +177,40 @@ const genericVisaInfo = 'Einreisebestimmungen je nach Staatsangehörigkeit vor R
 const genericVaccinationInfo = 'Standardimpfungen prüfen; länderspezifische Empfehlungen beachten.';
 const genericHealthSafetyInfo = 'Aktuelle Reise- und Sicherheitshinweise beachten.';
 
+const migrationImageMap = (() => {
+  try {
+    const match = migrationRaw.match(/jsonb_to_recordset\(\s*'([\s\S]*?)'\s*::jsonb\s*\)/);
+    if (!match) return null;
+    const jsonText = match[1].replace(/''/g, "'");
+    const data = JSON.parse(jsonText) as Array<{
+      country_code?: string;
+      image_url?: string;
+      name?: string;
+      country?: string;
+    }>;
+    const map = new Map<string, string>();
+    data.forEach((entry) => {
+      const url = entry?.image_url;
+      if (!url) return;
+      if (entry?.country_code) map.set(String(entry.country_code).toUpperCase(), url);
+      if (entry?.name) map.set(`name:${String(entry.name).toLowerCase()}`, url);
+      if (entry?.country) map.set(`country:${String(entry.country).toLowerCase()}`, url);
+    });
+    return map;
+  } catch {
+    return null;
+  }
+})();
+
+const getMigrationImage = (row: DestinationRow) => {
+  if (!migrationImageMap) return null;
+  const byCode = row.country_code ? migrationImageMap.get(row.country_code.toUpperCase()) : null;
+  if (byCode) return byCode;
+  const byName = migrationImageMap.get(`name:${row.name.toLowerCase()}`);
+  if (byName) return byName;
+  return migrationImageMap.get(`country:${row.country.toLowerCase()}`) || null;
+};
+
 const sanitizeGeneratedRow = (row: DestinationRow): DestinationRow => {
   if (row.source !== 'generated') return row;
   const descriptionMatches = row.description?.trim() === genericDescription;
@@ -204,6 +239,8 @@ const sanitizeGeneratedRow = (row: DestinationRow): DestinationRow => {
 };
 
 const resolveDestinationImage = (row: DestinationRow) => {
+  const migrationImage = getMigrationImage(row);
+  if (migrationImage) return migrationImage;
   const imageUrl = row.image_url;
   if (imageUrl) return imageUrl;
   const flag = flagFromCountryCode(row.country_code);

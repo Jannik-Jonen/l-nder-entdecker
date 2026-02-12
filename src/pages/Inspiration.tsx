@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { defaultTodos, inspirationDestinations } from '@/data/mockData';
+import { defaultTodos } from '@/data/mockData';
 import type { PackingItem, TodoItem } from '@/types/travel';
 import { Destination } from '@/types/travel';
 import { MapPin, Calendar, DollarSign, Sparkles, Palmtree, Building2, Globe, Mountain, Plus, FileCheck, Syringe, ShieldCheck } from 'lucide-react';
@@ -44,24 +44,20 @@ const Inspiration = () => {
 
   useEffect(() => {
     const query = searchQuery.trim();
-    if (!query) {
-      setCatalog([]);
-      setCatalogLoading(false);
-      return;
-    }
     const type = selectedType === 'all' ? undefined : selectedType;
     let active = true;
+    const delay = query ? 300 : 0;
     const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
-        const data = await fetchDestinationsCatalog({ search: query, type });
+        const data = await fetchDestinationsCatalog({ search: query || undefined, type });
         if (active) setCatalog(Array.isArray(data) ? data : []);
       } catch {
         if (active) setCatalog([]);
       } finally {
         if (active) setCatalogLoading(false);
       }
-    }, 300);
+    }, delay);
     return () => {
       active = false;
       window.clearTimeout(handle);
@@ -257,7 +253,7 @@ const Inspiration = () => {
 
  
 
-  const visibleDestinations = searchQuery.trim() ? searchFilteredDestinations : inspirationDestinations;
+  const visibleDestinations = searchFilteredDestinations;
   const filteredDestinations = selectedType === 'all'
     ? visibleDestinations
     : visibleDestinations.filter((d) => d.type === selectedType || (Array.isArray(d.types) && d.types.includes(selectedType)));
@@ -290,7 +286,7 @@ const Inspiration = () => {
                 Katalog wird geladen...
               </div>
             )}
-            {!catalogLoading && searchQuery.trim() && catalog.length === 0 && (
+            {!catalogLoading && catalog.length === 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
                 Aktuell sind keine Destinationen im Katalog verfügbar.
               </p>
