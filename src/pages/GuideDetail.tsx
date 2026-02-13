@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
-import { guidePosts, travelTips } from '@/data/mockData';
+import { travelTips } from '@/data/mockData';
+import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { Destination } from '@/types/travel';
 import { getAncestors, getChildren, getDestinationById } from '@/services/travelData';
@@ -9,12 +10,15 @@ import { Badge } from '@/components/ui/badge';
 import { useEffect, useRef, useState } from 'react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
+type PostRow = { id: string; title: string; excerpt: string; image_url: string };
+
 const GuideDetail = () => {
   const { id } = useParams();
   const [dest, setDest] = useState<Destination | null>(null);
   const [loading, setLoading] = useState(true);
   const [ancestors, setAncestors] = useState<Destination[]>([]);
   const [children, setChildren] = useState<Destination[]>([]);
+  const [destPosts, setDestPosts] = useState<PostRow[]>([]);
   const [searchParams] = useSearchParams();
   const postsRef = useRef<HTMLDivElement | null>(null);
   const tipsRef = useRef<HTMLDivElement | null>(null);
@@ -40,6 +44,20 @@ const GuideDetail = () => {
       setLoading(false);
     };
     load();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    const loadPosts = async () => {
+      const { data } = await supabaseUntyped
+        .from('guide_posts')
+        .select('id,title,excerpt,image_url')
+        .eq('destination_id', id)
+        .eq('status', 'published')
+        .order('created_at', { ascending: false });
+      if (data && Array.isArray(data)) setDestPosts(data as unknown as PostRow[]);
+    };
+    loadPosts();
   }, [id]);
 
   useEffect(() => {
@@ -214,7 +232,7 @@ const GuideDetail = () => {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {guidePosts.filter((p) => p.destinationId === dest.id).map((p) => (
+            {destPosts.map((p) => (
               <Link
                 key={p.id}
                 to={`/guides/posts/${p.id}`}
@@ -222,10 +240,10 @@ const GuideDetail = () => {
               >
                 <div className="relative h-40">
                   <img
-                    src={p.imageUrl}
+                    src={p.image_url}
                     alt={p.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800'; }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">

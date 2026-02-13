@@ -1,19 +1,17 @@
 import { Header } from '@/components/Header';
-import { guidePosts } from '@/data/mockData';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { useAuth } from '@/hooks/useAuth';
 import { getDestinationById } from '@/services/travelData';
 
 const GuidePostDetail = () => {
   const { id } = useParams();
-  const fallback = guidePosts.find((p) => p.id === id);
   const { user } = useAuth();
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
-  const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
+  const [isAdmin, setIsAdmin] = useState(false);
   type GuidePostRow = {
     id: string;
     title: string;
@@ -25,17 +23,14 @@ const GuidePostDetail = () => {
     sources?: string[];
     status?: 'draft' | 'pending_review' | 'published' | 'rejected';
   };
-  const [post, setPost] = useState<GuidePostRow | null>(fallback ? {
-    id: fallback.id,
-    title: fallback.title,
-    excerpt: fallback.excerpt,
-    image_url: fallback.imageUrl,
-    destination_id: fallback.destinationId,
-    tags: fallback.tags,
-    sources: [],
-  } : null);
-  const [loading, setLoading] = useState(!fallback);
+  const [post, setPost] = useState<GuidePostRow | null>(null);
+  const [loading, setLoading] = useState(true);
   const [destination, setDestination] = useState<{ id: string; name: string } | null>(null);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    supabase.rpc('has_role', { _user_id: user.id, _role: 'admin' }).then(({ data }) => setIsAdmin(!!data));
+  }, [user]);
 
   useEffect(() => {
     const load = async () => {
@@ -46,7 +41,6 @@ const GuidePostDetail = () => {
           .from('guide_posts')
           .select('*')
           .eq('id', id)
-          .eq('status', 'published')
           .maybeSingle();
         if (data) {
           setPost(data as unknown as GuidePostRow);
@@ -55,8 +49,8 @@ const GuidePostDetail = () => {
         setLoading(false);
       }
     };
-    if (!fallback) load();
-  }, [id, fallback]);
+    load();
+  }, [id]);
 
   useEffect(() => {
     const loadDestination = async () => {

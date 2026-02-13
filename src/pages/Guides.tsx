@@ -3,15 +3,26 @@ import { useEffect, useMemo, useState } from 'react';
 import { Destination } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
 import { Link } from 'react-router-dom';
-import { MapPin, BookOpen, ArrowRight, ExternalLink } from 'lucide-react';
+import { MapPin, BookOpen, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+
+type GuidePostRow = {
+  id: string;
+  title: string;
+  excerpt: string;
+  image_url: string;
+  destination_id: string;
+  tags?: string[];
+};
 
 const Guides = () => {
   const { user } = useAuth();
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "jannik.jonen@gmail.com";
-  const isAdmin = !!user && !!adminEmail && user.email === adminEmail;
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [guidePosts, setGuidePosts] = useState<GuidePostRow[]>([]);
   const [catalog, setCatalog] = useState<Destination[]>([]);
   const [catalogLoading, setCatalogLoading] = useState(false);
   const [currentParentId, setCurrentParentId] = useState<string | null>(null);
@@ -28,6 +39,24 @@ const Guides = () => {
       }
     };
     load();
+  }, []);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    supabase.rpc('has_role', { _user_id: user.id, _role: 'admin' }).then(({ data }) => setIsAdmin(!!data));
+  }, [user]);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const { data } = await supabaseUntyped
+        .from('guide_posts')
+        .select('id,title,excerpt,image_url,destination_id,tags')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(6);
+      if (data && Array.isArray(data)) setGuidePosts(data as unknown as GuidePostRow[]);
+    };
+    loadPosts();
   }, []);
   const sourceList = catalog;
   const [currentPath, setCurrentPath] = useState<Destination[]>([]);
@@ -164,36 +193,10 @@ const Guides = () => {
                     <span>Beste Reisezeit: {d.bestSeason}</span>
                     <span>Ø {d.averageDailyCost} {d.currency}/Tag</span>
                   </div>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="mt-3">
                     <Button variant="outline" size="sm" asChild>
                       <Link to={`/guides/${d.id}`} className="gap-2">Details <ArrowRight className="h-4 w-4" /></Link>
                     </Button>
-                    <a
-                      href={`https://www.lonelyplanet.com/search?q=${encodeURIComponent(d.name)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                    >
-                      Lonely Planet <ExternalLink className="h-4 w-4 ml-1" />
-                    </a>
-                  </div>
-                  <div className="mt-2 grid grid-cols-2 gap-2">
-                    <a
-                      href={`https://www.urlaubsguru.de/?s=${encodeURIComponent(d.name)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                    >
-                      Urlaubsguru <ExternalLink className="h-4 w-4 ml-1" />
-                    </a>
-                    <a
-                      href={`https://www.google.com/search?q=${encodeURIComponent(`${d.name} BetterBeyond Blog`)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
-                    >
-                      BetterBeyond <ExternalLink className="h-4 w-4 ml-1" />
-                    </a>
                   </div>
                 </div>
               </div>
@@ -206,15 +209,58 @@ const Guides = () => {
           )}
         </section>
 
+        {guidePosts.length > 0 && (
+          <section className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-2xl font-semibold">Neueste Guide-Beiträge</h2>
+              <Button asChild variant="ghost">
+                <Link to="/blog" className="gap-2">Alle Beiträge <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {guidePosts.map((p) => {
+                const dest = catalog.find((d) => d.id === p.destination_id);
+                return (
+                  <Link
+                    key={p.id}
+                    to={`/guides/posts/${p.id}`}
+                    className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+                  >
+                    <div className="relative h-40">
+                      <img
+                        src={p.image_url}
+                        alt={p.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800'; }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="font-display text-lg font-semibold text-white">{p.title}</h3>
+                        <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                      </div>
+                    </div>
+                    <div className="p-4 flex items-center justify-between">
+                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <MapPin className="h-3 w-3" /> {dest?.name || 'Destination'}
+                      </span>
+                      <span className="text-sm text-primary">Lesen →</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-2xl font-semibold">Redaktionelle Beiträge</h2>
+            <h2 className="font-display text-2xl font-semibold">Blog & Community</h2>
             <Button asChild variant="ghost">
               <Link to="/blog" className="gap-2">Zum Blog <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </div>
           <div className="rounded-xl bg-card border border-border p-4 text-sm text-muted-foreground">
-            Im Blog findest du ausführliche Artikel und Guides. Die Inspiration‑Seite zeigt kompakte Ideen – hier geht es tiefer in die Planung.
+            Im Blog findest du ausführliche Artikel, Erfahrungsberichte und Reisetipps von der Community.
           </div>
         </section>
       </main>
