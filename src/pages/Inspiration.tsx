@@ -192,7 +192,7 @@ const Inspiration = () => {
         destination: planningDestination,
         planData: data
       }));
-      window.location.href = '/?auth=1';
+      window.location.href = '/?login=1';
       return;
     }
     setIsAdding(true);

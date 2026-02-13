@@ -1,15 +1,22 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, DollarSign, FileCheck, MapPin, ShieldCheck, Syringe } from 'lucide-react';
+import { ArrowRight, Calendar, DollarSign, FileCheck, MapPin, Plus, ShieldCheck, Syringe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useState } from 'react';
-import { Destination } from '@/types/travel';
+import { Destination, PackingItem, TodoItem } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
-import { inspirationDestinations } from '@/data/mockData';
+import { defaultTodos, inspirationDestinations } from '@/data/mockData';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
 
 export const InspirationPreview = () => {
   const [catalog, setCatalog] = useState<Destination[]>([]);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
+  const [planningDestination, setPlanningDestination] = useState<Destination | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const { user } = useAuth();
   useEffect(() => {
     const load = async () => {
       try {
@@ -28,6 +35,176 @@ export const InspirationPreview = () => {
     city: 'Stadt',
     island: 'Insel',
     region: 'Region',
+  };
+  const startPlanningTrip = (destination: Destination) => {
+    setPlanningDestination(destination);
+  };
+
+  const handlePlanConfirm = async (data: TripPlanData) => {
+    if (!planningDestination) return;
+    if (!user) {
+      localStorage.setItem('pendingPlan', JSON.stringify({
+        destination: planningDestination,
+        planData: data
+      }));
+      window.location.href = '/?login=1';
+      return;
+    }
+    setIsAdding(true);
+
+    try {
+      const startIso = new Date(data.startDate).toISOString();
+      const endIso = new Date(data.endDate).toISOString();
+      const days =
+        Math.max(
+          1,
+          Math.ceil((new Date(data.endDate).getTime() - new Date(data.startDate).getTime()) / (1000 * 60 * 60 * 24)),
+        );
+
+      const basePacking: PackingItem[] = [
+        { id: `doc-${Date.now()}`, name: 'Reisedokumente (Pass/Personalausweis)', packed: false, category: 'documents' },
+        { id: `phone-${Date.now()}`, name: 'Smartphone + Ladegerät', packed: false, category: 'electronics' },
+        { id: `adapter-${Date.now()}`, name: 'Steckdosenadapter (falls nötig)', packed: false, category: 'electronics' },
+        { id: `sunscreen-${Date.now()}`, name: 'Sonnencreme', packed: false, category: 'toiletries' },
+        { id: `meds-${Date.now()}`, name: 'Reiseapotheke', packed: false, category: 'toiletries' },
+      ];
+      const clothingItems: PackingItem[] = [
+        { id: `tops-${Date.now()}`, name: `${days}× Oberteile`, packed: false, category: 'clothing' },
+        { id: `bottoms-${Date.now()}`, name: `${Math.ceil(days / 2)}× Hosen/Röcke`, packed: false, category: 'clothing' },
+        { id: `under-${Date.now()}`, name: `${days}× Unterwäsche & Socken`, packed: false, category: 'clothing' },
+        { id: `shoes-${Date.now()}`, name: 'Bequeme Schuhe', packed: false, category: 'clothing' },
+        { id: `jacket-${Date.now()}`, name: 'Leichte Jacke/Regenschutz', packed: false, category: 'clothing' },
+      ];
+      const typeExtras: PackingItem[] =
+        planningDestination.type === 'island'
+          ? [
+              { id: `swim-${Date.now()}`, name: 'Badesachen', packed: false, category: 'other' },
+              { id: `hat-${Date.now()}`, name: 'Sonnenhut/Cap', packed: false, category: 'other' },
+            ]
+          : planningDestination.type === 'region' || planningDestination.type === 'country'
+          ? [{ id: `hike-${Date.now()}`, name: 'Wanderausrüstung (falls geplant)', packed: false, category: 'other' }]
+          : [{ id: `powerbank-${Date.now()}`, name: 'Powerbank', packed: false, category: 'electronics' }];
+      const packingList: PackingItem[] = [...basePacking, ...clothingItems, ...typeExtras];
+
+      const todos: TodoItem[] = defaultTodos.map((t, i) => ({
+        ...t,
+        id: `todo-${Date.now()}-${i}`,
+        completed: false,
+      }));
+
+      const tips: string[] =
+        planningDestination.type === 'city'
+          ? [
+              'Kostenlose Stadtführungen (Free Walking Tours) nutzen',
+              'Aussichtspunkte bei Sonnenaufgang meiden Andrang',
+              'Streetfood-Märkte für günstige, authentische Küche',
+              'ÖPNV-Apps installieren (Tickets, Routen, Echtzeit)',
+              'Reservierung für Top-Restaurants frühzeitig vornehmen',
+              'City Pass prüfen (Museen, Attraktionen, Ermäßigungen)',
+            ]
+          : planningDestination.type === 'island'
+          ? [
+              'Sonnenaufgang am Strand: ruhige Spots abseits der Hauptstrände',
+              'Lokaler Fischmarkt besuchen für frische Spezialitäten',
+              'Schnorchelspots vorab recherchieren (Sichtweiten, Strömung)',
+              'Sonnenschutz & Trinkwasser immer mitnehmen',
+              'Riffschutz beachten (kein Anfassen, umweltfreundliche Sonnencreme)',
+              'Roller/Fahrrad vor Ort vergleichen (Versicherung, Helm)',
+            ]
+          : [
+              'Panorama-Route mit Foto‑Stopps planen',
+              'Regionalmärkte: beste Zeit am Vormittag',
+              'Sonnenuntergangs‑Spots mit wenig Verkehr',
+              'Offline-Karten laden (Fernstraßen, Funklöcher möglich)',
+              'Tankstellen-/Mautplanung vorab checken',
+              'Notfallkit im Auto (Wasser, Snacks, Powerbank)',
+            ];
+
+      const transportNotes: string[] =
+        planningDestination.type === 'city'
+          ? ['ÖPNV‑Pass kaufen (Tages/Mehrtagestickets)', 'Bike‑Sharing und Metro nutzen', 'App‑Tickets vorbereiten']
+          : planningDestination.type === 'island'
+          ? ['Fähren vorab buchen (Hauptzeiten beachten)', 'Roller/Fahrrad mieten', 'Küstenstraßen langsam fahren']
+          : ['Mietwagen für flexible Routen', 'Zug/Fernbus zwischen Städten', 'Maut & Parkzonen beachten'];
+
+      const itinerary: string[] = Array.from({ length: days }).map((_, i) => {
+        const d = i + 1;
+        const baseCity = [
+          '08:30 Frühstück',
+          '10:00 Free Walking Tour (Altstadt)',
+          '13:00 Lunch',
+          '15:00 Museum/Galerie',
+          '18:00 Aussichtspunkt/Skyline',
+          '20:00 Dinner (lokale Küche)'
+        ];
+        const baseIsland = [
+          '08:00 Strand/Spaziergang',
+          '10:30 Schnorcheln/Bootstour',
+          '13:00 Lunch (Seafood)',
+          '15:30 Küstenroute/Hidden Beach',
+          '18:30 Sonnenuntergangs‑Spot',
+          '20:00 Dinner'
+        ];
+        const baseRegion = [
+          '08:30 Frühstück',
+          '10:00 Panorama‑Route (Fotostopps)',
+          '13:00 Lunch/Markt',
+          '15:30 Natur‑Highlight',
+          '18:00 Aussichtspunkt',
+          '20:00 Dinner'
+        ];
+        const plan = planningDestination.type === 'city' ? baseCity : planningDestination.type === 'island' ? baseIsland : baseRegion;
+        return `Tag ${d}: ${plan.join(' • ')}`;
+      });
+
+      let countryCode = planningDestination.countryCode || 'XX';
+      let lat: number | null = null;
+      let lon: number | null = null;
+      try {
+        const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(planningDestination.name)}&limit=1&addressdetails=1&accept-language=de`);
+        const arr = await resp.json();
+        const first = Array.isArray(arr) && arr[0];
+        const cc = first?.address?.country_code || first?.country_code || null;
+        if (cc && typeof cc === 'string') {
+          countryCode = cc.toUpperCase();
+        }
+        if (first?.lat && first?.lon) {
+          lat = Number(first.lat);
+          lon = Number(first.lon);
+        }
+      } catch { void 0; }
+      const { error } = await supabase
+        .from('saved_trips')
+        .insert({
+          user_id: user.id,
+          destination_name: planningDestination.name,
+          destination_code: countryCode,
+          image_url: planningDestination.imageUrl,
+          daily_budget: data.dailyBudget,
+          currency: planningDestination.currency || 'EUR',
+          start_date: startIso,
+          end_date: endIso,
+          notes: JSON.stringify({
+            peopleCount: data.peopleCount,
+            packingList,
+            todos,
+            bestTimeToVisit: planningDestination.bestSeason,
+            tips,
+            transportNotes,
+            itinerary,
+            coords: lat !== null && lon !== null ? { lat, lon } : undefined,
+          }),
+        });
+
+      if (error) throw error;
+      toast.success('Reise erfolgreich gespeichert! Packtipps & Aufgaben wurden hinzugefügt.');
+      setPlanningDestination(null);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : 'Unbekannter Fehler';
+      toast.error('Fehler beim Speichern: ' + msg);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -245,6 +422,15 @@ export const InspirationPreview = () => {
                       >
                         Numbeo
                       </a>
+                      <Button 
+                        onClick={() => startPlanningTrip(selectedDestination)}
+                        disabled={isAdding}
+                        size="sm"
+                        className="gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        {isAdding ? '...' : 'Zu Reisen hinzufügen'}
+                      </Button>
                     </div>
                   </div>
                 </>
@@ -253,6 +439,12 @@ export const InspirationPreview = () => {
           </div>
         </div>
       )}
+      <PlanTripDialog 
+        open={!!planningDestination} 
+        onOpenChange={(open) => !open && setPlanningDestination(null)}
+        destination={planningDestination}
+        onConfirm={handlePlanConfirm}
+      />
     </section>
   );
 };
