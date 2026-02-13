@@ -74,16 +74,16 @@ const Inspiration = () => {
   useEffect(() => {
     const query = searchQuery.trim();
     const type = selectedType === 'all' ? undefined : selectedType;
-    const fetchKey = `${selectedType}|${selectedType === 'all' ? '' : query}`;
+    const fetchKey = `${selectedType}|${query}`;
     if (lastFetchKey.current === fetchKey) return;
     lastFetchKey.current = fetchKey;
     let active = true;
-    const delay = query && selectedType !== 'all' ? 300 : 0;
+    const delay = query ? 300 : 0;
     const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
         const data = await fetchDestinationsCatalog({
-          search: selectedType === 'all' ? undefined : query || undefined,
+          search: query || undefined,
           type,
         });
         if (active) setCatalog(Array.isArray(data) ? data : []);
@@ -666,31 +666,6 @@ const Inspiration = () => {
                   >
                     Mehr Infos
                   </button>
-                  <a
-                    href={`https://www.google.com/search?q=${encodeURIComponent(`site:lonelyplanet.com ${selectedDestination.name}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
-                  >
-                    Lonely Planet
-                  </a>
-                  <a
-                    href={`https://www.google.com/search?q=${encodeURIComponent(`site:tripadvisor.${navigator.language?.includes('de') ? 'de' : 'com'} ${selectedDestination.name}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
-                  >
-                    TripAdvisor
-                  </a>
-                  <a
-                    href={`https://www.google.com/search?q=${encodeURIComponent(`site:numbeo.com ${selectedDestination.name}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
-                  >
-                    Numbeo
-                  </a>
-
                   <Button 
                     onClick={() => startPlanningTrip(selectedDestination)}
                     disabled={isAdding}

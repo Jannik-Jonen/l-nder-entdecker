@@ -145,7 +145,7 @@ export default async function handler(
       if (aScore !== bScore) return bScore - aScore;
       return a.name.localeCompare(b.name);
     });
-    rows.splice(10);
+    rows.splice(50);
   }
 
   res.statusCode = 200;
