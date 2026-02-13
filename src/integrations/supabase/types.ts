@@ -76,7 +76,6 @@ export type Database = {
           parent_id: string | null
           source: string | null
           type: string
-          types: string[] | null
           updated_at: string
           vaccination_info: string | null
           visa_info: string | null
@@ -100,7 +99,6 @@ export type Database = {
           parent_id?: string | null
           source?: string | null
           type?: string
-          types?: string[] | null
           updated_at?: string
           vaccination_info?: string | null
           visa_info?: string | null
@@ -124,7 +122,6 @@ export type Database = {
           parent_id?: string | null
           source?: string | null
           type?: string
-          types?: string[] | null
           updated_at?: string
           vaccination_info?: string | null
           visa_info?: string | null
