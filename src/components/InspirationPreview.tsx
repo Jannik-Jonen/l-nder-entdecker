@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { Destination } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
+import { inspirationDestinations } from '@/data/mockData';
 
 export const InspirationPreview = () => {
   const [catalog, setCatalog] = useState<Destination[]>([]);
@@ -18,7 +19,7 @@ export const InspirationPreview = () => {
     };
     load();
   }, []);
-  const previewDestinations = catalog.slice(0, 3);
+  const previewDestinations = (catalog.length > 0 ? catalog : inspirationDestinations).slice(0, 3);
 
   return (
     <section className="py-16 bg-muted/30">
