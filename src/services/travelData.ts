@@ -164,6 +164,41 @@ const rankDestinations = (list: Destination[], search?: string) => {
     .slice(0, 10);
 };
 
+const normalizeDedupeKey = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+
+const scoreDestination = (row: Destination) => {
+  let score = 0;
+  if (row.source === 'curated') score += 100;
+  if (row.source) score += 10;
+  if (row.highlights?.length) score += row.highlights.length;
+  if (row.description?.trim()) score += 5;
+  if (row.imageUrl) score += 2;
+  if (row.bestSeason?.trim()) score += 1;
+  return score;
+};
+
+const dedupeDestinations = (list: Destination[]) => {
+  const seen = new Map<string, Destination>();
+  list.forEach((item) => {
+    const key =
+      item.type === 'country' && item.countryCode
+        ? `country:${item.countryCode.toUpperCase()}`
+        : item.id
+          ? `id:${item.id}`
+          : `${item.type}:${item.countryCode ? item.countryCode.toUpperCase() : 'XX'}:${normalizeDedupeKey(item.name)}`;
+    const existing = seen.get(key);
+    if (!existing || scoreDestination(item) > scoreDestination(existing)) {
+      seen.set(key, item);
+    }
+  });
+  return Array.from(seen.values());
+};
+
 const fallbackDestinationImage = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
 
 const flagFromCountryCode = (countryCode?: string | null) => {
@@ -392,8 +427,9 @@ export const fetchDestinationsCatalog = async (_opts?: {
       }
       if (apiData && (search || apiData.length > 0)) {
         const mapped = apiData.map(toDestination);
-        if (search && mapped.length === 0) return [];
-        return search ? rankDestinations(mapped, search) : mapped;
+        const deduped = dedupeDestinations(mapped);
+        if (search && deduped.length === 0) return [];
+        return search ? rankDestinations(deduped, search) : deduped;
       }
     }
     if (isLocalSupabase) {
@@ -421,8 +457,9 @@ export const fetchDestinationsCatalog = async (_opts?: {
         );
       }
       const mapped = rows.map(toDestination);
-      if (search && mapped.length === 0) return [];
-      return search ? rankDestinations(mapped, search) : mapped;
+      const deduped = dedupeDestinations(mapped);
+      if (search && deduped.length === 0) return [];
+      return search ? rankDestinations(deduped, search) : deduped;
     }
     let query = fromDestinations()
       .select(columns)
@@ -438,8 +475,9 @@ export const fetchDestinationsCatalog = async (_opts?: {
     if (error) throw error;
     const rows = (data || []) as DestinationRow[];
     const mapped = rows.map(toDestination);
-    if (search && mapped.length === 0) return [];
-    return search ? rankDestinations(mapped, search) : mapped;
+    const deduped = dedupeDestinations(mapped);
+    if (search && deduped.length === 0) return [];
+    return search ? rankDestinations(deduped, search) : deduped;
   } catch {
     return [];
   }
