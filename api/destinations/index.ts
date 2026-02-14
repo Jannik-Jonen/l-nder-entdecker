@@ -53,14 +53,20 @@ export default async function handler(
   const type = url.searchParams.get('type') || undefined;
   const countryCode = url.searchParams.get('countryCode') || undefined;
   const countryCodesParam = url.searchParams.get('countryCodes') || '';
+  const fields = url.searchParams.get('fields') || 'full';
   const countryCodes = countryCodesParam
     .split(',')
     .map((code) => code.trim().toUpperCase())
     .filter(Boolean);
   const debug = url.searchParams.get('debug') === '1';
 
-  const columns =
+  const fullColumns =
     'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+  const summaryColumns =
+    'id,name,country,country_code,type,types,image_url,description,best_season,average_daily_cost,currency,source,parent_id,children_count';
+  const lookupColumns =
+    'id,name,country,country_code,type,types,image_url,source,parent_id,children_count';
+  const columns = fields === 'summary' ? summaryColumns : fields === 'lookup' ? lookupColumns : fullColumns;
 
   const normalizedSupabaseUrl = /^https?:\/\//i.test(supabaseUrl)
     ? supabaseUrl
@@ -94,7 +100,7 @@ export default async function handler(
     return;
   }
   const supabaseAdmin = createClient(normalizedSupabaseUrl, supabaseKey);
-  let query = supabaseAdmin.from('destinations').select(columns).order('name', { ascending: true });
+  let query = supabaseAdmin.from('destinations').select(columns as string).order('name', { ascending: true });
 
   if (type) query = query.contains('types', [type]);
   if (countryCode) query = query.eq('country_code', countryCode);
@@ -114,7 +120,7 @@ export default async function handler(
     return;
   }
 
-  const rows = (data || []) as Array<{ name: string; country: string; description?: string | null; type: string }>;
+  const rows = (data || []) as unknown as Array<{ name: string; country: string; description?: string | null; type: string }>;
   if (search) {
     const normalize = (value: string) =>
       value

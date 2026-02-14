@@ -30,7 +30,7 @@ const typeLabels: Record<Destination['type'], string> = {
   region: 'Region',
 };
 
-import { fetchDestinationsCatalog } from '@/services/travelData';
+import { fetchDestinationsCatalog, getDestinationById } from '@/services/travelData';
 
 const normalizeSearch = (value: string) =>
   value
@@ -39,6 +39,9 @@ const normalizeSearch = (value: string) =>
     .replace(/\p{Diacritic}/gu, '')
     .replace(/\uFFFD/g, '')
     .trim();
+
+const isUuid = (value: string) =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 
 const stripReplacementChar = (value: string) => value.replace(/\uFFFD/g, '');
 
@@ -72,8 +75,10 @@ const Inspiration = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [catalog, setCatalog] = useState<Destination[]>([]);
   const [catalogLoading, setCatalogLoading] = useState<boolean>(false);
+  const [selectedDetailsLoading, setSelectedDetailsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
   const lastFetchKey = useRef<string | null>(null);
+  const lastDetailsId = useRef<string | null>(null);
 
   useEffect(() => {
     const query = searchQuery.trim();
@@ -88,8 +93,8 @@ const Inspiration = () => {
       try {
         if (selectedType === 'all' && query) {
           const [allData, countryData] = await Promise.all([
-            fetchDestinationsCatalog({ search: query }),
-            fetchDestinationsCatalog({ search: query, type: 'country' }),
+            fetchDestinationsCatalog({ search: query, fields: 'summary' }),
+            fetchDestinationsCatalog({ search: query, type: 'country', fields: 'summary' }),
           ]);
           const normalizedQuery = normalizeSearch(query);
           const matchingCountries = (Array.isArray(countryData) ? countryData : []).filter((country) => {
@@ -108,7 +113,7 @@ const Inspiration = () => {
           );
           const byCountryData =
             countryCodes.length > 0
-              ? await fetchDestinationsCatalog({ countryCodes })
+              ? await fetchDestinationsCatalog({ countryCodes, fields: 'summary' })
               : [];
           const combined = [
             ...(Array.isArray(allData) ? allData : []),
@@ -126,6 +131,7 @@ const Inspiration = () => {
           const data = await fetchDestinationsCatalog({
             search: query || undefined,
             type,
+            fields: 'summary',
           });
           if (active) setCatalog(Array.isArray(data) ? data : []);
         }
@@ -140,6 +146,35 @@ const Inspiration = () => {
       window.clearTimeout(handle);
     };
   }, [searchQuery, selectedType]);
+
+  useEffect(() => {
+    if (!selectedDestination?.id) return;
+    if (!isUuid(selectedDestination.id)) return;
+    if (lastDetailsId.current === selectedDestination.id) return;
+    if (
+      (selectedDestination.highlights && selectedDestination.highlights.length > 0) ||
+      selectedDestination.visaInfo ||
+      selectedDestination.vaccinationInfo ||
+      selectedDestination.healthSafetyInfo
+    ) {
+      lastDetailsId.current = selectedDestination.id;
+      return;
+    }
+    lastDetailsId.current = selectedDestination.id;
+    let active = true;
+    setSelectedDetailsLoading(true);
+    getDestinationById(selectedDestination.id)
+      .then((full) => {
+        if (!active || !full) return;
+        setSelectedDestination((prev) => (prev && prev.id === full.id ? { ...prev, ...full } : prev));
+      })
+      .finally(() => {
+        if (active) setSelectedDetailsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [selectedDestination]);
 
   const defaultInspirationList = React.useMemo(() => {
     if (catalog.length === 0) return inspirationDestinations;
@@ -656,6 +691,9 @@ const Inspiration = () => {
                 <p className="text-sm text-muted-foreground mb-6">{safeSelectedDescription}</p>
                 {selectedDestination.source && (
                   <p className="text-xs text-muted-foreground mb-6">Quelle: {selectedDestination.source}</p>
+                )}
+                {selectedDetailsLoading && (
+                  <p className="text-xs text-muted-foreground mb-6">Details werden geladen…</p>
                 )}
 
                 {safeHighlights.length > 0 && (

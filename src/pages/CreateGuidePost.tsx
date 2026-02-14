@@ -27,7 +27,7 @@ const CreateGuidePost = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const catalog = await fetchDestinationsCatalog();
+        const catalog = await fetchDestinationsCatalog({ fields: 'lookup' });
         setDestOptions(catalog.map((d) => ({ id: d.id, name: d.name })));
       } catch {
         setDestOptions(inspirationDestinations.map((d) => ({ id: d.id, name: d.name })));

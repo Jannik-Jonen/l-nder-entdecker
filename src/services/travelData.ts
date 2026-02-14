@@ -199,6 +199,9 @@ const dedupeDestinations = (list: Destination[]) => {
   return Array.from(seen.values());
 };
 
+const CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
+const catalogCache = new Map<string, { ts: number; data: Destination[] }>();
+
 const fallbackDestinationImage = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
 
 const flagFromCountryCode = (countryCode?: string | null) => {
@@ -400,11 +403,18 @@ export const fetchDestinationsCatalog = async (_opts?: {
   countryCode?: string;
   countryCodes?: string[];
   search?: string;
+  fields?: 'full' | 'summary' | 'lookup';
 }): Promise<Destination[]> => {
   try {
-    const columns = isLocalSupabase
-      ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
-      : 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    const fieldSet = _opts?.fields ?? 'full';
+    const fullColumns =
+      'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    const summaryColumns =
+      'id,name,country,country_code,type,types,image_url,description,best_season,average_daily_cost,currency,source,parent_id,children_count';
+    const lookupColumns =
+      'id,name,country,country_code,type,types,image_url,source,parent_id,children_count';
+    const columns =
+      fieldSet === 'summary' ? summaryColumns : fieldSet === 'lookup' ? lookupColumns : fullColumns;
     const search = _opts?.search?.trim();
     const isLocalHost =
       typeof window !== 'undefined' &&
@@ -412,6 +422,16 @@ export const fetchDestinationsCatalog = async (_opts?: {
     const canUseApi = !isLocalSupabase && !isLocalHost;
     const countryCodes =
       _opts?.countryCodes?.map((code) => code.trim().toUpperCase()).filter(Boolean) ?? [];
+    const cacheKey = JSON.stringify({
+      type: _opts?.type || null,
+      countryCode: _opts?.countryCode || null,
+      countryCodes,
+      search: search || null,
+      fields: fieldSet,
+      api: canUseApi,
+    });
+    const cached = catalogCache.get(cacheKey);
+    if (cached && Date.now() - cached.ts < CATALOG_CACHE_TTL_MS) return cached.data;
     if (canUseApi) {
       let apiData: DestinationRow[] | null = null;
       try {
@@ -420,6 +440,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
         if (_opts?.type) params.set('type', _opts.type);
         if (_opts?.countryCode) params.set('countryCode', _opts.countryCode);
         if (countryCodes.length > 0) params.set('countryCodes', countryCodes.join(','));
+        if (fieldSet !== 'full') params.set('fields', fieldSet);
         const response = await fetch(`/api/destinations?${params.toString()}`);
         if (response.ok) apiData = (await response.json()) as DestinationRow[];
       } catch (error) {
@@ -429,15 +450,17 @@ export const fetchDestinationsCatalog = async (_opts?: {
         const mapped = apiData.map(toDestination);
         const deduped = dedupeDestinations(mapped);
         if (search && deduped.length === 0) return [];
-        return search ? rankDestinations(deduped, search) : deduped;
+        const result = search ? rankDestinations(deduped, search) : deduped;
+        catalogCache.set(cacheKey, { data: result, ts: Date.now() });
+        return result;
       }
     }
     if (isLocalSupabase) {
       const { data, error } = await fromDestinations()
-        .select(columns)
+        .select(columns as string)
         .order('name', { ascending: true });
       if (error) throw error;
-      let rows = (data || []) as DestinationRow[];
+      let rows = (data || []) as unknown as DestinationRow[];
       if (_opts?.type) {
         rows = rows.filter((row) => row.type === _opts.type || (Array.isArray(row.types) && row.types.includes(_opts.type)));
       }
@@ -459,10 +482,12 @@ export const fetchDestinationsCatalog = async (_opts?: {
       const mapped = rows.map(toDestination);
       const deduped = dedupeDestinations(mapped);
       if (search && deduped.length === 0) return [];
-      return search ? rankDestinations(deduped, search) : deduped;
+      const result = search ? rankDestinations(deduped, search) : deduped;
+      catalogCache.set(cacheKey, { data: result, ts: Date.now() });
+      return result;
     }
     let query = fromDestinations()
-      .select(columns)
+      .select(columns as string)
       .order('name', { ascending: true });
     if (_opts?.type) query = query.contains('types', [_opts.type]);
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
@@ -473,11 +498,13 @@ export const fetchDestinationsCatalog = async (_opts?: {
     }
     const { data, error } = await query;
     if (error) throw error;
-    const rows = (data || []) as DestinationRow[];
+    const rows = (data || []) as unknown as DestinationRow[];
     const mapped = rows.map(toDestination);
     const deduped = dedupeDestinations(mapped);
     if (search && deduped.length === 0) return [];
-    return search ? rankDestinations(deduped, search) : deduped;
+    const result = search ? rankDestinations(deduped, search) : deduped;
+    catalogCache.set(cacheKey, { data: result, ts: Date.now() });
+    return result;
   } catch {
     return [];
   }

@@ -263,7 +263,7 @@ const Index = () => {
   }, [user]);
 
   useEffect(() => {
-    fetchDestinationsCatalog()
+    fetchDestinationsCatalog({ fields: 'lookup' })
       .then((data) => setGuideCatalog(Array.isArray(data) ? data : []))
       .catch(() => setGuideCatalog([]));
   }, []);

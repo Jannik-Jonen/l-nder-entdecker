@@ -2,20 +2,25 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, DollarSign, FileCheck, MapPin, Plus, ShieldCheck, Syringe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Destination, PackingItem, TodoItem } from '@/types/travel';
-import { fetchDestinationsCatalog } from '@/services/travelData';
+import { fetchDestinationsCatalog, getDestinationById } from '@/services/travelData';
 import { defaultTodos, inspirationDestinations } from '@/data/mockData';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { PlanTripDialog, TripPlanData } from '@/components/PlanTripDialog';
 
+const isUuid = (value: string) =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+
 export const InspirationPreview = () => {
   const [catalog, setCatalog] = useState<Destination[]>([]);
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
   const [planningDestination, setPlanningDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [selectedDetailsLoading, setSelectedDetailsLoading] = useState(false);
+  const lastDetailsId = useRef<string | null>(null);
   const { user } = useAuth();
   const normalizeSearch = (value: string) =>
     value
@@ -27,7 +32,7 @@ export const InspirationPreview = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await fetchDestinationsCatalog();
+        const data = await fetchDestinationsCatalog({ fields: 'summary' });
         setCatalog(Array.isArray(data) ? data : []);
       } catch {
         setCatalog([]);
@@ -35,6 +40,34 @@ export const InspirationPreview = () => {
     };
     load();
   }, []);
+  useEffect(() => {
+    if (!selectedDestination?.id) return;
+    if (!isUuid(selectedDestination.id)) return;
+    if (lastDetailsId.current === selectedDestination.id) return;
+    if (
+      (selectedDestination.highlights && selectedDestination.highlights.length > 0) ||
+      selectedDestination.visaInfo ||
+      selectedDestination.vaccinationInfo ||
+      selectedDestination.healthSafetyInfo
+    ) {
+      lastDetailsId.current = selectedDestination.id;
+      return;
+    }
+    lastDetailsId.current = selectedDestination.id;
+    let active = true;
+    setSelectedDetailsLoading(true);
+    getDestinationById(selectedDestination.id)
+      .then((full) => {
+        if (!active || !full) return;
+        setSelectedDestination((prev) => (prev && prev.id === full.id ? { ...prev, ...full } : prev));
+      })
+      .finally(() => {
+        if (active) setSelectedDetailsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [selectedDestination]);
   const defaultInspirationList = useMemo(() => {
     if (catalog.length === 0) return inspirationDestinations;
     const byCode = new Map<string, Destination[]>();
@@ -388,6 +421,9 @@ export const InspirationPreview = () => {
                     <p className="text-sm text-muted-foreground mb-6">{safeSelectedDescription}</p>
                     {selectedDestination.source && (
                       <p className="text-xs text-muted-foreground mb-6">Quelle: {selectedDestination.source}</p>
+                    )}
+                    {selectedDetailsLoading && (
+                      <p className="text-xs text-muted-foreground mb-6">Details werden geladen…</p>
                     )}
 
                     {safeHighlights.length > 0 && (
