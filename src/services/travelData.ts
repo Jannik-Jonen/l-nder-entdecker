@@ -202,6 +202,77 @@ const migrationImageMap = (() => {
   }
 })();
 
+type MigrationEntry = {
+  name?: string;
+  country?: string;
+  country_code?: string;
+  description?: string;
+  highlights?: string[];
+  best_season?: string;
+  average_daily_cost?: number;
+  currency?: string | null;
+  visa_info?: string;
+  vaccination_info?: string;
+  health_safety_info?: string;
+  source?: string;
+};
+
+const migrationDataMap = (() => {
+  try {
+    const match = migrationRaw.match(/jsonb_to_recordset\(\s*'([\s\S]*?)'\s*::jsonb\s*\)/);
+    if (!match) return null;
+    const jsonText = match[1].replace(/''/g, "'");
+    const data = JSON.parse(jsonText) as MigrationEntry[];
+    const map = new Map<string, MigrationEntry>();
+    data.forEach((entry) => {
+      if (entry?.country_code) map.set(String(entry.country_code).toUpperCase(), entry);
+      if (entry?.name) map.set(`name:${String(entry.name).toLowerCase()}`, entry);
+      if (entry?.country) map.set(`country:${String(entry.country).toLowerCase()}`, entry);
+    });
+    return map;
+  } catch {
+    return null;
+  }
+})();
+
+const getMigrationData = (row: DestinationRow): MigrationEntry | null => {
+  if (!migrationDataMap) return null;
+  if (row.country_code) {
+    const byCode = migrationDataMap.get(row.country_code.toUpperCase());
+    if (byCode) return byCode;
+  }
+  const byName = migrationDataMap.get(`name:${row.name.toLowerCase()}`);
+  if (byName) return byName;
+  return migrationDataMap.get(`country:${row.country.toLowerCase()}`) || null;
+};
+
+const applyMigrationFallback = (row: DestinationRow): DestinationRow => {
+  const migration = getMigrationData(row);
+  if (!migration) return row;
+  return {
+    ...row,
+    description: row.description?.trim() ? row.description : migration.description ?? row.description,
+    highlights:
+      Array.isArray(row.highlights) && row.highlights.length > 0
+        ? row.highlights
+        : migration.highlights ?? row.highlights,
+    best_season: row.best_season?.trim() ? row.best_season : migration.best_season ?? row.best_season,
+    average_daily_cost:
+      typeof row.average_daily_cost === 'number'
+        ? row.average_daily_cost
+        : migration.average_daily_cost ?? row.average_daily_cost,
+    currency: row.currency?.trim() ? row.currency : migration.currency ?? row.currency,
+    visa_info: row.visa_info?.trim() ? row.visa_info : migration.visa_info ?? row.visa_info,
+    vaccination_info: row.vaccination_info?.trim()
+      ? row.vaccination_info
+      : migration.vaccination_info ?? row.vaccination_info,
+    health_safety_info: row.health_safety_info?.trim()
+      ? row.health_safety_info
+      : migration.health_safety_info ?? row.health_safety_info,
+    source: row.source?.trim() ? row.source : migration.source ?? row.source,
+  };
+};
+
 const getMigrationImage = (row: DestinationRow) => {
   if (!migrationImageMap) return null;
   const byCode = row.country_code ? migrationImageMap.get(row.country_code.toUpperCase()) : null;
@@ -250,35 +321,37 @@ const resolveDestinationImage = (row: DestinationRow) => {
 
 const toDestination = (row: DestinationRow): Destination => {
   const sanitized = sanitizeGeneratedRow(row);
+  const enriched = applyMigrationFallback(sanitized);
   return {
-    id: sanitized.id,
-    name: sanitized.name,
-    country: sanitized.country,
-    countryCode: sanitized.country_code || undefined,
-    type: sanitized.type,
-    types: Array.isArray(sanitized.types) ? sanitized.types : undefined,
-    imageUrl: resolveDestinationImage(sanitized),
-    description: sanitized.description || '',
-    highlights: Array.isArray(sanitized.highlights) ? sanitized.highlights : [],
-    bestSeason: sanitized.best_season || '',
-    averageDailyCost: typeof sanitized.average_daily_cost === 'number' ? sanitized.average_daily_cost : 0,
-    currency: sanitized.currency || 'EUR',
-    visaInfo: sanitized.visa_info || undefined,
-    vaccinationInfo: sanitized.vaccination_info || undefined,
-    healthSafetyInfo: sanitized.health_safety_info || undefined,
-    source: sanitized.source || undefined,
-    parentId: sanitized.parent_id || undefined,
+    id: enriched.id,
+    name: enriched.name,
+    country: enriched.country,
+    countryCode: enriched.country_code || undefined,
+    type: enriched.type,
+    types: Array.isArray(enriched.types) ? enriched.types : undefined,
+    imageUrl: resolveDestinationImage(enriched),
+    description: enriched.description || '',
+    highlights: Array.isArray(enriched.highlights) ? enriched.highlights : [],
+    bestSeason: enriched.best_season || '',
+    averageDailyCost: typeof enriched.average_daily_cost === 'number' ? enriched.average_daily_cost : 0,
+    currency: enriched.currency || 'EUR',
+    visaInfo: enriched.visa_info || undefined,
+    vaccinationInfo: enriched.vaccination_info || undefined,
+    healthSafetyInfo: enriched.health_safety_info || undefined,
+    source: enriched.source || undefined,
+    parentId: enriched.parent_id || undefined,
     coords:
-      typeof sanitized.coords_lat === 'number' && typeof sanitized.coords_lon === 'number'
-        ? { lat: sanitized.coords_lat, lon: sanitized.coords_lon }
+      typeof enriched.coords_lat === 'number' && typeof enriched.coords_lon === 'number'
+        ? { lat: enriched.coords_lat, lon: enriched.coords_lon }
         : undefined,
-    childrenCount: typeof sanitized.children_count === 'number' ? sanitized.children_count : undefined,
+    childrenCount: typeof enriched.children_count === 'number' ? enriched.children_count : undefined,
   };
 };
 
 export const fetchDestinationsCatalog = async (_opts?: {
   type?: Destination['type'];
   countryCode?: string;
+  countryCodes?: string[];
   search?: string;
 }): Promise<Destination[]> => {
   try {
@@ -290,6 +363,8 @@ export const fetchDestinationsCatalog = async (_opts?: {
       typeof window !== 'undefined' &&
       (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
     const canUseApi = !isLocalSupabase && !isLocalHost;
+    const countryCodes =
+      _opts?.countryCodes?.map((code) => code.trim().toUpperCase()).filter(Boolean) ?? [];
     if (canUseApi) {
       let apiData: DestinationRow[] | null = null;
       try {
@@ -297,6 +372,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
         if (search) params.set('search', search);
         if (_opts?.type) params.set('type', _opts.type);
         if (_opts?.countryCode) params.set('countryCode', _opts.countryCode);
+        if (countryCodes.length > 0) params.set('countryCodes', countryCodes.join(','));
         const response = await fetch(`/api/destinations?${params.toString()}`);
         if (response.ok) apiData = (await response.json()) as DestinationRow[];
       } catch (error) {
@@ -321,6 +397,9 @@ export const fetchDestinationsCatalog = async (_opts?: {
         const code = _opts.countryCode.toUpperCase();
         rows = rows.filter((row) => (row.country_code || '').toUpperCase() === code);
       }
+      if (countryCodes.length > 0) {
+        rows = rows.filter((row) => countryCodes.includes((row.country_code || '').toUpperCase()));
+      }
       if (search) {
         const s = search.toLowerCase();
         rows = rows.filter((row) =>
@@ -338,6 +417,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
       .order('name', { ascending: true });
     if (_opts?.type) query = query.contains('types', [_opts.type]);
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
+    if (countryCodes.length > 0) query = query.in('country_code', countryCodes);
     if (search) {
       const s = search.replace(/%/g, '\\%');
       query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(100);

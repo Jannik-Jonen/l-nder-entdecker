@@ -52,6 +52,11 @@ export default async function handler(
   const search = (url.searchParams.get('search') || '').trim();
   const type = url.searchParams.get('type') || undefined;
   const countryCode = url.searchParams.get('countryCode') || undefined;
+  const countryCodesParam = url.searchParams.get('countryCodes') || '';
+  const countryCodes = countryCodesParam
+    .split(',')
+    .map((code) => code.trim().toUpperCase())
+    .filter(Boolean);
   const debug = url.searchParams.get('debug') === '1';
 
   const columns =
@@ -93,6 +98,7 @@ export default async function handler(
 
   if (type) query = query.contains('types', [type]);
   if (countryCode) query = query.eq('country_code', countryCode);
+  if (countryCodes.length > 0) query = query.in('country_code', countryCodes);
   if (search) {
     const s = search.replace(/%/g, '\\%');
     query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(100);

@@ -106,13 +106,14 @@ const Inspiration = () => {
                 .filter((code): code is string => Boolean(code)),
             ),
           );
-          const byCountryData = await Promise.all(
-            countryCodes.map((code) => fetchDestinationsCatalog({ countryCode: code })),
-          );
+          const byCountryData =
+            countryCodes.length > 0
+              ? await fetchDestinationsCatalog({ countryCodes })
+              : [];
           const combined = [
             ...(Array.isArray(allData) ? allData : []),
             ...(Array.isArray(countryData) ? countryData : []),
-            ...byCountryData.flat(),
+            ...(Array.isArray(byCountryData) ? byCountryData : []),
           ];
           const deduped = new Map<string, Destination>();
           combined.forEach((item) => {
