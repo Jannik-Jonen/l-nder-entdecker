@@ -60,6 +60,10 @@ const getCountryAliases = (code?: string | null) => {
   return [de, en].filter((value): value is string => Boolean(value));
 };
 
+const makeDestinationKey = (item: Destination) =>
+  item.id ||
+  `${item.type}:${item.countryCode ? item.countryCode.toUpperCase() : 'XX'}:${normalizeSearch(item.name)}`;
+
 const Inspiration = () => {
   const { user } = useAuth();
   const [selectedType, setSelectedType] = useState<Destination['type'] | 'all'>('all');
@@ -82,11 +86,48 @@ const Inspiration = () => {
     const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
-        const data = await fetchDestinationsCatalog({
-          search: query || undefined,
-          type,
-        });
-        if (active) setCatalog(Array.isArray(data) ? data : []);
+        if (selectedType === 'all' && query) {
+          const [allData, countryData] = await Promise.all([
+            fetchDestinationsCatalog({ search: query }),
+            fetchDestinationsCatalog({ search: query, type: 'country' }),
+          ]);
+          const normalizedQuery = normalizeSearch(query);
+          const matchingCountries = (Array.isArray(countryData) ? countryData : []).filter((country) => {
+            const name = normalizeSearch(country.name);
+            const countryName = normalizeSearch(country.country);
+            if (name.includes(normalizedQuery) || countryName.includes(normalizedQuery)) return true;
+            const aliases = getCountryAliases(country.countryCode).map(normalizeSearch);
+            return aliases.some((alias) => alias.includes(normalizedQuery));
+          });
+          const countryCodes = Array.from(
+            new Set(
+              matchingCountries
+                .map((country) => country.countryCode)
+                .filter((code): code is string => Boolean(code)),
+            ),
+          );
+          const byCountryData = await Promise.all(
+            countryCodes.map((code) => fetchDestinationsCatalog({ countryCode: code })),
+          );
+          const combined = [
+            ...(Array.isArray(allData) ? allData : []),
+            ...(Array.isArray(countryData) ? countryData : []),
+            ...byCountryData.flat(),
+          ];
+          const deduped = new Map<string, Destination>();
+          combined.forEach((item) => {
+            if (!item) return;
+            const key = makeDestinationKey(item);
+            if (!deduped.has(key)) deduped.set(key, item);
+          });
+          if (active) setCatalog(Array.from(deduped.values()));
+        } else {
+          const data = await fetchDestinationsCatalog({
+            search: query || undefined,
+            type,
+          });
+          if (active) setCatalog(Array.isArray(data) ? data : []);
+        }
       } catch {
         if (active) setCatalog([]);
       } finally {
@@ -164,13 +205,19 @@ const Inspiration = () => {
         else if (country.includes(query)) score += 1;
         if (aliases.some((alias) => alias.startsWith(query))) score += 2;
         else if (aliases.some((alias) => alias.includes(query))) score += 1;
+        if (
+          d.type === 'country' &&
+          (name === query ||
+            country === query ||
+            aliases.some((alias) => alias === query))
+        ) {
+          score += 3;
+        }
         return { destination: d, score };
       });
     const deduped = new Map<string, { destination: Destination; score: number }>();
     scored.forEach((entry) => {
-      const key = entry.destination.countryCode
-        ? `${entry.destination.type}:${entry.destination.countryCode.toUpperCase()}`
-        : `${entry.destination.type}:${normalizeSearch(entry.destination.name)}`;
+      const key = makeDestinationKey(entry.destination);
       const existing = deduped.get(key);
       if (!existing || entry.score > existing.score) {
         deduped.set(key, entry);
