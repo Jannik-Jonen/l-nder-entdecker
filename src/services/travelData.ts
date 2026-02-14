@@ -249,13 +249,22 @@ const getMigrationData = (row: DestinationRow): MigrationEntry | null => {
 const applyMigrationFallback = (row: DestinationRow): DestinationRow => {
   const migration = getMigrationData(row);
   if (!migration) return row;
+  const hasHighlights =
+    Array.isArray(row.highlights) &&
+    row.highlights.map((value) => String(value).trim()).filter(Boolean).length > 0;
+  const shouldUseMigrationHighlights =
+    Array.isArray(migration.highlights) &&
+    migration.highlights.length > 0 &&
+    (!hasHighlights ||
+      (row.source === 'generated' &&
+        Array.isArray(row.highlights) &&
+        row.highlights.length === genericHighlights.length &&
+        row.highlights.every((value) => genericHighlights.includes(value))));
   return {
     ...row,
     description: row.description?.trim() ? row.description : migration.description ?? row.description,
     highlights:
-      Array.isArray(row.highlights) && row.highlights.length > 0
-        ? row.highlights
-        : migration.highlights ?? row.highlights,
+      shouldUseMigrationHighlights ? migration.highlights : row.highlights,
     best_season: row.best_season?.trim() ? row.best_season : migration.best_season ?? row.best_season,
     average_daily_cost:
       typeof row.average_daily_cost === 'number'
