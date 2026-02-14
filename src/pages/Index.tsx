@@ -454,10 +454,10 @@ const Index = () => {
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                             onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-4">
-                            <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
-                            <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                            <h3 className="font-display text-xl font-semibold text-white drop-shadow-sm">{p.title}</h3>
+                            <p className="text-white/90 text-sm line-clamp-2 drop-shadow-sm">{p.excerpt}</p>
                           </div>
                         </div>
                         <div className="p-4">
@@ -512,10 +512,10 @@ const Index = () => {
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                           onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild'; }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
-                          <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                          <h3 className="font-display text-xl font-semibold text-white drop-shadow-sm">{p.title}</h3>
+                          <p className="text-white/90 text-sm line-clamp-2 drop-shadow-sm">{p.excerpt}</p>
                         </div>
                       </div>
                       <div className="p-4">
@@ -712,10 +712,10 @@ const Index = () => {
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                             onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800'; }}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-4">
-                            <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
-                            <p className="text-white/80 text-sm line-clamp-2 mt-1">{p.excerpt}</p>
+                            <h3 className="font-display text-xl font-semibold text-white drop-shadow-sm">{p.title}</h3>
+                            <p className="text-white/90 text-sm line-clamp-2 mt-1 drop-shadow-sm">{p.excerpt}</p>
                           </div>
                         </div>
                         <div className="p-4">
@@ -772,10 +772,10 @@ const Index = () => {
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                           onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild'; }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
-                          <p className="text-white/80 text-sm line-clamp-2 mt-1">{p.excerpt}</p>
+                          <h3 className="font-display text-xl font-semibold text-white drop-shadow-sm">{p.title}</h3>
+                          <p className="text-white/90 text-sm line-clamp-2 mt-1 drop-shadow-sm">{p.excerpt}</p>
                         </div>
                       </div>
                       <div className="p-4">
