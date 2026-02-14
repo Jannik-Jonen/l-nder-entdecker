@@ -259,7 +259,10 @@ const applyMigrationFallback = (row: DestinationRow): DestinationRow => {
       (row.source === 'generated' &&
         Array.isArray(row.highlights) &&
         row.highlights.length === genericHighlights.length &&
-        row.highlights.every((value) => genericHighlights.includes(value))));
+        row.highlights.every((value) => genericHighlights.includes(value))) ||
+      (row.source !== 'curated' &&
+        Array.isArray(row.highlights) &&
+        migration.highlights.length > row.highlights.length));
   return {
     ...row,
     description: row.description?.trim() ? row.description : migration.description ?? row.description,
