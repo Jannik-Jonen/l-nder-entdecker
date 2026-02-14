@@ -5,16 +5,17 @@ import { CountryCard } from '@/components/CountryCard';
 import { CountryDetail } from '@/components/CountryDetail';
 import { LandingHero } from '@/components/LandingHero';
 import { InspirationPreview } from '@/components/InspirationPreview';
-import { mockTrip, defaultTodos } from '@/data/mockData';
-import { Country, Trip } from '@/types/travel';
+import { defaultTodos } from '@/data/mockData';
+import { Country, Destination, Trip } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
-import { guidePosts } from '@/data/mockData';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles, Globe } from 'lucide-react';
 import { WorldMap } from '@/components/WorldMap';
 import { supabase } from '@/integrations/supabase/client';
+import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { fetchDestinationsCatalog } from '@/services/travelData';
 
 interface SavedTripRow {
   id: string;
@@ -29,6 +30,25 @@ interface SavedTripRow {
   notes: string | null;
 }
 
+type GuidePostRow = {
+  id: string;
+  title: string;
+  excerpt: string;
+  image_url: string;
+  destination_id: string;
+  tags?: string[];
+  created_at?: string;
+};
+
+type BlogPostRow = {
+  id: string;
+  title: string;
+  excerpt: string;
+  image_url: string;
+  tags?: string[];
+  created_at?: string;
+};
+
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -42,6 +62,9 @@ const Index = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isLoadingTrips, setIsLoadingTrips] = useState(false);
   const [userName, setUserName] = useState<string>('');
+  const [guideCatalog, setGuideCatalog] = useState<Destination[]>([]);
+  const [guidePostsPreview, setGuidePostsPreview] = useState<GuidePostRow[]>([]);
+  const [blogPostsPreview, setBlogPostsPreview] = useState<BlogPostRow[]>([]);
 
   
 
@@ -240,6 +263,38 @@ const Index = () => {
   }, [user]);
 
   useEffect(() => {
+    fetchDestinationsCatalog()
+      .then((data) => setGuideCatalog(Array.isArray(data) ? data : []))
+      .catch(() => setGuideCatalog([]));
+  }, []);
+
+  useEffect(() => {
+    supabaseUntyped
+      .from('guide_posts')
+      .select('id,title,excerpt,image_url,destination_id,tags,created_at')
+      .eq('status', 'published')
+      .order('created_at', { ascending: false })
+      .limit(3)
+      .then((response) => {
+        const data = (response as { data?: GuidePostRow[] | null }).data;
+        if (data) setGuidePostsPreview(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    supabaseUntyped
+      .from('blog_posts')
+      .select('id,title,excerpt,image_url,tags,created_at')
+      .eq('status', 'published')
+      .order('created_at', { ascending: false })
+      .limit(3)
+      .then((response) => {
+        const data = (response as { data?: BlogPostRow[] | null }).data;
+        if (data) setBlogPostsPreview(data);
+      });
+  }, []);
+
+  useEffect(() => {
     if (user) {
       fetchUserTrips();
       fetchProfile();
@@ -378,35 +433,112 @@ const Index = () => {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {guidePosts.slice(0, 3).map((p) => (
-                  <Link
-                    key={p.id}
-                    to={`/guides/posts/${p.id}`}
-                    className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
-                  >
-                    <div className="relative h-40">
-                      <img
-                        src={p.imageUrl}
-                        alt={p.title}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
-                        <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>{p.tags.join(' • ')}</span>
-                        <span>Weiterlesen</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+              {guidePostsPreview.length === 0 ? (
+                <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
+                  Noch keine Guide-Beiträge vorhanden.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {guidePostsPreview.map((p) => {
+                    const dest = guideCatalog.find((d) => d.id === p.destination_id);
+                    return (
+                      <Link
+                        key={p.id}
+                        to={`/guides/posts/${p.id}`}
+                        className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+                      >
+                        <div className="relative h-40">
+                          <img
+                            src={p.image_url}
+                            alt={p.title}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild+nicht+verfügbar'; }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                            <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                            <span>{dest?.name || 'Destination'}</span>
+                            <span>Weiterlesen</span>
+                          </div>
+                          {p.tags && p.tags.length > 0 && (
+                            <div className="mt-3 flex flex-wrap gap-1.5">
+                              {p.tags.slice(0, 3).map(t => (
+                                <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{t}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="py-12">
+            <div className="container">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-semibold">Aktuelle Blogbeiträge</h2>
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
+                >
+                  Alle Beiträge ansehen
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
+              {blogPostsPreview.length === 0 ? (
+                <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
+                  Noch keine Blogbeiträge vorhanden.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {blogPostsPreview.map((p) => (
+                    <Link
+                      key={p.id}
+                      to={`/blog?post=${p.id}`}
+                      className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+                    >
+                      <div className="relative h-40">
+                        <img
+                          src={p.image_url}
+                          alt={p.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild'; }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                          <p className="text-white/80 text-sm line-clamp-2">{p.excerpt}</p>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          {p.created_at ? (
+                            <span>{new Date(p.created_at).toLocaleDateString('de-DE')}</span>
+                          ) : (
+                            <span>&nbsp;</span>
+                          )}
+                          <span>Weiterlesen</span>
+                        </div>
+                        {p.tags && p.tags.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {p.tags.slice(0, 3).map(t => (
+                              <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{t}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         </main>
@@ -542,6 +674,133 @@ const Index = () => {
                     <Plus className="h-5 w-5 mr-2" />
                     Erste Reise planen
                   </Link>
+                </div>
+              )}
+            </section>
+
+            <InspirationPreview />
+
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-semibold">Orts-Guides</h2>
+                <Link
+                  to="/guides"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
+                >
+                  Alle Guides ansehen
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              {guidePostsPreview.length === 0 ? (
+                <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
+                  Noch keine Guide-Beiträge vorhanden.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {guidePostsPreview.map((p) => {
+                    const dest = guideCatalog.find((d) => d.id === p.destination_id);
+                    return (
+                      <Link
+                        key={p.id}
+                        to={`/guides/posts/${p.id}`}
+                        className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+                      >
+                        <div className="relative h-40">
+                          <img
+                            src={p.image_url}
+                            alt={p.title}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800'; }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                            <p className="text-white/80 text-sm line-clamp-2 mt-1">{p.excerpt}</p>
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <div className="flex items-center justify-between">
+                            <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                              {dest?.name || 'Destination'}
+                            </span>
+                            <span className="text-sm font-medium text-primary flex items-center gap-1">
+                              Lesen <ArrowRight className="h-3.5 w-3.5" />
+                            </span>
+                          </div>
+                          {p.tags && p.tags.length > 0 && (
+                            <div className="mt-3 flex flex-wrap gap-1.5">
+                              {p.tags.slice(0, 3).map(t => (
+                                <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{t}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-semibold">Aktuelle Blogbeiträge</h2>
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
+                >
+                  Alle Beiträge ansehen
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              {blogPostsPreview.length === 0 ? (
+                <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
+                  Noch keine Blogbeiträge vorhanden.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {blogPostsPreview.map((p) => (
+                    <Link
+                      key={p.id}
+                      to={`/blog?post=${p.id}`}
+                      className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
+                    >
+                      <div className="relative h-40">
+                        <img
+                          src={p.image_url}
+                          alt={p.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild'; }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-4">
+                          <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
+                          <p className="text-white/80 text-sm line-clamp-2 mt-1">{p.excerpt}</p>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between">
+                          {p.created_at ? (
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(p.created_at).toLocaleDateString('de-DE')}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">&nbsp;</span>
+                          )}
+                          <span className="text-sm font-medium text-primary flex items-center gap-1">
+                            Lesen <ArrowRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                        {p.tags && p.tags.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {p.tags.slice(0, 3).map(t => (
+                              <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{t}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               )}
             </section>

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, DollarSign, FileCheck, MapPin, Plus, ShieldCheck, Syringe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Destination, PackingItem, TodoItem } from '@/types/travel';
 import { fetchDestinationsCatalog } from '@/services/travelData';
 import { defaultTodos, inspirationDestinations } from '@/data/mockData';
@@ -17,6 +17,13 @@ export const InspirationPreview = () => {
   const [planningDestination, setPlanningDestination] = useState<Destination | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const { user } = useAuth();
+  const normalizeSearch = (value: string) =>
+    value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replace(/\uFFFD/g, '')
+      .trim();
   useEffect(() => {
     const load = async () => {
       try {
@@ -28,7 +35,48 @@ export const InspirationPreview = () => {
     };
     load();
   }, []);
-  const previewDestinations = (catalog.length > 0 ? catalog : inspirationDestinations).slice(0, 3);
+  const defaultInspirationList = useMemo(() => {
+    if (catalog.length === 0) return inspirationDestinations;
+    const byCode = new Map<string, Destination[]>();
+    catalog.forEach((item) => {
+      if (!item.countryCode) return;
+      const key = item.countryCode.toUpperCase();
+      const list = byCode.get(key) || [];
+      list.push(item);
+      byCode.set(key, list);
+    });
+    const seen = new Set<string>();
+    const ordered = inspirationDestinations.map((seed) => {
+      const normalizedName = normalizeSearch(seed.name);
+      const normalizedCountry = normalizeSearch(seed.country);
+      const codeMatch = seed.countryCode
+        ? byCode
+            .get(seed.countryCode.toUpperCase())
+            ?.find(
+              (item) =>
+                item.type === seed.type ||
+                (Array.isArray(item.types) && item.types.includes(seed.type)),
+            )
+        : undefined;
+      const nameMatch =
+        codeMatch ||
+        catalog.find((item) => {
+          const itemName = normalizeSearch(item.name);
+          const itemCountry = normalizeSearch(item.country);
+          return itemName === normalizedName || itemCountry === normalizedCountry;
+        });
+      return nameMatch || seed;
+    });
+    return ordered.filter((item) => {
+      const key = item.countryCode
+        ? `${item.type}:${item.countryCode.toUpperCase()}`
+        : `${item.type}:${normalizeSearch(item.name)}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [catalog]);
+  const previewDestinations = defaultInspirationList.slice(0, 3);
   const stripReplacementChar = (value: string) => value.replace(/\uFFFD/g, '');
   const typeLabels: Record<Destination['type'], string> = {
     country: 'Land',
@@ -398,30 +446,6 @@ export const InspirationPreview = () => {
                       >
                         Mehr Infos
                       </button>
-                      <a
-                        href={`https://www.google.com/search?q=${encodeURIComponent(`site:lonelyplanet.com ${selectedDestination.name}`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
-                      >
-                        Lonely Planet
-                      </a>
-                      <a
-                        href={`https://www.google.com/search?q=${encodeURIComponent(`site:tripadvisor.${navigator.language?.includes('de') ? 'de' : 'com'} ${selectedDestination.name}`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
-                      >
-                        TripAdvisor
-                      </a>
-                      <a
-                        href={`https://www.google.com/search?q=${encodeURIComponent(`site:numbeo.com ${selectedDestination.name}`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 rounded-md bg-muted text-muted-foreground hover:bg-muted/90 transition text-sm"
-                      >
-                        Numbeo
-                      </a>
                       <Button 
                         onClick={() => startPlanningTrip(selectedDestination)}
                         disabled={isAdding}
