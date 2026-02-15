@@ -10,7 +10,7 @@ WITH data AS (
         "types": [
           "country"
         ],
-        "image_url": "https://plus.unsplash.com/premium_photo-1733317216216-1bf7b1db4f65?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "image_url": "https://plus.unsplash.com/premium_photo-1733317216216-1bf7b1db4f65?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMzwisc3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Land mit Karibikküste, Tepuis und Wasserfällen.",
         "highlights": [
           "Angel Falls",
@@ -3177,7 +3177,7 @@ WITH data AS (
         "types": [
           "country"
         ],
-        "image_url": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "image_url": "https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=1470&auto=format&fit=crop",
         "description": "Japan ist ein Land in Asia (Eastern Asia). Hauptstadt: Tokyo.",
         "highlights": [
           "Tokyo",

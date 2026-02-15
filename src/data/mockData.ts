@@ -617,7 +617,7 @@ export const inspirationDestinations: Destination[] = [
     country: 'Japan',
     countryCode: 'JP',
     type: 'country',
-    imageUrl: 'https://images.unsplash.com/photo-1549692520-acc6669e2f0c?w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=1470&auto=format&fit=crop',
     description: 'Inselstaat mit einzigartiger Kultur, modernen Städten und Natur.',
     highlights: ['Tokyo', 'Kyoto', 'Fuji', 'Nara'],
     bestSeason: 'März bis Mai, Oktober bis November',
