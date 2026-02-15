@@ -2,23 +2,21 @@ import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { defaultTodos } from '@/data/mockData';
 import { Country, TodoItem, PackingItem, PeopleBreakdown } from '@/types/travel';
-import { User, MapPin, Calendar, Settings, Plus, Trash2, Edit2, LogOut, Loader2 } from 'lucide-react';
+import { User, MapPin, Calendar, Settings, Plus, Trash2, Edit2, LogOut, Loader2, Globe, TrendingUp, ChevronRight, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { format } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { AddCountryDialog } from '@/components/AddCountryDialog';
+import { CountryDetail } from '@/components/CountryDetail';
 import { AuthDialog } from '@/components/AuthDialog';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-
-interface ProfileRow {
-  display_name: string | null;
-}
+import { Progress } from '@/components/ui/progress';
 
 interface SavedTripRow {
   id: string;
@@ -53,8 +51,16 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const [profile, setProfile] = useState<{ display_name: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ display_name: string | null; avatar_url: string | null } | null>(null);
   const [loadingTrips, setLoadingTrips] = useState(false);
+  const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid');
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editAvatarUrl, setEditAvatarUrl] = useState('');
+  const [savingProfile, setSavingProfile] = useState(false);
+
+  // MFA state
   const [mfaLoading, setMfaLoading] = useState(false);
   const [mfaEnabled, setMfaEnabled] = useState(false);
   const [mfaFactorsLoaded, setMfaFactorsLoaded] = useState(false);
@@ -62,33 +68,22 @@ const Profile = () => {
   const [mfaEnroll, setMfaEnroll] = useState<{ factorId: string; qrCode: string; secret: string } | null>(null);
   const [mfaChallengeId, setMfaChallengeId] = useState<string | null>(null);
   const [mfaVerifyCode, setMfaVerifyCode] = useState('');
-  const [homeAirport, setHomeAirport] = useState<string>(() => {
-    try {
-      return localStorage.getItem('homeAirport') || 'FRA';
-    } catch {
-      return 'FRA';
-    }
-  });
   const hasPendingFactor = mfaFactors.some((factor) => factor.status !== 'verified');
 
-  // Fetch profile and trips when user logs in
-  
+  const [homeAirport, setHomeAirport] = useState<string>(() => {
+    try { return localStorage.getItem('homeAirport') || 'FRA'; } catch { return 'FRA'; }
+  });
 
   const fetchProfile = useCallback(async () => {
     if (!user) return;
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('profiles')
-        .select('display_name')
+        .select('display_name, avatar_url')
         .eq('user_id', user.id)
         .single();
-      
-      if (data) {
-        setProfile({ display_name: data.display_name });
-      }
-    } catch (e) {
-      // ignore
-    }
+      if (data) setProfile({ display_name: data.display_name, avatar_url: data.avatar_url });
+    } catch { /* ignore */ }
   }, [user]);
 
   const fetchTrips = useCallback(async () => {
@@ -101,61 +96,46 @@ const Profile = () => {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        toast.error('Fehler beim Laden der Reisen');
-        setCountries([]);
-        return;
-      }
+      if (error) { toast.error('Fehler beim Laden der Reisen'); setCountries([]); return; }
 
       if (data) {
-        let mappedTrips: Country[] = (data as SavedTripRow[])
-          .filter((trip) => trip.user_id === user.id)
-          .map((trip: SavedTripRow) => {
-            let parsed: NotesData = {};
-            try {
-              parsed = trip.notes ? (JSON.parse(trip.notes) as NotesData) : {};
-            } catch {
-              parsed = {};
-            }
-            const todosFromNotes: TodoItem[] =
-              parsed.todos && Array.isArray(parsed.todos)
-                ? parsed.todos.map((t: TodoItem, idx: number) => ({ ...t, id: t.id || `${trip.id}-todo-${idx}` }))
-                : defaultTodos.map((t, i) => ({ ...t, id: `${trip.id}-${i}` }));
-            return {
-              id: trip.id,
-              name: trip.destination_name,
-              code: trip.destination_code || 'XX',
-              imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
-              startDate: trip.start_date || new Date().toISOString(),
-              endDate: trip.end_date || new Date().toISOString(),
-              dailyCost: Number(trip.daily_budget) || 100,
-              currency: trip.currency || 'EUR',
-              todos: todosFromNotes,
-              peopleCount: parsed.peopleCount || 1,
-              people: (() => {
-                const count = typeof parsed.peopleCount === 'number' ? parsed.peopleCount! : 1;
-                const pb = parsed.peopleBreakdown;
-                if (pb && typeof pb === 'object') {
-                  return {
-                    adults: typeof pb.adults === 'number' ? pb.adults : count,
-                    children: typeof pb.children === 'number' ? pb.children : 0,
-                    babies: typeof pb.babies === 'number' ? pb.babies : 0,
-                  };
-                }
-                return { adults: count, children: 0, babies: 0 };
-              })(),
-              packingList: parsed.packingList || [],
-              tips: parsed.tips || [],
-              transportNotes: parsed.transportNotes || [],
-              itinerary: parsed.itinerary || [],
-              attractions: [],
-              hotels: [],
-              restaurants: [],
-              flights: [],
-              weather: { averageTemp: 20, condition: 'sunny', bestTimeToVisit: parsed.bestTimeToVisit || '', packingTips: [] },
-              stops: parsed.stops || [],
-            } as Country;
-          });
+        let mappedTrips: Country[] = (data as SavedTripRow[]).map((trip) => {
+          let parsed: NotesData = {};
+          try { parsed = trip.notes ? JSON.parse(trip.notes) : {}; } catch { parsed = {}; }
+          const todosFromNotes: TodoItem[] =
+            parsed.todos && Array.isArray(parsed.todos)
+              ? parsed.todos.map((t: TodoItem, idx: number) => ({ ...t, id: t.id || `${trip.id}-todo-${idx}` }))
+              : defaultTodos.map((t, i) => ({ ...t, id: `${trip.id}-${i}` }));
+          return {
+            id: trip.id,
+            name: trip.destination_name,
+            code: trip.destination_code || 'XX',
+            imageUrl: trip.image_url || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+            startDate: trip.start_date || new Date().toISOString(),
+            endDate: trip.end_date || new Date().toISOString(),
+            dailyCost: Number(trip.daily_budget) || 100,
+            currency: trip.currency || 'EUR',
+            todos: todosFromNotes,
+            peopleCount: parsed.peopleCount || 1,
+            people: (() => {
+              const count = typeof parsed.peopleCount === 'number' ? parsed.peopleCount : 1;
+              const pb = parsed.peopleBreakdown;
+              if (pb && typeof pb === 'object') {
+                return { adults: typeof pb.adults === 'number' ? pb.adults : count, children: typeof pb.children === 'number' ? pb.children : 0, babies: typeof pb.babies === 'number' ? pb.babies : 0 };
+              }
+              return { adults: count, children: 0, babies: 0 };
+            })(),
+            packingList: parsed.packingList || [],
+            tips: parsed.tips || [],
+            transportNotes: parsed.transportNotes || [],
+            itinerary: parsed.itinerary || [],
+            attractions: [], hotels: [], restaurants: [], flights: [],
+            weather: { averageTemp: 20, condition: 'sunny' as const, bestTimeToVisit: parsed.bestTimeToVisit || '', packingTips: [] },
+            stops: parsed.stops || [],
+          } as Country;
+        });
+
+        // Resolve country codes
         const withCodes = await Promise.all(
           mappedTrips.map(async (c) => {
             if (c.code !== 'XX') return c;
@@ -164,26 +144,16 @@ const Profile = () => {
               const arr = await resp.json();
               const first = Array.isArray(arr) && arr[0];
               const cc = first?.address?.country_code || first?.country_code || null;
-              if (cc && typeof cc === 'string') {
-                return { ...c, code: cc.toUpperCase() };
-              }
+              if (cc && typeof cc === 'string') return { ...c, code: cc.toUpperCase() };
             } catch { void 0; }
             return c;
           })
         );
-        mappedTrips = withCodes.sort(
-          (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-        );
+        mappedTrips = withCodes.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
         setCountries(mappedTrips);
-      } else {
-        setCountries([]);
-      }
-    } catch (error) {
-      toast.error('Fehler beim Laden der Reisen');
-      setCountries([]);
-    } finally {
-      setLoadingTrips(false);
-    }
+      } else { setCountries([]); }
+    } catch { toast.error('Fehler beim Laden der Reisen'); setCountries([]); }
+    finally { setLoadingTrips(false); }
   }, [user]);
 
   const loadMfaFactors = useCallback(async () => {
@@ -191,17 +161,10 @@ const Profile = () => {
     setMfaFactorsLoaded(false);
     try {
       const { data, error } = await supabase.auth.mfa.listFactors();
-      if (error) {
-        setMfaEnabled(false);
-        setMfaFactors([]);
-        return;
-      }
+      if (error) { setMfaEnabled(false); setMfaFactors([]); return; }
       setMfaFactors(data?.totp || []);
-      const verified = data?.totp?.some((factor) => factor.status === 'verified') || false;
-      setMfaEnabled(verified);
-    } finally {
-      setMfaFactorsLoaded(true);
-    }
+      setMfaEnabled(data?.totp?.some((f) => f.status === 'verified') || false);
+    } finally { setMfaFactorsLoaded(true); }
   }, [user]);
 
   useEffect(() => {
@@ -211,350 +174,146 @@ const Profile = () => {
       fetchTrips();
       loadMfaFactors();
     } else {
-      setProfile(null);
-      setCountries([]);
-      setMfaEnabled(false);
-      setMfaFactors([]);
-      setMfaEnroll(null);
-      setMfaVerifyCode('');
-      setMfaChallengeId(null);
+      setProfile(null); setCountries([]); setMfaEnabled(false); setMfaFactors([]); setMfaEnroll(null); setMfaVerifyCode(''); setMfaChallengeId(null);
     }
   }, [user, fetchProfile, fetchTrips, loadMfaFactors]);
 
+  // MFA handlers
   const handleMfaEnroll = async () => {
     if (!user) return;
-    const hasPending = mfaFactors.some((factor) => factor.status !== 'verified');
-    if (hasPending) {
-      toast.error('Es gibt bereits einen unbestätigten TOTP‑Faktor. Bitte zurücksetzen.');
-      return;
-    }
+    if (hasPendingFactor) { toast.error('Es gibt bereits einen unbestätigten TOTP‑Faktor.'); return; }
     setMfaLoading(true);
     try {
       const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp' });
-      if (error || !data?.id || !data?.totp?.qr_code) {
-        toast.error('TOTP konnte nicht gestartet werden: ' + (error?.message || 'Unbekannter Fehler'));
-        return;
-      }
+      if (error || !data?.id || !data?.totp?.qr_code) { toast.error('TOTP konnte nicht gestartet werden: ' + (error?.message || 'Unbekannter Fehler')); return; }
       setMfaEnroll({ factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret });
-      const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
-        factorId: data.id,
-      });
-      if (challengeError || !challengeData?.id) {
-        toast.error('MFA-Challenge fehlgeschlagen: ' + (challengeError?.message || 'Unbekannter Fehler'));
-        return;
-      }
-      setMfaChallengeId(challengeData.id);
-    } finally {
-      setMfaLoading(false);
-    }
+      const { data: cData, error: cError } = await supabase.auth.mfa.challenge({ factorId: data.id });
+      if (cError || !cData?.id) { toast.error('MFA-Challenge fehlgeschlagen'); return; }
+      setMfaChallengeId(cData.id);
+    } finally { setMfaLoading(false); }
   };
 
   const handleMfaReset = async () => {
     if (!user) return;
-    const pendingFactors = mfaFactors.filter((factor) => factor.status !== 'verified');
-    if (pendingFactors.length === 0) {
-      toast.error('Kein zurücksetzbarer TOTP‑Faktor gefunden.');
-      return;
-    }
+    const pending = mfaFactors.filter((f) => f.status !== 'verified');
+    if (!pending.length) { toast.error('Kein zurücksetzbarer Faktor.'); return; }
     setMfaLoading(true);
     try {
-      for (const factor of pendingFactors) {
-        const { error } = await supabase.auth.mfa.unenroll({ factorId: factor.id });
-        if (error) {
-          toast.error('TOTP‑Reset fehlgeschlagen: ' + error.message);
-          return;
-        }
+      for (const f of pending) {
+        const { error } = await supabase.auth.mfa.unenroll({ factorId: f.id });
+        if (error) { toast.error('Reset fehlgeschlagen: ' + error.message); return; }
       }
-      setMfaEnroll(null);
-      setMfaVerifyCode('');
-      setMfaChallengeId(null);
+      setMfaEnroll(null); setMfaVerifyCode(''); setMfaChallengeId(null);
       await loadMfaFactors();
-      toast.success('TOTP wurde zurückgesetzt.');
-    } finally {
-      setMfaLoading(false);
-    }
+      toast.success('TOTP zurückgesetzt.');
+    } finally { setMfaLoading(false); }
   };
 
   const handleMfaVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mfaEnroll?.factorId) return;
-    if (!mfaVerifyCode.trim()) return;
+    if (!mfaEnroll?.factorId || !mfaVerifyCode.trim()) return;
     setMfaLoading(true);
     try {
       let challengeId = mfaChallengeId;
       if (!challengeId) {
-        const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
-          factorId: mfaEnroll.factorId,
-        });
-        if (challengeError || !challengeData?.id) {
-          toast.error('MFA-Challenge fehlgeschlagen');
-          return;
-        }
-        challengeId = challengeData.id;
-        setMfaChallengeId(challengeId);
+        const { data: cd, error: ce } = await supabase.auth.mfa.challenge({ factorId: mfaEnroll.factorId });
+        if (ce || !cd?.id) { toast.error('MFA-Challenge fehlgeschlagen'); return; }
+        challengeId = cd.id; setMfaChallengeId(challengeId);
       }
-      const { error } = await supabase.auth.mfa.verify({
-        factorId: mfaEnroll.factorId,
-        challengeId,
-        code: mfaVerifyCode,
-      });
-      if (error) {
-        toast.error('MFA-Code ungültig: ' + error.message);
-        return;
-      }
+      const { error } = await supabase.auth.mfa.verify({ factorId: mfaEnroll.factorId, challengeId, code: mfaVerifyCode });
+      if (error) { toast.error('Code ungültig: ' + error.message); return; }
       toast.success('2FA aktiviert');
-      setMfaEnroll(null);
-      setMfaVerifyCode('');
-      setMfaChallengeId(null);
+      setMfaEnroll(null); setMfaVerifyCode(''); setMfaChallengeId(null);
       await loadMfaFactors();
-    } finally {
-      setMfaLoading(false);
-    }
+    } finally { setMfaLoading(false); }
   };
 
+  // Trip CRUD
   const handleAddCountry = async (newCountry: Country) => {
-    if (!user) {
-      setAuthDialogOpen(true);
-      toast.info('Bitte anmelden, um eine Reise zu planen.');
-      return;
-    }
+    if (!user) { setAuthDialogOpen(true); return; }
     try {
-      const { data, error } = await supabase
-        .from('saved_trips')
-        .insert({
-          user_id: user.id,
-          destination_name: newCountry.name,
-          destination_code: newCountry.code,
-          image_url: newCountry.imageUrl,
-          start_date: newCountry.startDate,
-          end_date: newCountry.endDate,
-          daily_budget: newCountry.dailyCost,
-          currency: newCountry.currency,
-        })
-        .select()
-        .single();
-
-      if (error) {
-        toast.error('Fehler beim Speichern: ' + error.message);
-        return;
-      }
-
+      const { data, error } = await supabase.from('saved_trips').insert({
+        user_id: user.id, destination_name: newCountry.name, destination_code: newCountry.code,
+        image_url: newCountry.imageUrl, start_date: newCountry.startDate, end_date: newCountry.endDate,
+        daily_budget: newCountry.dailyCost, currency: newCountry.currency,
+      }).select().single();
+      if (error) { toast.error('Fehler: ' + error.message); return; }
       if (data) {
-        const savedCountry: Country = {
-          ...newCountry,
-          id: (data as SavedTripRow).id,
-        };
-        setCountries([savedCountry, ...countries]);
+        setCountries([{ ...newCountry, id: (data as SavedTripRow).id }, ...countries]);
         toast.success('Reise gespeichert!');
       }
-    } catch {
-      toast.error('Fehler beim Speichern');
-    }
+    } catch { toast.error('Fehler beim Speichern'); }
   };
 
   const handleDeleteCountry = async (id: string) => {
     if (user) {
-      try {
-        const { error } = await supabase
-          .from('saved_trips')
-          .delete()
-          .eq('id', id)
-          .eq('user_id', user.id);
-
-        if (error) {
-          toast.error('Fehler beim Löschen');
-          return;
-        }
-      } catch {
-        toast.error('Fehler beim Löschen');
-        return;
-      }
+      const { error } = await supabase.from('saved_trips').delete().eq('id', id).eq('user_id', user.id);
+      if (error) { toast.error('Fehler beim Löschen'); return; }
     }
     setCountries(countries.filter((c) => c.id !== id));
+    if (selectedTripId === id) setSelectedTripId(null);
     toast.success('Reise gelöscht');
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    setCountries([]);
-    toast.success('Erfolgreich abgemeldet');
-  };
+  const handleSignOut = async () => { await signOut(); setCountries([]); toast.success('Erfolgreich abgemeldet'); };
 
   const updateTripNotes = async (tripId: string, notes: NotesData) => {
     if (!user) return;
     try {
-      const { error } = await supabase
-        .from('saved_trips')
-        .update({ notes: JSON.stringify(notes) })
-        .eq('id', tripId)
-        .eq('user_id', user.id);
-      if (error) {
-        toast.error('Änderungen konnten nicht gespeichert werden');
-      }
-    } catch {
-      toast.error('Änderungen konnten nicht gespeichert werden');
-    }
-  };
-
-  const togglePackingItem = async (tripId: string, itemId: string) => {
-    setCountries((prev) =>
-      prev.map((c) => {
-        if (c.id !== tripId) return c;
-        const updatedPacking = (c.packingList || []).map((p) => (p.id === itemId ? { ...p, packed: !p.packed } : p));
-        const notes = {
-          peopleCount: c.peopleCount || 1,
-          packingList: updatedPacking,
-          todos: c.todos,
-          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
-        };
-        updateTripNotes(tripId, notes);
-        return { ...c, packingList: updatedPacking };
-      }),
-    );
-  };
-
-  const addPackingItem = async (tripId: string, name: string, category: PackingItem['category'] = 'other') => {
-    if (!name.trim()) return;
-    setCountries((prev) =>
-      prev.map((c) => {
-        if (c.id !== tripId) return c;
-        const newItem: PackingItem = {
-          id: `${tripId}-pack-${Date.now()}`,
-          name,
-          packed: false,
-          category,
-        };
-        const updated = [newItem, ...(c.packingList || [])];
-        const notes = {
-          peopleCount: c.peopleCount || 1,
-          packingList: updated,
-          todos: c.todos,
-          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
-        };
-        updateTripNotes(tripId, notes);
-        return { ...c, packingList: updated };
-      }),
-    );
-  };
-
-  const generatePackingSuggestions = (days: number, people: number): PackingItem[] => {
-    const suggestions: PackingItem[] = [
-      { id: `sugg-doc-${Date.now()}`, name: `Dokumente für ${people} Person(en)`, packed: false, category: 'documents' },
-      { id: `sugg-tee-${Date.now()}`, name: `T-Shirts ${Math.max(people, days)}`, packed: false, category: 'clothing' },
-      { id: `sugg-socks-${Date.now()}`, name: `Socken ${days}`, packed: false, category: 'clothing' },
-      { id: `sugg-uh-${Date.now()}`, name: `Unterwäsche ${days}`, packed: false, category: 'clothing' },
-      { id: `sugg-jacke-${Date.now()}`, name: 'Leichte Jacke/Regenschutz', packed: false, category: 'clothing' },
-      { id: `sugg-rt-${Date.now()}`, name: 'Reisehandtuch', packed: false, category: 'other' },
-      { id: `sugg-pb-${Date.now()}`, name: 'Powerbank', packed: false, category: 'electronics' },
-      { id: `sugg-adapter-${Date.now()}`, name: 'Steckdosenadapter (falls nötig)', packed: false, category: 'electronics' },
-    ];
-    return suggestions;
-  };
-
-  const applyAISuggestions = async (tripId: string) => {
-    const target = countries.find((c) => c.id === tripId);
-    if (!target) return;
-    const days = Math.max(
-      1,
-      Math.ceil((new Date(target.endDate).getTime() - new Date(target.startDate).getTime()) / (1000 * 60 * 60 * 24)),
-    );
-    const people = target.peopleCount || 1;
-    const suggestions = generatePackingSuggestions(days, people);
-    const mergedNames = new Set((target.packingList || []).map((p) => p.name));
-    const merged = [...(target.packingList || []), ...suggestions.filter((s) => !mergedNames.has(s.name))];
-    const notes = {
-      peopleCount: people,
-      packingList: merged,
-      todos: target.todos,
-      bestTimeToVisit: target.weather?.bestTimeToVisit || '',
-    };
-    await updateTripNotes(tripId, notes);
-    setCountries((prev) => prev.map((c) => (c.id === tripId ? { ...c, packingList: merged } : c)));
-    toast.success('KI‑Vorschläge übernommen');
+      const { error } = await supabase.from('saved_trips').update({ notes: JSON.stringify(notes) }).eq('id', tripId).eq('user_id', user.id);
+      if (error) toast.error('Änderungen konnten nicht gespeichert werden');
+    } catch { toast.error('Änderungen konnten nicht gespeichert werden'); }
   };
 
   const toggleTodo = async (tripId: string, todoId: string) => {
-    setCountries((prev) =>
-      prev.map((c) => {
-        if (c.id !== tripId) return c;
-        const updatedTodos = c.todos.map((t) => (t.id === todoId ? { ...t, completed: !t.completed } : t));
-        const notes = {
-          peopleCount: c.peopleCount || 1,
-          packingList: c.packingList || [],
-          todos: updatedTodos,
-          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
-        };
-        updateTripNotes(tripId, notes);
-        return { ...c, todos: updatedTodos };
-      }),
-    );
+    setCountries((prev) => prev.map((c) => {
+      if (c.id !== tripId) return c;
+      const updatedTodos = c.todos.map((t) => (t.id === todoId ? { ...t, completed: !t.completed } : t));
+      updateTripNotes(tripId, { peopleCount: c.peopleCount || 1, packingList: c.packingList || [], todos: updatedTodos, bestTimeToVisit: c.weather?.bestTimeToVisit || '' });
+      return { ...c, todos: updatedTodos };
+    }));
   };
 
-  const addTodo = async (tripId: string, title: string) => {
-    if (!title.trim()) return;
-    setCountries((prev) =>
-      prev.map((c) => {
-        if (c.id !== tripId) return c;
-        const newTodo: TodoItem = {
-          id: `${tripId}-custom-${Date.now()}`,
-          category: 'preparation',
-          title,
-          completed: false,
-        };
-        const updatedTodos = [newTodo, ...c.todos];
-        const notes = {
-          peopleCount: c.peopleCount || 1,
-          packingList: c.packingList || [],
-          todos: updatedTodos,
-          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
-        };
-        updateTripNotes(tripId, notes);
-        return { ...c, todos: updatedTodos };
-      }),
-    );
-  };
-
-  const updatePeopleCount = async (tripId: string, count: number) => {
-    setCountries((prev) =>
-      prev.map((c) => {
-        if (c.id !== tripId) return c;
-        const days = Math.max(
-          1,
-          Math.ceil((new Date(c.endDate).getTime() - new Date(c.startDate).getTime()) / (1000 * 60 * 60 * 24)),
-        );
-        const recomputed: PackingItem[] = [
-          { id: `${tripId}-doc`, name: `Dokumente für ${count} Person(en)`, packed: false, category: 'documents' },
-          { id: `${tripId}-shirts`, name: `T-Shirts ${Math.max(count * days, days)}`, packed: false, category: 'clothing' },
-          { id: `${tripId}-socks`, name: `Socken ${count * days}`, packed: false, category: 'clothing' },
-          { id: `${tripId}-underwear`, name: `Unterwäsche ${count * days}`, packed: false, category: 'clothing' },
-          { id: `${tripId}-jacket`, name: 'Leichte Jacke/Regenschutz', packed: false, category: 'clothing' },
-          { id: `${tripId}-powerbank`, name: 'Powerbank', packed: false, category: 'electronics' },
-          { id: `${tripId}-adapter`, name: 'Steckdosenadapter (falls nötig)', packed: false, category: 'electronics' },
-        ];
-        const byName = new Map((c.packingList || []).map((p) => [p.name, p]));
-        const merged = recomputed.map((p) => (byName.has(p.name) ? { ...p, packed: byName.get(p.name)!.packed } : p));
-        const extras = (c.packingList || []).filter((p) => !merged.find((m) => m.name === p.name));
-        const finalPacking = [...merged, ...extras];
-        const notes = {
-          peopleCount: count,
-          packingList: finalPacking,
-          todos: c.todos,
-          bestTimeToVisit: c.weather?.bestTimeToVisit || '',
-        };
-        updateTripNotes(tripId, notes);
-        return { ...c, peopleCount: count, packingList: finalPacking };
-      }),
-    );
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setSavingProfile(true);
+    try {
+      const { error } = await supabase.from('profiles').update({
+        display_name: editName || null,
+        avatar_url: editAvatarUrl || null,
+      }).eq('user_id', user.id);
+      if (error) { toast.error('Profil konnte nicht gespeichert werden'); return; }
+      setProfile({ display_name: editName || null, avatar_url: editAvatarUrl || null });
+      setEditingProfile(false);
+      toast.success('Profil aktualisiert');
+    } finally { setSavingProfile(false); }
   };
 
   const totalTrips = countries.length;
   const totalTodos = countries.reduce((sum, c) => sum + c.todos.length, 0);
   const completedTodos = countries.reduce((sum, c) => sum + c.todos.filter((t) => t.completed).length, 0);
+  const uniqueCountryCodes = new Set(countries.map((c) => c.code).filter((c) => c !== 'XX'));
+  const nextTrip = countries.find((c) => new Date(c.startDate) > new Date());
+  const daysToNext = nextTrip ? differenceInDays(new Date(nextTrip.startDate), new Date()) : null;
+
+  const selectedTrip = selectedTripId ? countries.find((c) => c.id === selectedTripId) : null;
 
   if (authLoading) {
+    return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+  }
+
+  // Detail view
+  if (selectedTrip) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container py-8">
+          <CountryDetail
+            country={selectedTrip}
+            onBack={() => setSelectedTripId(null)}
+            onToggleTodo={(todoId) => toggleTodo(selectedTrip.id, todoId)}
+          />
+        </main>
       </div>
     );
   }
@@ -562,83 +321,132 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
       <main className="container py-8">
         {/* Hero Section */}
         <section className="relative overflow-hidden rounded-2xl gradient-hero p-8 md:p-12 text-primary-foreground mb-8">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary-foreground/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
-
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <User className="h-6 w-6" />
-                <span className="text-sm font-medium uppercase tracking-wide opacity-80">
-                  {user ? 'Mein Profil' : 'Gast-Modus'}
-                </span>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-center gap-5">
+              {/* Avatar */}
+              <div className="relative shrink-0">
+                <div className="h-20 w-20 rounded-full bg-primary-foreground/20 flex items-center justify-center overflow-hidden ring-4 ring-primary-foreground/30">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+                  ) : (
+                    <User className="h-10 w-10 text-primary-foreground/60" />
+                  )}
+                </div>
+                {user && (
+                  <button
+                    onClick={() => { setEditingProfile(true); setEditName(profile?.display_name || ''); setEditAvatarUrl(profile?.avatar_url || ''); }}
+                    className="absolute -bottom-1 -right-1 h-7 w-7 rounded-full bg-accent text-accent-foreground flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                  >
+                    <Camera className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
-                {user ? `Hallo, ${profile?.display_name || user.email?.split('@')[0]}!` : 'Meine Reisen'}
-              </h1>
-              <p className="text-primary-foreground/80 text-lg max-w-2xl">
-                {user 
-                  ? 'Verwalte deine geplanten Reisen und behalte den Überblick'
-                  : 'Melde dich an, um deine Reisen zu speichern und überall darauf zuzugreifen'
-                }
-              </p>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-medium uppercase tracking-wide opacity-80">
+                    {user ? 'Mein Profil' : 'Gast-Modus'}
+                  </span>
+                </div>
+                <h1 className="font-display text-3xl md:text-4xl font-bold">
+                  {user ? `Hallo, ${profile?.display_name || user.email?.split('@')[0]}!` : 'Meine Reisen'}
+                </h1>
+                <p className="text-primary-foreground/80 text-base mt-1">
+                  {user ? 'Verwalte deine geplanten Reisen und behalte den Überblick' : 'Melde dich an, um deine Reisen zu speichern'}
+                </p>
+              </div>
             </div>
-
             {user ? (
-              <Button 
-                variant="secondary" 
-                onClick={handleSignOut}
-                className="self-start"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Abmelden
+              <Button variant="secondary" onClick={handleSignOut} className="self-start">
+                <LogOut className="h-4 w-4 mr-2" /> Abmelden
               </Button>
             ) : (
-              <Button 
-                variant="secondary" 
-                onClick={() => setAuthDialogOpen(true)}
-                className="self-start"
-              >
-                <User className="h-4 w-4 mr-2" />
-                Anmelden / Registrieren
+              <Button variant="secondary" onClick={() => setAuthDialogOpen(true)} className="self-start">
+                <User className="h-4 w-4 mr-2" /> Anmelden / Registrieren
               </Button>
             )}
           </div>
         </section>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {/* Edit Profile Dialog */}
+        {editingProfile && (
+          <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setEditingProfile(false)}>
+            <div className="bg-card rounded-2xl p-6 w-full max-w-md shadow-elevated space-y-4" onClick={(e) => e.stopPropagation()}>
+              <h3 className="font-display text-xl font-semibold">Profil bearbeiten</h3>
+              <div className="space-y-3">
+                <div>
+                  <Label>Anzeigename</Label>
+                  <Input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Dein Name" />
+                </div>
+                <div>
+                  <Label>Avatar-URL</Label>
+                  <Input value={editAvatarUrl} onChange={(e) => setEditAvatarUrl(e.target.value)} placeholder="https://..." />
+                  {editAvatarUrl && (
+                    <div className="mt-2 flex justify-center">
+                      <img src={editAvatarUrl} alt="Vorschau" className="h-20 w-20 rounded-full object-cover border-2 border-border" />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setEditingProfile(false)}>Abbrechen</Button>
+                <Button onClick={handleSaveProfile} disabled={savingProfile}>
+                  {savingProfile && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Speichern
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Dashboard Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="rounded-xl bg-card p-5 shadow-card">
             <div className="flex items-center gap-3 mb-2">
-              <MapPin className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Geplante Reisen</h3>
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="text-sm text-muted-foreground">Reisen</h3>
             </div>
             <p className="text-3xl font-bold">{totalTrips}</p>
           </div>
           <div className="rounded-xl bg-card p-5 shadow-card">
             <div className="flex items-center gap-3 mb-2">
-              <Calendar className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Aufgaben erledigt</h3>
+              <div className="h-10 w-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <Globe className="h-5 w-5 text-secondary" />
+              </div>
+              <h3 className="text-sm text-muted-foreground">Länder</h3>
             </div>
-            <p className="text-3xl font-bold">{completedTodos} <span className="text-lg text-muted-foreground">/ {totalTodos}</span></p>
+            <p className="text-3xl font-bold">{uniqueCountryCodes.size}</p>
           </div>
           <div className="rounded-xl bg-card p-5 shadow-card">
             <div className="flex items-center gap-3 mb-2">
-              <Settings className="h-5 w-5 text-primary" />
-              <h3 className="font-medium">Bearbeitungsmodus</h3>
+              <div className="h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 text-accent" />
+              </div>
+              <h3 className="text-sm text-muted-foreground">Aufgaben</h3>
             </div>
-            <Button
-              variant={editMode ? "default" : "outline"}
-              onClick={() => setEditMode(!editMode)}
-              className="mt-1"
-            >
-              <Edit2 className="h-4 w-4 mr-2" />
-              {editMode ? 'Fertig' : 'Bearbeiten'}
-            </Button>
+            <p className="text-3xl font-bold">{completedTodos}<span className="text-lg text-muted-foreground">/{totalTodos}</span></p>
+          </div>
+          <div className="rounded-xl bg-card p-5 shadow-card">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Calendar className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="text-sm text-muted-foreground">Nächste Reise</h3>
+            </div>
+            {daysToNext !== null ? (
+              <>
+                <p className="text-3xl font-bold">{daysToNext}<span className="text-lg text-muted-foreground"> Tage</span></p>
+                <p className="text-xs text-muted-foreground mt-1">{nextTrip?.name}</p>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">Keine geplant</p>
+            )}
           </div>
         </div>
 
@@ -646,334 +454,181 @@ const Profile = () => {
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-display text-2xl font-semibold">Meine Destinationen</h2>
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (user) {
-                  setAddDialogOpen(true);
-                } else {
-                  setAuthDialogOpen(true);
-                  toast.info('Bitte anmelden, um eine Reise hinzuzufügen.');
-                }
-              }}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Reise hinzufügen
-            </Button>
+            <div className="flex items-center gap-2">
+              {/* View toggle */}
+              <div className="flex rounded-lg border border-border overflow-hidden">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={cn('px-3 py-1.5 text-sm transition-colors', viewMode === 'grid' ? 'bg-primary text-primary-foreground' : 'bg-card text-muted-foreground hover:text-foreground')}
+                >
+                  Karten
+                </button>
+                <button
+                  onClick={() => setViewMode('timeline')}
+                  className={cn('px-3 py-1.5 text-sm transition-colors', viewMode === 'timeline' ? 'bg-primary text-primary-foreground' : 'bg-card text-muted-foreground hover:text-foreground')}
+                >
+                  Timeline
+                </button>
+              </div>
+              {editMode && (
+                <Button variant="outline" size="sm" onClick={() => setEditMode(false)}>
+                  <Edit2 className="h-4 w-4 mr-1" /> Fertig
+                </Button>
+              )}
+              {!editMode && user && (
+                <Button variant="ghost" size="sm" onClick={() => setEditMode(true)}>
+                  <Edit2 className="h-4 w-4 mr-1" /> Bearbeiten
+                </Button>
+              )}
+              <Button variant="outline" onClick={() => { if (user) setAddDialogOpen(true); else { setAuthDialogOpen(true); toast.info('Bitte anmelden.'); } }}>
+                <Plus className="h-4 w-4 mr-2" /> Reise hinzufügen
+              </Button>
+            </div>
           </div>
 
           {loadingTrips ? (
-            <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+          ) : countries.length === 0 ? (
+            <div className="rounded-xl border border-border bg-card p-12 text-center">
+              <MapPin className="h-12 w-12 mx-auto text-muted-foreground/40 mb-4" />
+              <h3 className="font-display text-lg font-semibold mb-2">Noch keine Reisen geplant</h3>
+              <p className="text-muted-foreground mb-4">Füge deine erste Destination hinzu und starte mit der Planung!</p>
+              <Button onClick={() => { if (user) setAddDialogOpen(true); else setAuthDialogOpen(true); }}>
+                <Plus className="h-4 w-4 mr-2" /> Erste Reise planen
+              </Button>
             </div>
-          ) : (
+          ) : viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {countries.map((country) => {
                 const completedCount = country.todos.filter((t) => t.completed).length;
                 const progress = country.todos.length > 0 ? Math.round((completedCount / country.todos.length) * 100) : 0;
-
                 return (
-                  <div
-                    key={country.id}
-                    className={cn(
-                      "group relative rounded-xl bg-card shadow-card overflow-hidden transition-all duration-300",
-                      editMode && "ring-2 ring-primary/20"
+                  <div key={country.id} className="group relative">
+                    <button
+                      onClick={() => setSelectedTripId(country.id)}
+                      className="w-full text-left rounded-xl bg-card shadow-card overflow-hidden transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <div className="relative h-40 overflow-hidden">
+                        <img src={country.imageUrl} alt={country.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
+                        <div className="absolute bottom-4 left-4 text-primary-foreground">
+                          <h3 className="font-display text-xl font-semibold">{country.name}</h3>
+                          <p className="text-sm opacity-80">
+                            {format(new Date(country.startDate), 'dd. MMM', { locale: de })} – {format(new Date(country.endDate), 'dd. MMM', { locale: de })}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <Badge variant="outline">{country.code}</Badge>
+                          <span className="text-sm font-medium text-primary">{progress}% erledigt</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-muted overflow-hidden">
+                          <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${progress}%` }} />
+                        </div>
+                        <div className="flex items-center justify-between mt-3">
+                          <p className="text-xs text-muted-foreground">{completedCount}/{country.todos.length} Aufgaben</p>
+                          <span className="text-sm font-medium text-primary flex items-center gap-1">
+                            Details <ChevronRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                    {editMode && (
+                      <Button
+                        variant="destructive" size="icon"
+                        className="absolute top-3 right-3 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        onClick={(e) => { e.stopPropagation(); handleDeleteCountry(country.id); }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     )}
-                  >
-                    <div className="relative h-40 overflow-hidden">
-                      <img
-                        src={country.imageUrl}
-                        alt={country.name}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
-                      <div className="absolute bottom-4 left-4 text-primary-foreground">
-                        <h3 className="font-display text-xl font-semibold">{country.name}</h3>
-                        <p className="text-sm opacity-80">
-                          {format(new Date(country.startDate), 'dd. MMM', { locale: de })} – {format(new Date(country.endDate), 'dd. MMM', { locale: de })}
-                        </p>
-                      </div>
-                      {editMode && (
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          className="absolute top-3 right-3 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => handleDeleteCountry(country.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <Badge variant="outline">{country.code}</Badge>
-                        <span className="text-sm font-medium text-primary">{progress}% erledigt</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-muted overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-primary transition-all duration-300"
-                          style={{ width: `${progress}%` }}
-                        />
-                      </div>
-                      <p className="mt-2 text-xs text-muted-foreground">
-                        {completedCount} von {country.todos.length} Aufgaben
-                      </p>
-                    </div>
-                    <div className="px-4 pb-4 space-y-3">
-                      <div className="grid grid-cols-2 gap-2">
-                        <a
-                          href={`https://www.kayak.de/flights?origin=${encodeURIComponent(homeAirport)}&destination=${encodeURIComponent(country.name)}&dates=${encodeURIComponent(country.startDate)}-${encodeURIComponent(country.endDate)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Flüge (Kayak)
-                        </a>
-                        <a
-                          href={`https://www.skyscanner.de/transport/flights-to/${encodeURIComponent(country.name)}/?depart=${encodeURIComponent(country.startDate)}&return=${encodeURIComponent(country.endDate)}&origin=${encodeURIComponent(homeAirport)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Flüge (Skyscanner)
-                        </a>
-                        <a
-                          href={`https://www.google.com/travel/flights?hl=de&q=${encodeURIComponent(`Flüge von ${homeAirport} nach ${country.name} ${country.startDate} ${country.endDate}`)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Flüge (Google)
-                        </a>
-                        <a
-                          href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(country.name)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Unterkünfte
-                        </a>
-                        <a
-                          href={`https://www.getyourguide.de/s/?q=${encodeURIComponent(country.name)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Aktivitäten
-                        </a>
-                        <a
-                          href={`https://www.rentalcars.com/SearchResults.do?locationName=${encodeURIComponent(country.name)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Mietwagen
-                        </a>
-                        <a
-                          href={`https://www.rome2rio.com/s/${encodeURIComponent(country.name)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-md border border-border bg-background px-3 py-2 text-sm text-primary hover:bg-primary/10"
-                        >
-                          Fortbewegung (Rome2Rio)
-                        </a>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Personen</span>
-                        <input
-                          type="number"
-                          min={1}
-                          value={country.peopleCount || 1}
-                          onChange={(e) => updatePeopleCount(country.id, Math.max(1, Number(e.target.value) || 1))}
-                          className="w-20 rounded-md border border-border bg-background px-2 py-1 text-sm"
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Heimatflughafen (IATA)</span>
-                        <input
-                          type="text"
-                          value={homeAirport}
-                          onChange={(e) => {
-                            const v = e.target.value.toUpperCase().slice(0, 3);
-                            setHomeAirport(v);
-                            try {
-                              localStorage.setItem('homeAirport', v);
-                            } catch (e) { void e; }
-                          }}
-                          className="w-24 rounded-md border border-border bg-background px-2 py-1 text-sm uppercase"
-                        />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium mb-2">Aufgaben</div>
-                        <div className="space-y-2">
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              placeholder="Neue Aufgabe hinzufügen..."
-                              className="flex-1 rounded-md border border-border bg-background px-2 py-1 text-sm"
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                  addTodo(country.id, (e.target as HTMLInputElement).value);
-                                  (e.target as HTMLInputElement).value = '';
-                                }
-                              }}
-                            />
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={(e) => {
-                                const input = (e.currentTarget.parentElement?.querySelector('input[type=text]') as HTMLInputElement) || null;
-                                if (input && input.value.trim()) {
-                                  addTodo(country.id, input.value);
-                                  input.value = '';
-                                }
-                              }}
-                            >
-                              Hinzufügen
-                            </Button>
-                          </div>
-                          <ul className="space-y-1">
-                            {country.todos.map((t) => (
-                              <li key={t.id} className="flex items-center justify-between text-sm">
-                                <label className="flex items-center gap-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={t.completed}
-                                    onChange={() => toggleTodo(country.id, t.id)}
-                                    className="rounded"
-                                  />
-                                  <span className={cn(t.completed && 'line-through text-muted-foreground')}>{t.title}</span>
-                                </label>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm font-medium">Packliste</div>
-                          <Button variant="ghost" size="sm" onClick={() => applyAISuggestions(country.id)}>
-                            KI‑Vorschläge
-                          </Button>
-                        </div>
-                        <div className="flex gap-2 mb-2">
-                          <input
-                            type="text"
-                            placeholder="Neues Packitem..."
-                            className="flex-1 rounded-md border border-border bg-background px-2 py-1 text-sm"
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                addPackingItem(country.id, (e.target as HTMLInputElement).value);
-                                (e.target as HTMLInputElement).value = '';
-                              }
-                            }}
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              const input = (e.currentTarget.parentElement?.querySelector('input[type=text]') as HTMLInputElement) || null;
-                              if (input && input.value.trim()) {
-                                addPackingItem(country.id, input.value);
-                                input.value = '';
-                              }
-                            }}
-                          >
-                            Hinzufügen
-                          </Button>
-                        </div>
-                        <ul className="space-y-1">
-                          {(country.packingList || []).map((p) => (
-                            <li key={p.id} className="flex items-center justify-between text-sm">
-                              <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={p.packed} onChange={() => togglePackingItem(country.id, p.id)} />
-                                <span className={cn(p.packed && 'line-through text-muted-foreground')}>{p.name}</span>
-                              </label>
-                              <span className="text-xs text-muted-foreground">{p.category}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium mb-1">Beste Reisezeit & Fortbewegung</div>
-                        <p className="text-sm text-muted-foreground">
-                          Beste Zeit: {country.weather?.bestTimeToVisit ? country.weather.bestTimeToVisit : '—'}
-                        </p>
-                        <ul className="text-xs text-muted-foreground space-y-1 mt-1">
-                          {(country.transportNotes && country.transportNotes.length > 0
-                            ? country.transportNotes
-                            : [
-                                'ÖPNV, zu Fuß, App‑Tickets',
-                                'Mietwagen, Fernbus/Zug',
-                                'Fähren, Roller/Moped',
-                              ]
-                          ).map((note, idx) => (
-                            <li key={`tn-${country.id}-${idx}`}>• {note}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      {country.tips && country.tips.length > 0 && (
-                        <div>
-                          <div className="text-sm font-medium mb-1">Geheimtipps</div>
-                          <div className="flex flex-wrap gap-2">
-                            {country.tips.map((tip, idx) => (
-                              <Badge key={`tip-${country.id}-${idx}`} variant="secondary">{tip}</Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {country.itinerary && country.itinerary.length > 0 && (
-                        <div>
-                          <div className="text-sm font-medium mb-1">Itinerary</div>
-                          <ul className="text-xs text-muted-foreground space-y-1">
-                            {country.itinerary.map((item, idx) => (
-                              <li key={`it-${country.id}-${idx}`}>• {item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
                   </div>
                 );
               })}
-
-              {/* Add new card entfernt – oben existiert bereits "Reise hinzufügen" */}
+            </div>
+          ) : (
+            /* Timeline View */
+            <div className="relative pl-8 space-y-0">
+              <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border" />
+              {countries.map((country, idx) => {
+                const completedCount = country.todos.filter((t) => t.completed).length;
+                const progress = country.todos.length > 0 ? Math.round((completedCount / country.todos.length) * 100) : 0;
+                const isPast = new Date(country.endDate) < new Date();
+                const isCurrent = new Date(country.startDate) <= new Date() && new Date(country.endDate) >= new Date();
+                return (
+                  <div key={country.id} className="relative pb-8 last:pb-0">
+                    <div className={cn(
+                      'absolute left-[-22px] top-4 h-4 w-4 rounded-full border-2 border-background',
+                      isCurrent ? 'bg-accent ring-4 ring-accent/20' : isPast ? 'bg-muted-foreground' : 'bg-primary'
+                    )} />
+                    <button
+                      onClick={() => setSelectedTripId(country.id)}
+                      className="w-full text-left flex gap-4 rounded-xl bg-card shadow-card p-4 hover:shadow-card-hover transition-all group"
+                    >
+                      <img
+                        src={country.imageUrl}
+                        alt={country.name}
+                        className="h-20 w-28 rounded-lg object-cover shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-display text-lg font-semibold truncate">{country.name}</h3>
+                          <Badge variant={isCurrent ? 'default' : isPast ? 'secondary' : 'outline'} className="shrink-0">
+                            {isCurrent ? 'Aktiv' : isPast ? 'Vergangen' : 'Geplant'}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {format(new Date(country.startDate), 'dd. MMMM yyyy', { locale: de })} – {format(new Date(country.endDate), 'dd. MMMM yyyy', { locale: de })}
+                        </p>
+                        <div className="flex items-center gap-4 mt-2">
+                          <div className="flex-1 max-w-[200px]">
+                            <Progress value={progress} size="sm" />
+                          </div>
+                          <span className="text-xs text-muted-foreground">{progress}%</span>
+                          <span className="text-sm text-primary flex items-center gap-1 ml-auto group-hover:gap-2 transition-all">
+                            Details <ChevronRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                    {editMode && (
+                      <Button
+                        variant="destructive" size="icon"
+                        className="absolute top-4 right-4 h-7 w-7"
+                        onClick={() => handleDeleteCountry(country.id)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
 
-          <AddCountryDialog
-            open={addDialogOpen}
-            onOpenChange={setAddDialogOpen}
-            onAdd={handleAddCountry}
-          />
-          <AuthDialog
-            open={authDialogOpen}
-            onOpenChange={setAuthDialogOpen}
-          />
+          <AddCountryDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} onAdd={handleAddCountry} />
+          <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
         </section>
 
         {/* Settings section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-semibold mb-6 flex items-center gap-2">
-            <Settings className="h-6 w-6" />
-            Einstellungen
+            <Settings className="h-6 w-6" /> Einstellungen
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="rounded-xl bg-card p-6 shadow-card">
               <h3 className="font-medium mb-4">Profil-Informationen</h3>
               <div className="space-y-3 text-sm">
+                <div className="flex justify-between"><span className="text-muted-foreground">Name</span><span>{profile?.display_name || 'Nicht angegeben'}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">E-Mail</span><span>{user?.email || 'Nicht angemeldet'}</span></div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Name</span>
-                  <span>{user ? (profile?.display_name || 'Nicht angegeben') : 'Gast'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">E-Mail</span>
-                  <span>{user?.email || 'Nicht angemeldet'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Währung</span>
-                  <span>EUR (€)</span>
+                  <span className="text-muted-foreground">Heimatflughafen</span>
+                  <input
+                    type="text" value={homeAirport}
+                    onChange={(e) => { const v = e.target.value.toUpperCase().slice(0, 3); setHomeAirport(v); try { localStorage.setItem('homeAirport', v); } catch { void 0; } }}
+                    className="w-16 rounded-md border border-border bg-background px-2 py-0.5 text-sm uppercase text-right"
+                  />
                 </div>
               </div>
             </div>
@@ -984,113 +639,57 @@ const Profile = () => {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">TOTP‑2FA</span>
                     {mfaFactorsLoaded ? (
-                      <Badge variant={mfaEnabled ? "default" : "secondary"}>
-                        {mfaEnabled ? "Aktiv" : "Nicht aktiv"}
-                      </Badge>
-                    ) : (
-                      <span className="text-muted-foreground">Lädt…</span>
-                    )}
+                      <Badge variant={mfaEnabled ? "default" : "secondary"}>{mfaEnabled ? "Aktiv" : "Nicht aktiv"}</Badge>
+                    ) : <span className="text-muted-foreground">Lädt…</span>}
                   </div>
                   {mfaEnabled ? (
-                    <p className="text-sm text-muted-foreground">
-                      2FA ist aktiv. Beim Login wird ein Code aus der Authenticator‑App abgefragt.
-                    </p>
+                    <p className="text-sm text-muted-foreground">2FA ist aktiv.</p>
                   ) : (
                     <>
-                      <p className="text-sm text-muted-foreground">
-                        Aktiviere 2FA, um den Admin‑Bereich zusätzlich abzusichern.
-                      </p>
                       {mfaEnroll ? (
                         <div className="space-y-3">
                           <div className="rounded-lg border bg-background p-3">
                             {mfaEnroll.qrCode.trim().startsWith('<svg') ? (
-                              <div
-                                className="flex items-center justify-center"
-                                dangerouslySetInnerHTML={{ __html: mfaEnroll.qrCode }}
-                              />
+                              <div className="flex items-center justify-center" dangerouslySetInnerHTML={{ __html: mfaEnroll.qrCode }} />
                             ) : (
-                              <img
-                                src={mfaEnroll.qrCode}
-                                alt="TOTP QR Code"
-                                className="mx-auto h-48 w-48"
-                              />
+                              <img src={mfaEnroll.qrCode} alt="QR" className="mx-auto h-48 w-48" />
                             )}
                           </div>
-                          <div className="text-xs text-muted-foreground break-all">
-                            Secret: {mfaEnroll.secret}
-                          </div>
+                          <div className="text-xs text-muted-foreground break-all">Secret: {mfaEnroll.secret}</div>
                           <form onSubmit={handleMfaVerify} className="space-y-2">
                             <Label htmlFor="mfaVerify">Bestätigungscode</Label>
-                            <Input
-                              id="mfaVerify"
-                              type="text"
-                              inputMode="numeric"
-                              pattern="[0-9]*"
-                              placeholder="123456"
-                              value={mfaVerifyCode}
-                              onChange={(e) => setMfaVerifyCode(e.target.value)}
-                            />
+                            <Input id="mfaVerify" type="text" inputMode="numeric" pattern="[0-9]*" placeholder="123456" value={mfaVerifyCode} onChange={(e) => setMfaVerifyCode(e.target.value)} />
                             <Button type="submit" variant="outline" disabled={mfaLoading}>
-                              {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                              Bestätigen
+                              {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Bestätigen
                             </Button>
                           </form>
                         </div>
                       ) : (
-                        <div className="space-y-2">
-                          {hasPendingFactor ? (
-                            <p className="text-sm text-muted-foreground">
-                              Es gibt bereits einen unbestätigten TOTP‑Faktor.
-                            </p>
-                          ) : null}
-                          <div className="flex flex-wrap gap-2">
-                            <Button
-                              variant="outline"
-                              onClick={handleMfaEnroll}
-                              disabled={mfaLoading || hasPendingFactor}
-                            >
-                              {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                              2FA aktivieren
-                            </Button>
-                            {hasPendingFactor ? (
-                              <Button variant="outline" onClick={handleMfaReset} disabled={mfaLoading}>
-                                {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                TOTP zurücksetzen
-                              </Button>
-                            ) : null}
-                          </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button variant="outline" onClick={handleMfaEnroll} disabled={mfaLoading || hasPendingFactor}>
+                            {mfaLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} 2FA aktivieren
+                          </Button>
+                          {hasPendingFactor && (
+                            <Button variant="outline" onClick={handleMfaReset} disabled={mfaLoading}>TOTP zurücksetzen</Button>
+                          )}
                         </div>
                       )}
                     </>
                   )}
                 </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Melde dich an, um 2FA in deinem Konto zu aktivieren.
-                </p>
-              )}
+              ) : <p className="text-sm text-muted-foreground">Melde dich an, um 2FA zu aktivieren.</p>}
             </div>
             <div className="rounded-xl bg-card p-6 shadow-card">
               <h3 className="font-medium mb-4">Konto</h3>
               {user ? (
                 <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">
-                    Du bist angemeldet und deine Reisen werden automatisch gespeichert.
-                  </p>
-                  <Button variant="outline" onClick={handleSignOut}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Abmelden
-                  </Button>
+                  <p className="text-sm text-muted-foreground">Deine Reisen werden automatisch gespeichert.</p>
+                  <Button variant="outline" onClick={handleSignOut}><LogOut className="h-4 w-4 mr-2" /> Abmelden</Button>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">
-                    Melde dich an, um deine Reisen zu speichern und von überall darauf zuzugreifen.
-                  </p>
-                  <Button onClick={() => setAuthDialogOpen(true)}>
-                    <User className="h-4 w-4 mr-2" />
-                    Jetzt anmelden
-                  </Button>
+                  <p className="text-sm text-muted-foreground">Melde dich an, um deine Reisen zu speichern.</p>
+                  <Button onClick={() => setAuthDialogOpen(true)}><User className="h-4 w-4 mr-2" /> Jetzt anmelden</Button>
                 </div>
               )}
             </div>

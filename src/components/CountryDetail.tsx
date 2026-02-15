@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LocationSearch, LocationResult } from '@/components/LocationSearch';
+import { DestinationNotes } from '@/components/DestinationNotes';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -653,6 +654,11 @@ export const CountryDetail = ({ country, onBack, onToggleTodo }: CountryDetailPr
           </div>
         </div>
       )}
+
+      {/* Destination Notes */}
+      <div className="mb-8">
+        <DestinationNotes destinationName={country.name} />
+      </div>
 
       {/* Todo & Packing Tabs */}
       <div className="rounded-xl bg-card p-6 shadow-card">

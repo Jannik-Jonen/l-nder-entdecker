@@ -1,6 +1,6 @@
 import { Header } from '@/components/Header';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, MapPin, ArrowRight, Calendar, Wallet, Thermometer } from 'lucide-react';
+import { ArrowLeft, BookOpen, MapPin, ArrowRight, Calendar, Wallet, Thermometer, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,6 +10,7 @@ import { getDestinationById } from '@/services/travelData';
 import { Destination } from '@/types/travel';
 import { BlogComments } from '@/components/BlogComments';
 import { BookmarkButton } from '@/components/BookmarkButton';
+import { DestinationNotes } from '@/components/DestinationNotes';
 
 type GuidePostRow = {
   id: string;
@@ -21,9 +22,9 @@ type GuidePostRow = {
   tags?: string[];
   sources?: string[];
   status?: string;
+  created_at?: string;
 };
 
-// Extract headings from markdown-style content for TOC
 function extractHeadings(content: string): { id: string; text: string; level: number }[] {
   const lines = content.split('\n');
   const headings: { id: string; text: string; level: number }[] = [];
@@ -38,7 +39,6 @@ function extractHeadings(content: string): { id: string; text: string; level: nu
   return headings;
 }
 
-// Render content with anchored headings
 function renderContentWithAnchors(content: string) {
   return content.split('\n').map((line, i) => {
     const match = line.match(/^(#{1,3})\s+(.+)/);
@@ -52,6 +52,11 @@ function renderContentWithAnchors(content: string) {
   });
 }
 
+function estimateReadingTime(content?: string): number {
+  if (!content) return 1;
+  return Math.max(1, Math.ceil(content.trim().split(/\s+/).length / 200));
+}
+
 const GuidePostDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -59,6 +64,19 @@ const GuidePostDetail = () => {
   const [post, setPost] = useState<GuidePostRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [destination, setDestination] = useState<Destination | null>(null);
+  const [relatedGuides, setRelatedGuides] = useState<GuidePostRow[]>([]);
+  const [readProgress, setReadProgress] = useState(0);
+
+  // Reading progress
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setReadProgress(docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!user) { setIsAdmin(false); return; }
@@ -77,7 +95,31 @@ const GuidePostDetail = () => {
     getDestinationById(post.destination_id).then(d => setDestination(d || null));
   }, [post?.destination_id]);
 
+  // Load related guides
+  useEffect(() => {
+    if (!post || !id) return;
+    supabaseUntyped
+      .from('guide_posts')
+      .select('id,title,excerpt,image_url,destination_id,tags')
+      .eq('status', 'published')
+      .neq('id', id)
+      .limit(3)
+      .order('created_at', { ascending: false })
+      .then(({ data }: any) => {
+        if (!data) { setRelatedGuides([]); return; }
+        // Sort by tag overlap
+        const postTags = new Set(post.tags || []);
+        const scored = (data as GuidePostRow[]).map(g => ({
+          ...g,
+          score: (g.tags || []).filter(t => postTags.has(t)).length + (g.destination_id === post.destination_id ? 2 : 0),
+        }));
+        scored.sort((a, b) => b.score - a.score);
+        setRelatedGuides(scored.slice(0, 3));
+      });
+  }, [post, id]);
+
   const headings = useMemo(() => post?.content ? extractHeadings(post.content) : [], [post?.content]);
+  const readingTime = estimateReadingTime(post?.content);
 
   if (loading) {
     return <div className="min-h-screen bg-background"><Header /><main className="container py-20 text-center text-muted-foreground">Laden…</main></div>;
@@ -102,6 +144,11 @@ const GuidePostDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Reading progress bar */}
+      <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-muted">
+        <div className="h-full bg-primary transition-all duration-150" style={{ width: `${readProgress}%` }} />
+      </div>
+
       <Header />
       <main className="container py-8">
         <Button variant="ghost" asChild className="mb-4 -ml-2 text-muted-foreground hover:text-foreground">
@@ -127,6 +174,12 @@ const GuidePostDetail = () => {
               <span className="text-sm font-medium uppercase tracking-wide opacity-80">Guide</span>
             </div>
             <h1 className="font-display text-3xl md:text-5xl font-bold">{post.title}</h1>
+            <div className="flex items-center gap-4 mt-3 text-white/70 text-sm">
+              {post.created_at && (
+                <span>{new Date(post.created_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              )}
+              <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {readingTime} Min. Lesezeit</span>
+            </div>
           </div>
         </div>
 
@@ -159,6 +212,13 @@ const GuidePostDetail = () => {
               )}
             </article>
 
+            {/* Destination notes */}
+            {destination && (
+              <div className="mt-8">
+                <DestinationNotes destinationName={destination.name} />
+              </div>
+            )}
+
             {destination && (
               <div className="mt-8">
                 <Button asChild className="gap-2">
@@ -168,6 +228,32 @@ const GuidePostDetail = () => {
             )}
 
             <BlogComments postId={post.id} postType="guide" />
+
+            {/* Related Guides */}
+            {relatedGuides.length > 0 && (
+              <div className="mt-12">
+                <h3 className="font-display text-xl font-semibold mb-4">Ähnliche Guides</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {relatedGuides.map(g => (
+                    <Link
+                      key={g.id}
+                      to={`/guides/posts/${g.id}`}
+                      className="group rounded-xl overflow-hidden bg-card border border-border hover:shadow-card-hover transition-all"
+                    >
+                      <div className="relative h-32">
+                        <img src={g.image_url} alt={g.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800'; }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      </div>
+                      <div className="p-3">
+                        <h4 className="font-display text-sm font-semibold line-clamp-2 group-hover:text-primary transition-colors">{g.title}</h4>
+                        <p className="text-xs text-muted-foreground line-clamp-1 mt-1">{g.excerpt}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Sidebar: TOC + Fact Box */}

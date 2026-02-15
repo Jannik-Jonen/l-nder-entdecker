@@ -1,8 +1,10 @@
 import { Header } from '@/components/Header';
 import { Link, useSearchParams } from 'react-router-dom';
-import { BookOpen, ArrowRight, ArrowLeft } from 'lucide-react';
+import { BookOpen, ArrowRight, ArrowLeft, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { useEffect, useState, useMemo } from 'react';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { useAuth } from '@/hooks/useAuth';
 import { BlogComments } from '@/components/BlogComments';
@@ -27,6 +29,8 @@ const Blog = () => {
   const [loading, setLoading] = useState(false);
   const [activePost, setActivePost] = useState<BlogPostRow | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -57,6 +61,28 @@ const Blog = () => {
       });
   }, [postId]);
 
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    posts.forEach(p => (p.tags || []).forEach(t => tags.add(t)));
+    return Array.from(tags).sort();
+  }, [posts]);
+
+  const filteredPosts = useMemo(() => {
+    let result = posts;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.excerpt?.toLowerCase().includes(q) ||
+        (p.tags || []).some(t => t.toLowerCase().includes(q))
+      );
+    }
+    if (selectedTag) {
+      result = result.filter(p => (p.tags || []).includes(selectedTag));
+    }
+    return result;
+  }, [posts, searchQuery, selectedTag]);
+
   // Detail view
   if (postId) {
     return (
@@ -68,20 +94,13 @@ const Blog = () => {
           </Button>
 
           {loadingDetail && <div className="text-muted-foreground text-center py-12">Lade Beitrag…</div>}
-
-          {!loadingDetail && !activePost && (
-            <div className="text-muted-foreground text-center py-12">Beitrag nicht gefunden.</div>
-          )}
+          {!loadingDetail && !activePost && <div className="text-muted-foreground text-center py-12">Beitrag nicht gefunden.</div>}
 
           {!loadingDetail && activePost && (
             <>
               <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-6">
-                <img
-                  src={activePost.image_url}
-                  alt={activePost.title}
-                  className="h-full w-full object-cover"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Bild'; }}
-                />
+                <img src={activePost.image_url} alt={activePost.title} className="h-full w-full object-cover"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/1200x600?text=Bild'; }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6 text-white">
                   <h1 className="font-display text-3xl md:text-4xl font-bold">{activePost.title}</h1>
@@ -146,8 +165,22 @@ const Blog = () => {
           </div>
         </section>
 
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-2xl font-semibold">Alle Artikel</h2>
+        {/* Search & Filter */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Artikel durchsuchen…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
           {user ? (
             <Button variant="outline" asChild>
               <Link to="/blog/create">Artikel schreiben</Link>
@@ -159,28 +192,54 @@ const Blog = () => {
           )}
         </div>
 
+        {/* Tags filter */}
+        {allTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button
+              onClick={() => setSelectedTag(null)}
+              className={`text-xs px-3 py-1.5 rounded-full transition-colors ${!selectedTag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+            >
+              Alle
+            </button>
+            {allTags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
+                className={`text-xs px-3 py-1.5 rounded-full transition-colors ${selectedTag === tag ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Results */}
+        {(searchQuery || selectedTag) && (
+          <p className="text-sm text-muted-foreground mb-4">
+            {filteredPosts.length} {filteredPosts.length === 1 ? 'Artikel' : 'Artikel'} gefunden
+            {selectedTag && <> zum Thema <Badge variant="secondary" className="ml-1">{selectedTag}</Badge></>}
+          </p>
+        )}
+
         {loading && <div className="text-muted-foreground text-center py-12">Lade Artikel…</div>}
 
-        {!loading && posts.length === 0 && (
+        {!loading && filteredPosts.length === 0 && (
           <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
-            Noch keine Artikel vorhanden.
+            {searchQuery || selectedTag ? 'Keine Artikel zu deiner Suche gefunden.' : 'Noch keine Artikel vorhanden.'}
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map(p => (
+          {filteredPosts.map(p => (
             <Link
               key={p.id}
               to={`/blog?post=${p.id}`}
               className="group relative overflow-hidden rounded-xl bg-card border border-border hover:shadow-card-hover transition-all"
             >
               <div className="relative h-48">
-                <img
-                  src={p.image_url}
-                  alt={p.title}
+                <img src={p.image_url} alt={p.title}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild'; }}
-                />
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800x480?text=Bild'; }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <h3 className="font-display text-xl font-semibold text-white">{p.title}</h3>
