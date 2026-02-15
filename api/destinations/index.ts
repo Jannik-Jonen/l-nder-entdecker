@@ -54,6 +54,8 @@ export default async function handler(
   const countryCode = url.searchParams.get('countryCode') || undefined;
   const countryCodesParam = url.searchParams.get('countryCodes') || '';
   const fields = url.searchParams.get('fields') || 'full';
+  const limitParam = url.searchParams.get('limit');
+  const limit = limitParam && !Number.isNaN(Number(limitParam)) ? Math.max(1, Math.min(Number(limitParam), 500)) : null;
   const countryCodes = countryCodesParam
     .split(',')
     .map((code) => code.trim().toUpperCase())
@@ -107,9 +109,9 @@ export default async function handler(
   if (countryCodes.length > 0) query = query.in('country_code', countryCodes);
   if (search) {
     const s = search.replace(/%/g, '\\%');
-    query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(100);
+    query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(limit || 100);
   } else {
-    query = query.limit(200);
+    query = query.limit(limit || 200);
   }
 
   const { data, error } = await query;

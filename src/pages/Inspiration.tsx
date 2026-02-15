@@ -91,10 +91,18 @@ const Inspiration = () => {
     const handle = window.setTimeout(async () => {
       setCatalogLoading(true);
       try {
+        if (selectedType === 'all' && !query) {
+          const quickData = await fetchDestinationsCatalog({ fields: 'summary', limit: 80 });
+          if (active) setCatalog(Array.isArray(quickData) ? quickData : []);
+          setCatalogLoading(false);
+          const fullData = await fetchDestinationsCatalog({ fields: 'summary' });
+          if (active && Array.isArray(fullData) && fullData.length > 0) setCatalog(fullData);
+          return;
+        }
         if (selectedType === 'all' && query) {
           const [allData, countryData] = await Promise.all([
-            fetchDestinationsCatalog({ search: query, fields: 'summary' }),
-            fetchDestinationsCatalog({ search: query, type: 'country', fields: 'summary' }),
+            fetchDestinationsCatalog({ search: query, fields: 'summary', limit: 80 }),
+            fetchDestinationsCatalog({ search: query, type: 'country', fields: 'summary', limit: 80 }),
           ]);
           const normalizedQuery = normalizeSearch(query);
           const matchingCountries = (Array.isArray(countryData) ? countryData : []).filter((country) => {
@@ -113,7 +121,7 @@ const Inspiration = () => {
           );
           const byCountryData =
             countryCodes.length > 0
-              ? await fetchDestinationsCatalog({ countryCodes, fields: 'summary' })
+              ? await fetchDestinationsCatalog({ countryCodes, fields: 'summary', limit: 80 })
               : [];
           const combined = [
             ...(Array.isArray(allData) ? allData : []),
@@ -132,6 +140,7 @@ const Inspiration = () => {
             search: query || undefined,
             type,
             fields: 'summary',
+            limit: 80,
           });
           if (active) setCatalog(Array.isArray(data) ? data : []);
         }

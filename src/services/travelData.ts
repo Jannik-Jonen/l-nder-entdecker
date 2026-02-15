@@ -404,6 +404,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
   countryCodes?: string[];
   search?: string;
   fields?: 'full' | 'summary' | 'lookup';
+  limit?: number;
 }): Promise<Destination[]> => {
   try {
     const fieldSet = _opts?.fields ?? 'full';
@@ -416,6 +417,10 @@ export const fetchDestinationsCatalog = async (_opts?: {
     const columns =
       fieldSet === 'summary' ? summaryColumns : fieldSet === 'lookup' ? lookupColumns : fullColumns;
     const search = _opts?.search?.trim();
+    const limit =
+      typeof _opts?.limit === 'number' && Number.isFinite(_opts.limit)
+        ? Math.max(1, Math.min(Math.floor(_opts.limit), 500))
+        : null;
     const isLocalHost =
       typeof window !== 'undefined' &&
       (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
@@ -428,6 +433,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
       countryCodes,
       search: search || null,
       fields: fieldSet,
+      limit,
       api: canUseApi,
     });
     const cached = catalogCache.get(cacheKey);
@@ -441,6 +447,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
         if (_opts?.countryCode) params.set('countryCode', _opts.countryCode);
         if (countryCodes.length > 0) params.set('countryCodes', countryCodes.join(','));
         if (fieldSet !== 'full') params.set('fields', fieldSet);
+        if (limit) params.set('limit', String(limit));
         const response = await fetch(`/api/destinations?${params.toString()}`);
         if (response.ok) apiData = (await response.json()) as DestinationRow[];
       } catch (error) {
@@ -456,9 +463,11 @@ export const fetchDestinationsCatalog = async (_opts?: {
       }
     }
     if (isLocalSupabase) {
-      const { data, error } = await fromDestinations()
+      let localQuery = fromDestinations()
         .select(columns as string)
         .order('name', { ascending: true });
+      if (limit) localQuery = localQuery.limit(limit);
+      const { data, error } = await localQuery;
       if (error) throw error;
       let rows = (data || []) as unknown as DestinationRow[];
       if (_opts?.type) {
@@ -496,6 +505,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
       const s = search.replace(/%/g, '\\%');
       query = query.or(`name.ilike.%${s}%,country.ilike.%${s}%`).limit(100);
     }
+    if (limit) query = query.limit(limit);
     const { data, error } = await query;
     if (error) throw error;
     const rows = (data || []) as unknown as DestinationRow[];

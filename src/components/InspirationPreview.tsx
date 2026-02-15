@@ -32,7 +32,7 @@ export const InspirationPreview = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await fetchDestinationsCatalog({ fields: 'summary' });
+        const data = await fetchDestinationsCatalog({ fields: 'summary', limit: 60 });
         setCatalog(Array.isArray(data) ? data : []);
       } catch {
         setCatalog([]);
