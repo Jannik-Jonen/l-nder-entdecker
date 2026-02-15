@@ -113,6 +113,41 @@ export type Database = {
         }
         Relationships: []
       }
+      destination_notes: {
+        Row: {
+          content: string
+          created_at: string
+          destination_id: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          destination_id: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          destination_id?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "destination_notes_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       destinations: {
         Row: {
           average_daily_cost: number | null
