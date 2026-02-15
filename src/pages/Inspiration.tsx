@@ -77,15 +77,11 @@ const Inspiration = () => {
   const [catalogLoading, setCatalogLoading] = useState<boolean>(false);
   const [selectedDetailsLoading, setSelectedDetailsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const lastFetchKey = useRef<string | null>(null);
   const lastDetailsId = useRef<string | null>(null);
 
   useEffect(() => {
     const query = searchQuery.trim();
     const type = selectedType === 'all' ? undefined : selectedType;
-    const fetchKey = `${selectedType}|${query}`;
-    if (lastFetchKey.current === fetchKey) return;
-    lastFetchKey.current = fetchKey;
     let active = true;
     const delay = query ? 300 : 0;
     const handle = window.setTimeout(async () => {
@@ -134,7 +130,12 @@ const Inspiration = () => {
             const key = makeDestinationKey(item);
             if (!deduped.has(key)) deduped.set(key, item);
           });
-          if (active) setCatalog(Array.from(deduped.values()));
+          const dedupedList = Array.from(deduped.values());
+          if (active) setCatalog(dedupedList);
+          if (active && dedupedList.length === 0) {
+            const retryData = await fetchDestinationsCatalog({ search: query, fields: 'summary' });
+            if (active) setCatalog(Array.isArray(retryData) ? retryData : []);
+          }
         } else {
           const data = await fetchDestinationsCatalog({
             search: query || undefined,
@@ -142,7 +143,16 @@ const Inspiration = () => {
             fields: 'summary',
             limit: 80,
           });
-          if (active) setCatalog(Array.isArray(data) ? data : []);
+          const list = Array.isArray(data) ? data : [];
+          if (active) setCatalog(list);
+          if (active && query && list.length === 0) {
+            const retryData = await fetchDestinationsCatalog({
+              search: query || undefined,
+              type,
+              fields: 'summary',
+            });
+            if (active) setCatalog(Array.isArray(retryData) ? retryData : []);
+          }
         }
       } catch {
         if (active) setCatalog([]);
