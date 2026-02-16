@@ -63,11 +63,11 @@ export default async function handler(
   const debug = url.searchParams.get('debug') === '1';
 
   const fullColumns =
-    'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+    'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
   const summaryColumns =
-    'id,name,country,country_code,type,types,image_url,description,best_season,average_daily_cost,currency,source,parent_id,children_count';
+    'id,name,country,country_code,type,image_url,description,best_season,average_daily_cost,currency,source,parent_id,children_count';
   const lookupColumns =
-    'id,name,country,country_code,type,types,image_url,source,parent_id,children_count';
+    'id,name,country,country_code,type,image_url,source,parent_id,children_count';
   const columns = fields === 'summary' ? summaryColumns : fields === 'lookup' ? lookupColumns : fullColumns;
 
   const normalizedSupabaseUrl = /^https?:\/\//i.test(supabaseUrl)
@@ -104,7 +104,7 @@ export default async function handler(
   const supabaseAdmin = createClient(normalizedSupabaseUrl, supabaseKey);
   let query = supabaseAdmin.from('destinations').select(columns as string).order('name', { ascending: true });
 
-  if (type) query = query.contains('types', [type]);
+  if (type) query = query.eq('type', type);
   if (countryCode) query = query.eq('country_code', countryCode);
   if (countryCodes.length > 0) query = query.in('country_code', countryCodes);
   if (search) {
