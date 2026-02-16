@@ -57,6 +57,9 @@ export const WorldMap = () => {
       }
       const trips = (data || []) as Array<{ id: string; destination_name: string; notes: string | null }>;
       const markersList: Array<{ id: string; name: string; coords: [number, number] }> = [];
+      // Collect trips without coords to look up from destinations table
+      const needsLookup: Array<{ trip: typeof trips[number]; index: number }> = [];
+
       for (const t of trips) {
         let coords: [number, number] | null = null;
         try {
@@ -65,44 +68,50 @@ export const WorldMap = () => {
             coords = [parsed.coords.lon, parsed.coords.lat];
           }
         } catch { /* ignore parse errors */ }
-        if (!coords) {
-          try {
-            const cacheKey = `geo::${t.destination_name}`;
-            const cached = sessionStorage.getItem(cacheKey);
-            if (cached) {
-              const obj = JSON.parse(cached) as { lat: number; lon: number };
-              coords = [obj.lon, obj.lat];
-            } else {
-              const resp = await fetch(
-                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                  t.destination_name
-                )}&limit=1&accept-language=de`
-              );
-              const arr = await resp.json();
-              const first = Array.isArray(arr) && arr[0];
-              if (first?.lat && first?.lon) {
-                const lat = Number(first.lat);
-                const lon = Number(first.lon);
-                coords = [lon, lat];
-                try {
-                  sessionStorage.setItem(cacheKey, JSON.stringify({ lat, lon }));
-                } catch { /* ignore */ }
-                try {
-                  const currentNotes = t.notes ? JSON.parse(t.notes as string) : {};
-                  currentNotes.coords = { lat, lon };
-                  await supabase
-                    .from('saved_trips')
-                    .update({ notes: JSON.stringify(currentNotes) })
-                    .eq('id', t.id);
-                } catch { /* ignore db update */ }
-              }
-            }
-          } catch { /* ignore fetch errors */ }
-        }
         if (coords) {
           markersList.push({ id: t.id, name: t.destination_name, coords });
+        } else {
+          needsLookup.push({ trip: t, index: markersList.length });
+          markersList.push({ id: t.id, name: t.destination_name, coords: [0, 0] }); // placeholder
         }
       }
+
+      // Look up coordinates from destinations table for trips without coords
+      if (needsLookup.length > 0) {
+        const names = needsLookup.map((n) => n.trip.destination_name);
+        const { data: destData } = await supabase
+          .from('destinations')
+          .select('name,coords_lat,coords_lon')
+          .in('name', names);
+        const coordsByName = new Map<string, [number, number]>();
+        (destData || []).forEach((d: { name: string; coords_lat: number | null; coords_lon: number | null }) => {
+          if (typeof d.coords_lat === 'number' && typeof d.coords_lon === 'number') {
+            coordsByName.set(d.name, [d.coords_lon, d.coords_lat]);
+          }
+        });
+        // Update markers and persist coords
+        const toRemove: number[] = [];
+        for (const item of needsLookup) {
+          const found = coordsByName.get(item.trip.destination_name);
+          if (found) {
+            markersList[item.index] = { id: item.trip.id, name: item.trip.destination_name, coords: found };
+            // Persist coords in notes
+            try {
+              const currentNotes = item.trip.notes ? JSON.parse(item.trip.notes as string) : {};
+              currentNotes.coords = { lat: found[1], lon: found[0] };
+              await supabase
+                .from('saved_trips')
+                .update({ notes: JSON.stringify(currentNotes) })
+                .eq('id', item.trip.id);
+            } catch { /* ignore */ }
+          } else {
+            toRemove.push(item.index);
+          }
+        }
+        // Remove markers without coords (reverse order to keep indices valid)
+        toRemove.sort((a, b) => b - a).forEach((i) => markersList.splice(i, 1));
+      }
+
       setMarkers(markersList);
     };
     loadMarkers();
