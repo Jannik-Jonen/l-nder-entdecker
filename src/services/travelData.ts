@@ -409,11 +409,11 @@ export const fetchDestinationsCatalog = async (_opts?: {
   try {
     const fieldSet = _opts?.fields ?? 'full';
     const fullColumns =
-      'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+      'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
     const summaryColumns =
-      'id,name,country,country_code,type,types,image_url,description,best_season,average_daily_cost,currency,source,parent_id,children_count';
+      'id,name,country,country_code,type,image_url,description,best_season,average_daily_cost,currency,source,parent_id,children_count';
     const lookupColumns =
-      'id,name,country,country_code,type,types,image_url,source,parent_id,children_count';
+      'id,name,country,country_code,type,image_url,source,parent_id,children_count';
     const columns =
       fieldSet === 'summary' ? summaryColumns : fieldSet === 'lookup' ? lookupColumns : fullColumns;
     const search = _opts?.search?.trim();
@@ -498,7 +498,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
     let query = fromDestinations()
       .select(columns as string)
       .order('name', { ascending: true });
-    if (_opts?.type) query = query.contains('types', [_opts.type]);
+    if (_opts?.type) query = query.eq('type', _opts.type);
     if (_opts?.countryCode) query = query.eq('country_code', _opts.countryCode);
     if (countryCodes.length > 0) query = query.in('country_code', countryCodes);
     if (search) {
@@ -522,9 +522,7 @@ export const fetchDestinationsCatalog = async (_opts?: {
 
 export const getDestinationById = async (_id: string): Promise<Destination | null> => {
   try {
-  const columns = isLocalSupabase
-      ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
-      : 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+  const columns = 'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
     const { data, error } = await fromDestinations()
       .select(columns)
       .eq('id', _id)
@@ -539,9 +537,7 @@ export const getDestinationById = async (_id: string): Promise<Destination | nul
 
 export const getChildren = async (_id: string, _type?: Destination['type']): Promise<Destination[]> => {
   try {
-  const columns = isLocalSupabase
-      ? 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count'
-      : 'id,name,country,country_code,type,types,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
+  const columns = 'id,name,country,country_code,type,image_url,description,highlights,best_season,average_daily_cost,currency,visa_info,vaccination_info,health_safety_info,source,parent_id,coords_lat,coords_lon,children_count';
     if (isLocalSupabase) {
       const { data, error } = await fromDestinations()
         .select(columns)
@@ -556,7 +552,7 @@ export const getChildren = async (_id: string, _type?: Destination['type']): Pro
       .select(columns)
       .eq('parent_id', _id)
       .order('name', { ascending: true });
-    if (_type) query = query.contains('types', [_type]);
+    if (_type) query = query.eq('type', _type);
     const { data, error } = await query;
     if (error) throw error;
     const rows = (data || []) as DestinationRow[];
