@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import AdminReview from "./pages/AdminReview";
 import AdminDestinations from "./pages/AdminDestinations";
 import AuthCallback from "./pages/AuthCallback";
+import TripPlanner from "./pages/TripPlanner";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/inspiration" element={<Inspiration />} />
+              <Route path="/planner" element={<TripPlanner />} />
               <Route path="/guides" element={<Guides />} />
               <Route path="/guides/:id" element={<GuideDetail />} />
               <Route path="/guides/posts/:id" element={<GuidePostDetail />} />
