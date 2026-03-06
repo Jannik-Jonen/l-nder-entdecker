@@ -353,6 +353,107 @@ export type Database = {
         }
         Relationships: []
       }
+      trip_routes: {
+        Row: {
+          budget_currency: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          status: string
+          total_budget: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_currency?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          status?: string
+          total_budget?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_currency?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          status?: string
+          total_budget?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trip_stops: {
+        Row: {
+          coords_lat: number | null
+          coords_lon: number | null
+          created_at: string
+          currency: string | null
+          daily_budget: number | null
+          destination_code: string | null
+          destination_name: string
+          end_date: string | null
+          id: string
+          image_url: string | null
+          notes: string | null
+          route_id: string
+          sort_order: number
+          start_date: string | null
+          transport_to_next: string | null
+          updated_at: string
+        }
+        Insert: {
+          coords_lat?: number | null
+          coords_lon?: number | null
+          created_at?: string
+          currency?: string | null
+          daily_budget?: number | null
+          destination_code?: string | null
+          destination_name: string
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          route_id: string
+          sort_order?: number
+          start_date?: string | null
+          transport_to_next?: string | null
+          updated_at?: string
+        }
+        Update: {
+          coords_lat?: number | null
+          coords_lon?: number | null
+          created_at?: string
+          currency?: string | null
+          daily_budget?: number | null
+          destination_code?: string | null
+          destination_name?: string
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          route_id?: string
+          sort_order?: number
+          start_date?: string | null
+          transport_to_next?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_stops_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "trip_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

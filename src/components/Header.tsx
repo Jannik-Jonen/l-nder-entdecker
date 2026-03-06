@@ -24,6 +24,7 @@ export const Header = () => {
 
   const navItems = [
     { path: '/', label: 'Dashboard' },
+    { path: '/planner', label: 'Planer' },
     { path: '/inspiration', label: 'Inspiration' },
     { path: '/guides', label: 'Guides' },
     { path: '/blog', label: 'Blog' },
