@@ -13,21 +13,24 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const { duration, startMonth, budget, travelStyle, interests, climate, specificPlaces, avoidRegions, companions } = preferences || {};
+    const {
+      duration, startMonth, budget, travelStyle, interests, climate,
+      specificPlaces, avoidRegions, companions, continents, pace, specialNeeds,
+    } = preferences || {};
 
-    const systemPrompt = `Du bist ein erfahrener Weltreise-Planer. Erstelle basierend auf den Präferenzen eine detaillierte Weltreise-Route.
+    const systemPrompt = `Du bist ein weltklasse Reiseberater und Routenplaner mit 20 Jahren Erfahrung. Du erstellst extrem detaillierte, realistische und inspirierende Weltreise-Routen.
 
 WICHTIG: Antworte ausschließlich mit einem validen JSON-Objekt (kein Markdown, kein Text drumherum).
 
 Das JSON muss folgendes Format haben:
 {
-  "routeName": "Kreativer Name für die Reise",
-  "description": "Kurze Beschreibung der Reise (2-3 Sätze)",
+  "routeName": "Kreativer, inspirierender Name für die Reise",
+  "description": "Ausführliche Beschreibung der Reise (3-5 Sätze). Erkläre warum diese Route perfekt zu den Vorlieben passt.",
   "totalBudget": 15000,
   "currency": "EUR",
   "stops": [
     {
-      "destination_name": "Bangkok",
+      "destination_name": "Bangkok, Thailand",
       "destination_code": "TH",
       "coords_lat": 13.7563,
       "coords_lon": 100.5018,
@@ -36,37 +39,63 @@ Das JSON muss folgendes Format haben:
       "daily_budget": 35,
       "currency": "EUR",
       "transport_to_next": "flight",
-      "notes": "Detaillierte Tipps: Was man sehen sollte, beste Viertel, Essen, Transport vor Ort. Min. 3-4 Sätze.",
-      "highlights": ["Großer Palast", "Chatuchak Markt", "Khao San Road"],
-      "accommodation_tip": "Hostels ab 8€/Nacht in Khao San, Boutique-Hotels ab 25€ in Silom"
+      "notes": "Extrem ausführliche Tipps – mindestens 6-8 Sätze. Beschreibe die besten Viertel zum Übernachten, lokale Geheimtipps, beste Straßenessen-Stände, Transport vor Ort (BTS, Tuk-Tuk Preise), kulturelle Dos & Don'ts, und einen Vorschlag für einen typischen Tag. Nenne auch Preisbeispiele (z.B. Pad Thai 1.50€, Hostel-Bett 8€/Nacht).",
+      "highlights": ["Großer Palast & Wat Pho", "Chatuchak Wochenendmarkt", "Chinatown Street Food Tour", "Rooftop Bars in Silom", "Floating Market Damnoen Saduak"],
+      "accommodation_tip": "Backpacker: NapPark Hostel ab 8€/Nacht (Khao San). Mid-Range: Ibis Styles Sukhumvit ab 30€. Luxus: Mandarin Oriental ab 250€/Nacht.",
+      "local_transport": "BTS Skytrain: 0.50-1.50€ pro Fahrt. Grab (wie Uber) günstiger als Taxis. Tuk-Tuk: immer vorher Preis verhandeln.",
+      "best_food": "Pad Thai bei Thip Samai (ab 1.50€), Mango Sticky Rice überall (1€), Jay Fai für Michelin-Star Street Food (25€).",
+      "visa_info": "Deutsche: 30 Tage visumfrei. Verlängerung um 30 Tage möglich (60€ Gebühr)."
     }
   ]
 }
 
-Regeln:
-- Erstelle 6-15 Stops je nach Reisedauer
-- Berücksichtige realistische Reisezeiten und Transportmittel zwischen Stops
-- Passe das Tagesbudget an den Reisestil und das Land an
-- transport_to_next: "flight", "train", "bus", "boat", oder "car"
-- Nutze echte Koordinaten für jeden Ort
+REGELN:
+- Erstelle ${pace === 'slow' ? '6-10' : pace === 'fast' ? '12-20' : '8-15'} Stops je nach Reisedauer und Tempo
+- Berücksichtige realistische Reisezeiten und die beste Route (nicht kreuz und quer fliegen!)
+- Passe das Tagesbudget REALISTISCH an Reisestil UND Land an (Thailand ≠ Norwegen)
+- transport_to_next: "flight", "train", "bus", "boat", oder "car" – wähle das REALISTISCHSTE Transportmittel
+- Nutze EXAKTE Koordinaten für jeden Ort
 - Datumsangaben im Format YYYY-MM-DD
-- Die notes sollen ausführlich und hilfreich sein mit konkreten Tipps
-- Berücksichtige Jahreszeiten und Klima am Zielort
-- destination_code ist der ISO 3166-1 Alpha-2 Ländercode`;
+- Die notes MÜSSEN extrem ausführlich und nützlich sein (min 6-8 Sätze) mit konkreten Tipps, Preisen, Geheimtipps
+- Berücksichtige Jahreszeiten (KEINE Regenzeit, KEIN Monsun im geplanten Zeitraum!)
+- destination_code = ISO 3166-1 Alpha-2 Ländercode
+- highlights: 3-5 konkrete Sehenswürdigkeiten/Aktivitäten pro Stop
+- accommodation_tip: 2-3 konkrete Unterkünfte mit Preisspanne nach Reisestil
+- local_transport: Wie man vor Ort am besten rumkommt mit Preisen
+- best_food: 2-3 kulinarische Must-Haves mit Preisen
+- visa_info: Visa-Infos für deutsche Staatsangehörige
+- Die Route muss geographisch SINN MACHEN (effiziente Reihenfolge, keine unnötigen Umwege)
+- Plane realistische Zeiträume: Metropolen 3-5 Tage, Regionen 5-14 Tage, je nach Tempo`;
 
-    const userPrompt = `Plane eine Weltreise mit folgenden Präferenzen:
+    const userPrompt = `Plane eine epische Weltreise mit folgenden Präferenzen:
 
+📅 ZEITRAUM:
 - Dauer: ${duration || 'flexibel'}
 - Startmonat: ${startMonth || 'flexibel'}
-- Budget: ${budget || 'mittel'} (Gesamtbudget in EUR)
-- Reisestil: ${travelStyle || 'gemischt'}
-- Interessen: ${interests?.join(', ') || 'vielfältig'}
-- Bevorzugtes Klima: ${climate || 'egal'}
-- Reisebegleitung: ${companions || '1 Person'}
-${specificPlaces ? `- Muss unbedingt hin: ${specificPlaces}` : ''}
-${avoidRegions ? `- Möchte vermeiden: ${avoidRegions}` : ''}
 
-Erstelle eine optimale Route mit realistischen Zeiträumen, Budget pro Tag und ausführlichen Tipps für jeden Stop.`;
+💰 BUDGET & STIL:
+- Reisestil: ${travelStyle || 'gemischt'}
+- Gesamtbudget: ${budget ? budget + '€' : 'Empfehlung basierend auf Reisestil und Dauer'}
+
+👥 REISEGRUPPE: ${companions || 'Solo'}
+
+🎯 INTERESSEN: ${interests?.length ? interests.join(', ') : 'vielfältig'}
+
+🌡️ KLIMA: ${climate || 'egal'}
+
+🌍 KONTINENTE: ${continents?.length ? continents.join(', ') : 'alle möglich'}
+
+🚶 REISETEMPO: ${pace || 'ausgewogen'} (${
+      pace === 'slow' ? 'wenige Orte, dafür tief eintauchen' :
+      pace === 'fast' ? 'viele Orte, kurze Aufenthalte' :
+      'ausgewogene Balance'
+    })
+
+${specificPlaces ? `✨ MUSS UNBEDINGT HIN:\n${specificPlaces}` : ''}
+${avoidRegions ? `🚫 VERMEIDEN:\n${avoidRegions}` : ''}
+${specialNeeds ? `♿ BESONDERE ANFORDERUNGEN:\n${specialNeeds}` : ''}
+
+Erstelle eine optimale, geographisch sinnvolle Route. Jeder Stop braucht EXTREM detaillierte Tipps mit konkreten Preisen, Geheimtipps und praktischen Infos. Die Route soll inspirierend und gleichzeitig realistisch umsetzbar sein.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -105,7 +134,6 @@ Erstelle eine optimale Route mit realistischen Zeiträumen, Budget pro Tag und a
     const result = await response.json();
     const content = result.choices?.[0]?.message?.content || "";
     
-    // Parse JSON from response (handle markdown code blocks)
     let tripData;
     try {
       const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
