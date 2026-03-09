@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { defaultTodos } from '@/data/mockData';
 import { Country, TodoItem, PackingItem, PeopleBreakdown } from '@/types/travel';
