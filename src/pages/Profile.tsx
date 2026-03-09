@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { defaultTodos } from '@/data/mockData';
 import { Country, TodoItem, PackingItem, PeopleBreakdown } from '@/types/travel';
-import { User, MapPin, Calendar, Settings, Plus, Trash2, Edit2, LogOut, Loader2, Globe, TrendingUp, ChevronRight, Camera } from 'lucide-react';
+import { User, MapPin, Calendar, Settings, Plus, Trash2, Edit2, LogOut, Loader2, Globe, TrendingUp, ChevronRight, Camera, Sparkles, Plane } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
