@@ -456,6 +456,37 @@ const Profile = () => {
           </div>
         </div>
 
+        {/* Weltreise CTA Card */}
+        <div
+          onClick={() => navigate('/planner')}
+          className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-accent p-6 md:p-8 mb-8 cursor-pointer transition-all hover:shadow-xl hover:scale-[1.01]"
+        >
+          <div className="absolute top-0 right-0 w-72 h-72 bg-primary-foreground/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-accent/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 rounded-xl bg-primary-foreground/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Plane className="h-7 w-7 text-primary-foreground" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="h-4 w-4 text-primary-foreground/80" />
+                  <span className="text-sm font-medium text-primary-foreground/80 uppercase tracking-wide">KI-gestützt</span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold text-primary-foreground">Weltreise planen</h3>
+                <p className="text-primary-foreground/70 text-sm mt-0.5">
+                  {worldTripCount > 0
+                    ? `${worldTripCount} Route${worldTripCount > 1 ? 'n' : ''} erstellt – plane deine nächste Weltreise!`
+                    : 'Lass dir von der KI eine komplette Route mit Budget, Visa & Tipps erstellen'}
+                </p>
+              </div>
+            </div>
+            <Button variant="secondary" className="self-start md:self-center group-hover:translate-x-1 transition-transform">
+              {worldTripCount > 0 ? 'Zum Planer' : 'Jetzt starten'} <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+
         {/* Countries list */}
         <section>
           <div className="flex items-center justify-between mb-6">
