@@ -48,6 +48,8 @@ type NotesData = {
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [worldTripCount, setWorldTripCount] = useState(0);
   const [countries, setCountries] = useState<Country[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
