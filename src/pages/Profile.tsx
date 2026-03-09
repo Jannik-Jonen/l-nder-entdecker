@@ -176,8 +176,11 @@ const Profile = () => {
       fetchProfile();
       fetchTrips();
       loadMfaFactors();
+      // Fetch world trip routes count
+      supabase.from('trip_routes').select('id', { count: 'exact', head: true })
+        .then(({ count }) => setWorldTripCount(count || 0));
     } else {
-      setProfile(null); setCountries([]); setMfaEnabled(false); setMfaFactors([]); setMfaEnroll(null); setMfaVerifyCode(''); setMfaChallengeId(null);
+      setProfile(null); setCountries([]); setMfaEnabled(false); setMfaFactors([]); setMfaEnroll(null); setMfaVerifyCode(''); setMfaChallengeId(null); setWorldTripCount(0);
     }
   }, [user, fetchProfile, fetchTrips, loadMfaFactors]);
 
