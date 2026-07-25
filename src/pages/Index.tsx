@@ -653,28 +653,37 @@ const Index = () => {
               </div>
               
               {/* Quick Actions Card */}
-              <div className="w-full md:w-1/3 bg-card border border-border rounded-2xl p-6 shadow-sm">
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  Schnellzugriff
-                </h3>
-                <div className="space-y-3">
+              <div className="w-full lg:w-1/3 bg-card border border-border/60 rounded-2xl p-6 shadow-card">
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                    Schnellzugriff
+                  </span>
+                </div>
+                <h3 className="font-display text-xl font-semibold mb-5">Was möchtest du tun?</h3>
+                <div className="space-y-2.5">
+                  <Link to="/planner">
+                    <Button className="w-full justify-start h-11" variant="default">
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Weltreise mit KI planen
+                    </Button>
+                  </Link>
                   <Link to="/inspiration">
-                    <Button className="w-full justify-start" variant="default">
+                    <Button className="w-full justify-start h-11" variant="outline">
                       <Plus className="mr-2 h-4 w-4" />
-                      Neue Reise planen
+                      Neue Reise hinzufügen
                     </Button>
                   </Link>
                   <Link to="/guides">
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button className="w-full justify-start h-11" variant="ghost">
                       <MapIcon className="mr-2 h-4 w-4" />
                       Guides entdecken
                     </Button>
                   </Link>
                   <Link to="/profile">
-                    <Button className="w-full justify-start" variant="ghost">
+                    <Button className="w-full justify-start h-11" variant="ghost">
                       <Calendar className="mr-2 h-4 w-4" />
-                      Mein Profil & Einstellungen
+                      Profil & Einstellungen
                     </Button>
                   </Link>
                 </div>
@@ -683,26 +692,38 @@ const Index = () => {
 
             {/* World Map Section - Authenticated View */}
             <section>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
-                  <Globe className="h-6 w-6 text-primary" />
-                  Entdecke die Welt
-                </h2>
+              <div className="flex items-end justify-between mb-6">
+                <div>
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">
+                    Deine Weltkarte
+                  </p>
+                  <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                    Entdecke, was noch fehlt.
+                  </h2>
+                </div>
               </div>
-              <div className="bg-card/50 border border-border rounded-2xl p-1 shadow-sm overflow-hidden">
-                 <WorldMap />
+              <div className="bg-card/50 border border-border/60 rounded-2xl p-1 shadow-card overflow-hidden">
+                <WorldMap />
               </div>
             </section>
 
             {/* Trips Grid */}
             <section>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold">
-                  Deine geplanten Reisen
-                </h2>
+              <div className="flex items-end justify-between mb-6">
+                <div>
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">
+                    Deine Reisen
+                  </p>
+                  <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                    Geplante Abenteuer
+                  </h2>
+                </div>
                 {trip.countries.length > 0 && (
-                  <Link to="/inspiration" className="text-primary hover:underline text-sm font-medium">
-                    + Weitere hinzufügen
+                  <Link
+                    to="/inspiration"
+                    className="text-primary hover:underline text-sm font-medium inline-flex items-center gap-1"
+                  >
+                    <Plus className="h-4 w-4" /> Weitere hinzufügen
                   </Link>
                 )}
               </div>
