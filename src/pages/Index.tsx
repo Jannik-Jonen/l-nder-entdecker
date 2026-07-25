@@ -578,6 +578,40 @@ const Index = () => {
               )}
             </div>
           </section>
+
+          {/* Final CTA */}
+          <section className="py-24">
+            <div className="container">
+              <div className="relative overflow-hidden rounded-3xl gradient-hero p-10 md:p-16 text-primary-foreground shadow-elevated">
+                <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-foreground/10 blur-3xl" />
+                <div className="absolute -bottom-32 -left-24 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
+                <div className="relative z-10 max-w-2xl">
+                  <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight mb-4 leading-[1.1]">
+                    Bereit, deine nächste Reise zu planen?
+                  </h2>
+                  <p className="text-primary-foreground/85 text-lg mb-8 leading-relaxed">
+                    Erstelle kostenlos ein Konto und lass dir in Minuten eine maßgeschneiderte
+                    Weltreise vorschlagen — inklusive Route, Budget und Insider-Tipps.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      to="/planner"
+                      className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-lg bg-background text-foreground font-medium hover:bg-background/90 transition-colors shadow-lg"
+                    >
+                      Weltreise-Planer starten
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link
+                      to="/inspiration"
+                      className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-lg border border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+                    >
+                      Erst mal stöbern
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </main>
         <Footer />
       </div>
@@ -597,15 +631,18 @@ const Index = () => {
             onToggleTodo={handleToggleTodo}
           />
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-16">
             {/* Welcome Section */}
-            <section className="flex flex-col md:flex-row gap-8 items-start justify-between">
-              <div className="w-full md:w-2/3">
-                <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">
-                  Willkommen zurück{userName ? `, ${userName}` : ''}! 👋
+            <section className="flex flex-col lg:flex-row gap-8 items-start justify-between">
+              <div className="w-full lg:w-2/3">
+                <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                  Willkommen zurück
+                </p>
+                <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-3">
+                  Hallo{userName ? `, ${userName}` : ''} 👋
                 </h1>
-                <p className="text-muted-foreground text-lg mb-6">
-                  Hier ist deine Kommandozentrale. Wohin soll die nächste Reise gehen?
+                <p className="text-muted-foreground text-lg mb-8 max-w-2xl leading-relaxed">
+                  Dein Reise-Cockpit ist bereit. Wohin geht die nächste Etappe?
                 </p>
                 <HeroSection
                   tripName={trip.name}
