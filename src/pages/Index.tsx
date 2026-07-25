@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/HeroSection';
 import { CountryCard } from '@/components/CountryCard';
 import { CountryDetail } from '@/components/CountryDetail';
@@ -542,11 +543,7 @@ const Index = () => {
             </div>
           </section>
         </main>
-        <footer className="border-t border-border mt-16 py-8">
-          <div className="container text-center text-sm text-muted-foreground">
-            <p>GlobeDetour – Dein Begleiter für unvergessliche Reisen</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     );
   }
@@ -808,11 +805,7 @@ const Index = () => {
         )}
       </main>
 
-      <footer className="border-t border-border mt-16 py-8">
-        <div className="container text-center text-sm text-muted-foreground">
-          <p>GlobeDetour – Dein Begleiter für unvergessliche Reisen</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
