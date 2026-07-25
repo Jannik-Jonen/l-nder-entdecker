@@ -21,6 +21,9 @@ import AdminReview from "./pages/AdminReview";
 import AdminDestinations from "./pages/AdminDestinations";
 import AuthCallback from "./pages/AuthCallback";
 import TripPlanner from "./pages/TripPlanner";
+import Impressum from "./pages/Impressum";
+import Datenschutz from "./pages/Datenschutz";
+import Kontakt from "./pages/Kontakt";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +51,9 @@ const App = () => (
               <Route path="/tipps" element={<Tipps />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="/datenschutz" element={<Datenschutz />} />
+              <Route path="/kontakt" element={<Kontakt />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </HashRouter>
