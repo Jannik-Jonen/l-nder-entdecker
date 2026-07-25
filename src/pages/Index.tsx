@@ -11,7 +11,7 @@ import { defaultTodos } from '@/data/mockData';
 import { Country, Destination, Trip } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles, Globe } from 'lucide-react';
+import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles } from 'lucide-react';
 import { WorldMap } from '@/components/WorldMap';
 import { supabase } from '@/integrations/supabase/client';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
