@@ -289,20 +289,24 @@ export const InspirationPreview = () => {
   };
 
   return (
-    <section className="py-16 bg-muted/30">
+    <section className="py-20 bg-muted/40 border-y border-border/50">
       <div className="container">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="font-display text-2xl md:text-3xl font-semibold">
-              Lass dich inspirieren
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+          <div className="max-w-xl">
+            <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+              Reiseinspiration
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              Kuratierte Ziele, die Fernweh wecken.
             </h2>
-            <p className="text-muted-foreground mt-2">
-              Entdecke traumhafte Reiseziele für dein nächstes Abenteuer
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Ausgewählte Destinationen mit Highlights, bester Reisezeit und praktischen
+              Insider-Tipps — bereit, direkt in deine Planung zu wandern.
             </p>
           </div>
-          <Button variant="ghost" asChild className="hidden sm:flex">
+          <Button variant="outline" asChild className="hidden sm:inline-flex self-start md:self-auto">
             <Link to="/inspiration" className="gap-2">
-              Alle Ziele <ArrowRight className="h-4 w-4" />
+              Alle Ziele entdecken <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </div>
@@ -313,12 +317,12 @@ export const InspirationPreview = () => {
               key={destination.id}
               type="button"
               onClick={() => setSelectedDestination(destination)}
-              className="group relative overflow-hidden rounded-2xl aspect-[4/3] text-left"
+              className="group relative overflow-hidden rounded-2xl aspect-[4/5] text-left shadow-card hover:shadow-card-hover transition-all hover:-translate-y-1"
             >
               <img
                 src={destination.imageUrl}
                 alt={destination.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 onError={(e) => {
                   const code = destination.countryCode;
                   (e.currentTarget as HTMLImageElement).src = code
@@ -326,20 +330,31 @@ export const InspirationPreview = () => {
                     : 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop';
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/40 to-transparent" />
+              <div className="absolute top-4 left-4">
+                <Badge className="bg-background/90 text-foreground hover:bg-background backdrop-blur-sm font-medium">
+                  {typeLabels[destination.type]}
+                </Badge>
+              </div>
               <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="font-display text-xl font-semibold text-white mb-1">
+                <p className="text-primary-foreground/70 text-xs uppercase tracking-wider mb-1">
+                  {destination.country}
+                </p>
+                <h3 className="font-display text-2xl font-bold text-primary-foreground mb-2 leading-tight">
                   {destination.name}
                 </h3>
-                <p className="text-white/80 text-sm line-clamp-2">
+                <p className="text-primary-foreground/85 text-sm line-clamp-2 leading-relaxed">
                   {destination.description}
                 </p>
+                <div className="mt-3 inline-flex items-center gap-1 text-primary-foreground text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                  Mehr erfahren <ArrowRight className="h-3.5 w-3.5" />
+                </div>
               </div>
             </button>
           ))}
         </div>
         {previewDestinations.length === 0 && (
-          <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+          <div className="rounded-xl border border-dashed border-border bg-card p-8 text-center text-muted-foreground">
             Aktuell sind keine Inspirationen verfügbar.
           </div>
         )}

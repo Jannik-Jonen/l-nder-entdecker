@@ -6,11 +6,12 @@ import { CountryCard } from '@/components/CountryCard';
 import { CountryDetail } from '@/components/CountryDetail';
 import { LandingHero } from '@/components/LandingHero';
 import { InspirationPreview } from '@/components/InspirationPreview';
+import { HowItWorks } from '@/components/HowItWorks';
 import { defaultTodos } from '@/data/mockData';
 import { Country, Destination, Trip } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles, Globe } from 'lucide-react';
+import { ArrowRight, Plus, Map as MapIcon, Calendar, Sparkles } from 'lucide-react';
 import { WorldMap } from '@/components/WorldMap';
 import { supabase } from '@/integrations/supabase/client';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
@@ -415,17 +416,41 @@ const Index = () => {
         <Header />
         <main>
           <LandingHero />
-          <section className="py-8">
+          <HowItWorks />
+          <section className="py-16 bg-muted/30 border-y border-border/50">
             <div className="container">
+              <div className="max-w-2xl mb-8">
+                <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                  Interaktive Karte
+                </p>
+                <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                  Deine Welt, auf einen Blick.
+                </h2>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Klicke ein Land an und öffne dessen Steckbrief mit Klima, Sprache, Währung und
+                  passenden Guides.
+                </p>
+              </div>
               <WorldMap />
             </div>
           </section>
           <InspirationPreview />
           
-          <section className="py-12">
+          <section className="py-20">
             <div className="container">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold">Orts-Guides & Beiträge</h2>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                <div className="max-w-xl">
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                    Redaktionelle Guides
+                  </p>
+                  <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                    Tiefgründige Orts-Guides.
+                  </h2>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    Ausführliche Reportagen zu Regionen, Städten und Inseln — von Reisenden für
+                    Reisende recherchiert.
+                  </p>
+                </div>
                 <Link
                   to="/guides"
                   className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
@@ -482,10 +507,21 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="py-12">
+          <section className="py-20 bg-muted/30 border-t border-border/50">
             <div className="container">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold">Aktuelle Blogbeiträge</h2>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                <div className="max-w-xl">
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                    Reisegeschichten
+                  </p>
+                  <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                    Aus dem Blog.
+                  </h2>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    Persönliche Erlebnisse, spontane Entdeckungen und ehrliche Empfehlungen aus der
+                    Community.
+                  </p>
+                </div>
                 <Link
                   to="/blog"
                   className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
@@ -542,6 +578,40 @@ const Index = () => {
               )}
             </div>
           </section>
+
+          {/* Final CTA */}
+          <section className="py-24">
+            <div className="container">
+              <div className="relative overflow-hidden rounded-3xl gradient-hero p-10 md:p-16 text-primary-foreground shadow-elevated">
+                <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-foreground/10 blur-3xl" />
+                <div className="absolute -bottom-32 -left-24 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
+                <div className="relative z-10 max-w-2xl">
+                  <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight mb-4 leading-[1.1]">
+                    Bereit, deine nächste Reise zu planen?
+                  </h2>
+                  <p className="text-primary-foreground/85 text-lg mb-8 leading-relaxed">
+                    Erstelle kostenlos ein Konto und lass dir in Minuten eine maßgeschneiderte
+                    Weltreise vorschlagen — inklusive Route, Budget und Insider-Tipps.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      to="/planner"
+                      className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-lg bg-background text-foreground font-medium hover:bg-background/90 transition-colors shadow-lg"
+                    >
+                      Weltreise-Planer starten
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link
+                      to="/inspiration"
+                      className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-lg border border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+                    >
+                      Erst mal stöbern
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </main>
         <Footer />
       </div>
@@ -561,15 +631,18 @@ const Index = () => {
             onToggleTodo={handleToggleTodo}
           />
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-16">
             {/* Welcome Section */}
-            <section className="flex flex-col md:flex-row gap-8 items-start justify-between">
-              <div className="w-full md:w-2/3">
-                <h1 className="font-display text-3xl md:text-4xl font-bold mb-3">
-                  Willkommen zurück{userName ? `, ${userName}` : ''}! 👋
+            <section className="flex flex-col lg:flex-row gap-8 items-start justify-between">
+              <div className="w-full lg:w-2/3">
+                <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                  Willkommen zurück
+                </p>
+                <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-3">
+                  Hallo{userName ? `, ${userName}` : ''} 👋
                 </h1>
-                <p className="text-muted-foreground text-lg mb-6">
-                  Hier ist deine Kommandozentrale. Wohin soll die nächste Reise gehen?
+                <p className="text-muted-foreground text-lg mb-8 max-w-2xl leading-relaxed">
+                  Dein Reise-Cockpit ist bereit. Wohin geht die nächste Etappe?
                 </p>
                 <HeroSection
                   tripName={trip.name}
@@ -580,28 +653,37 @@ const Index = () => {
               </div>
               
               {/* Quick Actions Card */}
-              <div className="w-full md:w-1/3 bg-card border border-border rounded-2xl p-6 shadow-sm">
-                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  Schnellzugriff
-                </h3>
-                <div className="space-y-3">
+              <div className="w-full lg:w-1/3 bg-card border border-border/60 rounded-2xl p-6 shadow-card">
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                    Schnellzugriff
+                  </span>
+                </div>
+                <h3 className="font-display text-xl font-semibold mb-5">Was möchtest du tun?</h3>
+                <div className="space-y-2.5">
+                  <Link to="/planner">
+                    <Button className="w-full justify-start h-11" variant="default">
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Weltreise mit KI planen
+                    </Button>
+                  </Link>
                   <Link to="/inspiration">
-                    <Button className="w-full justify-start" variant="default">
+                    <Button className="w-full justify-start h-11" variant="outline">
                       <Plus className="mr-2 h-4 w-4" />
-                      Neue Reise planen
+                      Neue Reise hinzufügen
                     </Button>
                   </Link>
                   <Link to="/guides">
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button className="w-full justify-start h-11" variant="ghost">
                       <MapIcon className="mr-2 h-4 w-4" />
                       Guides entdecken
                     </Button>
                   </Link>
                   <Link to="/profile">
-                    <Button className="w-full justify-start" variant="ghost">
+                    <Button className="w-full justify-start h-11" variant="ghost">
                       <Calendar className="mr-2 h-4 w-4" />
-                      Mein Profil & Einstellungen
+                      Profil & Einstellungen
                     </Button>
                   </Link>
                 </div>
@@ -610,26 +692,38 @@ const Index = () => {
 
             {/* World Map Section - Authenticated View */}
             <section>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold flex items-center gap-2">
-                  <Globe className="h-6 w-6 text-primary" />
-                  Entdecke die Welt
-                </h2>
+              <div className="flex items-end justify-between mb-6">
+                <div>
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">
+                    Deine Weltkarte
+                  </p>
+                  <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                    Entdecke, was noch fehlt.
+                  </h2>
+                </div>
               </div>
-              <div className="bg-card/50 border border-border rounded-2xl p-1 shadow-sm overflow-hidden">
-                 <WorldMap />
+              <div className="bg-card/50 border border-border/60 rounded-2xl p-1 shadow-card overflow-hidden">
+                <WorldMap />
               </div>
             </section>
 
             {/* Trips Grid */}
             <section>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold">
-                  Deine geplanten Reisen
-                </h2>
+              <div className="flex items-end justify-between mb-6">
+                <div>
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">
+                    Deine Reisen
+                  </p>
+                  <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">
+                    Geplante Abenteuer
+                  </h2>
+                </div>
                 {trip.countries.length > 0 && (
-                  <Link to="/inspiration" className="text-primary hover:underline text-sm font-medium">
-                    + Weitere hinzufügen
+                  <Link
+                    to="/inspiration"
+                    className="text-primary hover:underline text-sm font-medium inline-flex items-center gap-1"
+                  >
+                    <Plus className="h-4 w-4" /> Weitere hinzufügen
                   </Link>
                 )}
               </div>
