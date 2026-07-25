@@ -6,6 +6,7 @@ import { CountryCard } from '@/components/CountryCard';
 import { CountryDetail } from '@/components/CountryDetail';
 import { LandingHero } from '@/components/LandingHero';
 import { InspirationPreview } from '@/components/InspirationPreview';
+import { HowItWorks } from '@/components/HowItWorks';
 import { defaultTodos } from '@/data/mockData';
 import { Country, Destination, Trip } from '@/types/travel';
 import { useAuth } from '@/hooks/useAuth';
@@ -415,17 +416,41 @@ const Index = () => {
         <Header />
         <main>
           <LandingHero />
-          <section className="py-8">
+          <HowItWorks />
+          <section className="py-16 bg-muted/30 border-y border-border/50">
             <div className="container">
+              <div className="max-w-2xl mb-8">
+                <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                  Interaktive Karte
+                </p>
+                <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                  Deine Welt, auf einen Blick.
+                </h2>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Klicke ein Land an und öffne dessen Steckbrief mit Klima, Sprache, Währung und
+                  passenden Guides.
+                </p>
+              </div>
               <WorldMap />
             </div>
           </section>
           <InspirationPreview />
           
-          <section className="py-12">
+          <section className="py-20">
             <div className="container">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold">Orts-Guides & Beiträge</h2>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                <div className="max-w-xl">
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                    Redaktionelle Guides
+                  </p>
+                  <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                    Tiefgründige Orts-Guides.
+                  </h2>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    Ausführliche Reportagen zu Regionen, Städten und Inseln — von Reisenden für
+                    Reisende recherchiert.
+                  </p>
+                </div>
                 <Link
                   to="/guides"
                   className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
@@ -482,10 +507,21 @@ const Index = () => {
             </div>
           </section>
 
-          <section className="py-12">
+          <section className="py-20 bg-muted/30 border-t border-border/50">
             <div className="container">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-semibold">Aktuelle Blogbeiträge</h2>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+                <div className="max-w-xl">
+                  <p className="text-sm font-medium text-primary uppercase tracking-wider mb-3">
+                    Reisegeschichten
+                  </p>
+                  <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                    Aus dem Blog.
+                  </h2>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    Persönliche Erlebnisse, spontane Entdeckungen und ehrliche Empfehlungen aus der
+                    Community.
+                  </p>
+                </div>
                 <Link
                   to="/blog"
                   className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
