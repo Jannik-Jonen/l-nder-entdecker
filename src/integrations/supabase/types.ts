@@ -308,6 +308,138 @@ export type Database = {
         }
         Relationships: []
       }
+      provider_offers: {
+        Row: {
+          country: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          destination_id: string | null
+          external_url: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          offer_type: string
+          price_from: number | null
+          price_unit: string | null
+          provider_id: string
+          status: string
+          sustainability_tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          destination_id?: string | null
+          external_url?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          offer_type?: string
+          price_from?: number | null
+          price_unit?: string | null
+          provider_id: string
+          status?: string
+          sustainability_tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          destination_id?: string | null
+          external_url?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          offer_type?: string
+          price_from?: number | null
+          price_unit?: string | null
+          provider_id?: string
+          status?: string
+          sustainability_tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_offers_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "provider_offers_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      providers: {
+        Row: {
+          certifications: string[]
+          city: string | null
+          contact_email: string | null
+          country: string | null
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          owner_id: string
+          phone: string | null
+          provider_type: string
+          status: string
+          sustainability_info: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          certifications?: string[]
+          city?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          owner_id: string
+          phone?: string | null
+          provider_type?: string
+          status?: string
+          sustainability_info?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          certifications?: string[]
+          city?: string | null
+          contact_email?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          owner_id?: string
+          phone?: string | null
+          provider_type?: string
+          status?: string
+          sustainability_info?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       saved_trips: {
         Row: {
           created_at: string
@@ -353,37 +485,133 @@ export type Database = {
         }
         Relationships: []
       }
+      trip_items: {
+        Row: {
+          booking_status: string
+          cost_actual: number | null
+          cost_planned: number | null
+          created_at: string
+          currency: string
+          day_number: number | null
+          description: string | null
+          end_time: string | null
+          id: string
+          item_type: string
+          link: string | null
+          location: string | null
+          offer_id: string | null
+          route_id: string
+          sort_order: number
+          start_time: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          booking_status?: string
+          cost_actual?: number | null
+          cost_planned?: number | null
+          created_at?: string
+          currency?: string
+          day_number?: number | null
+          description?: string | null
+          end_time?: string | null
+          id?: string
+          item_type?: string
+          link?: string | null
+          location?: string | null
+          offer_id?: string | null
+          route_id: string
+          sort_order?: number
+          start_time?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          booking_status?: string
+          cost_actual?: number | null
+          cost_planned?: number | null
+          created_at?: string
+          currency?: string
+          day_number?: number | null
+          description?: string | null
+          end_time?: string | null
+          id?: string
+          item_type?: string
+          link?: string | null
+          location?: string | null
+          offer_id?: string | null
+          route_id?: string
+          sort_order?: number
+          start_time?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_items_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "provider_offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_items_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "trip_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trip_routes: {
         Row: {
           budget_currency: string | null
+          cover_image_url: string | null
           created_at: string
           description: string | null
+          end_date: string | null
           id: string
           name: string
+          original_prompt: string | null
+          start_date: string | null
           status: string
           total_budget: number | null
+          travelers: number
+          trip_type: string
           updated_at: string
           user_id: string
         }
         Insert: {
           budget_currency?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
+          end_date?: string | null
           id?: string
           name?: string
+          original_prompt?: string | null
+          start_date?: string | null
           status?: string
           total_budget?: number | null
+          travelers?: number
+          trip_type?: string
           updated_at?: string
           user_id: string
         }
         Update: {
           budget_currency?: string | null
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
+          end_date?: string | null
           id?: string
           name?: string
+          original_prompt?: string | null
+          start_date?: string | null
           status?: string
           total_budget?: number | null
+          travelers?: number
+          trip_type?: string
           updated_at?: string
           user_id?: string
         }
@@ -489,7 +717,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "provider"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -617,7 +845,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "provider"],
     },
   },
 } as const
