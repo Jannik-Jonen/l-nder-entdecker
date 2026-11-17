@@ -1,7 +1,7 @@
 import { Destination } from '@/types/travel';
 import { supabaseUntyped } from '@/lib/supabase-untyped';
 import { isLocalSupabase } from '@/integrations/supabase/client';
-import migrationRaw from '../../supabase/migrations/20260210153000_expand_destinations_countries.sql?raw';
+import countryFallbacks from '@/data/destination-country-fallbacks.json';
 
 interface WikiSection {
   toclevel: number;
@@ -217,10 +217,7 @@ const genericHealthSafetyInfo = 'Aktuelle Reise- und Sicherheitshinweise beachte
 
 const migrationImageMap = (() => {
   try {
-    const match = migrationRaw.match(/jsonb_to_recordset\(\s*'([\s\S]*?)'\s*::jsonb\s*\)/);
-    if (!match) return null;
-    const jsonText = match[1].replace(/''/g, "'");
-    const data = JSON.parse(jsonText) as Array<{
+    const data = countryFallbacks as Array<{
       country_code?: string;
       image_url?: string;
       name?: string;
@@ -257,10 +254,7 @@ type MigrationEntry = {
 
 const migrationDataMap = (() => {
   try {
-    const match = migrationRaw.match(/jsonb_to_recordset\(\s*'([\s\S]*?)'\s*::jsonb\s*\)/);
-    if (!match) return null;
-    const jsonText = match[1].replace(/''/g, "'");
-    const data = JSON.parse(jsonText) as MigrationEntry[];
+    const data = countryFallbacks as MigrationEntry[];
     const map = new Map<string, MigrationEntry>();
     data.forEach((entry) => {
       if (entry?.country_code) map.set(String(entry.country_code).toUpperCase(), entry);
